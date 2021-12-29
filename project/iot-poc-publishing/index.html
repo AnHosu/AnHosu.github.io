@@ -1,0 +1,1334 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Anders E. Nielsen" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="In this tutorial, we will obtain a value from a sensor and publish it to a topic on AWS." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="../../project/iot-poc-publishing/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#023e8a" />
+  
+
+  
+  
+    
+    <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono&display=swap">
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/wowchemy.f7eaf83122b08ab266aaa8a2d08cb1e8.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="../../index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="../../project/iot-poc-publishing/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="anders e" />
+  <meta property="og:url" content="/project/iot-poc-publishing/" />
+  <meta property="og:title" content="Publishing Industrial Data with AWS IoT | anders e" />
+  <meta property="og:description" content="In this tutorial, we will obtain a value from a sensor and publish it to a topic on AWS." /><meta property="og:image" content="/project/iot-poc-publishing/featured.png" />
+    <meta property="twitter:image" content="/project/iot-poc-publishing/featured.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2020-06-16T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2020-06-16T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/project/iot-poc-publishing/"
+  },
+  "headline": "Publishing Industrial Data with AWS IoT",
+  
+  "image": [
+    "/project/iot-poc-publishing/featured.png"
+  ],
+  
+  "datePublished": "2020-06-16T00:00:00Z",
+  "dateModified": "2020-06-16T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Anders E. Nielsen"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "anders e",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "In this tutorial, we will obtain a value from a sensor and publish it to a topic on AWS."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Publishing Industrial Data with AWS IoT | anders e</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="fed668908fc7c863a5fb329b7266b574" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="../../js/wowchemy-init.min.a8a181ea67095ef9fbb0e99ffbf585a0.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../post/"><span>Blog</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article article-project">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+
+<div class="article-container pt-3">
+  <h1>Publishing Industrial Data with AWS IoT</h1>
+
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    2020-06-16
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+<div class="btn-links mb-3">
+  
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <a class="btn btn-outline-primary btn-page-header" href="https://github.com/AnHosu" target="_blank" rel="noopener">
+    <i class="fab fa-github mr-1"></i>
+    Go to project repo
+  </a>
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+    
+      
+    
+  
+  <a class="btn btn-outline-primary btn-page-header" href="../../project/iot-poc/" >
+    <i class="fas fa-network-wired mr-1"></i>
+    iIoT Meta Post
+  </a>
+
+
+</div>
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 382px;">
+  <div style="position: relative">
+    <img src="../../project/iot-poc-publishing/featured_hudfe777fc1962dc4b74fbdbe8ead90de6_41133_720x0_resize_lanczos_3.png" alt="" class="featured-image">
+    
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <p>In this tutorial, we will obtain a value from a sensor and publish it to a topic on AWS. No added shenanigans; this is as simple as it gets.<br><br>
+At the core of it, we want to grab a reading from the sensor, wrap it in a message with some useful metadata, and publish that to AWS IoT. We will program all the logic into a Python script that runs continuosly on a loop. Our script should end up being structured somewhat like this:<br></p>
+<pre><code>Prepare the sensor
+Set up connection to AWS
+while true
+    get a sensor reading
+    pack it up
+    publish it
+</code></pre>
+<p>For the demonstration we will be using the Bosch BME680 air quality sensor connected to a Raspberry Pi 3 model B+. The BME680 does four different measurements, but for this case we will only be measuring and publishing the temperature. The Pi is just there to query the sensor and run Python script with the AWS IoT SDK. It essentially plays the part of a microcontroller, and so anything we accomplish here can be done with a microcontroller or any other compute device. In the final section of this demonstration we will discuss some of the additional considerations for a similar setup in an actual industrial setting.</p>
+<div align="center">
+	<img height="200" src="../iot-poc/images/publishing_architecture.png" alt="IoT overview">
+	<img height="200" src="../iot-poc/images/hardware_setup.jpg" alt="Hardware setup">
+  <br>
+  Schematic of the architecture we are building in this demonstration and a picture of the actual hardware I used for developing.
+</div>
+<h1 id="registering-the-sensor-in-iot-core">Registering the Sensor in IoT Core</h1>
+<p>Before we can start connecting a sensor to AWS, we need to register the sensor or system as a so-called Thing in AWS IoT Core. The AWS docs have a <a href="https://docs.aws.amazon.com/iot/latest/developerguide/register-device.html" title="AWS IoT docs" target="_blank" rel="noopener">getting started guide</a> which is pretty good. Follow the guide, but at the end of it, we should have the following:</p>
+<ul>
+<li>A device certificate file</li>
+<li>A private key file</li>
+<li>The root certificate file</li>
+<li>In the policy we attached to the certificate, we have allowed publishing from an ID and to a topic that we can remember</li>
+</ul>
+<p>The three files should be installed on the controller device. In this case, that just means the files should be in accessible place on the Raspberry Pi. The ID will be used as clientID for the MQTT client that we will use to connect to AWS IoT later, and the topic is a flag that helps us direct data along the right path. We will discuss both of these concepts in detail below.<br><br>
+The policy used for the examples follows this pattern:</p>
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;iot:Publish&quot;,
+        &quot;iot:Receive&quot;
+      ],
+      &quot;Resource&quot;: [
+        &quot;arn:aws:iot:your-region:your-aws-account:topic/bme680/temperature&quot;
+      ]
+    },
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;iot:Connect&quot;
+      ],
+      &quot;Resource&quot;: [
+        &quot;arn:aws:iot:your-region:your-aws-account:client/simple-publishing&quot;
+      ]
+    }
+  ]
+}
+</code></pre>
+<h1 id="setting-up-the-sdk">Setting up the SDK</h1>
+<p>We will do scripting for this case using Python. AWS IoT currently has two SDKs for Python. For this case we will use version 1, which is easily installed using pip:</p>
+<pre><code class="language-bash">pip install AWSIoTPythonSDK
+</code></pre>
+<p>The AWS IoT code below should work for any version of Python, but the interaction with the BME680 sensor is written with Python 3.7 and would need tweaks to work with earlier versions.</p>
+<h1 id="publishing-to-aws-iot">Publishing to AWS IoT</h1>
+<p>Now we are ready to get started on developing with the SDK.<br>
+Publishing a message to AWS using the Python SDK will look something like this</p>
+<pre><code class="language-python">AWSIoTMQTTClient.publish(topic, messageJSON, 1)
+</code></pre>
+<p>The AWSIoTMQTTClient is the object that we will use to configure and establish the connection to AWS IoT Core. The <a href="https://s3.amazonaws.com/aws-iot-device-sdk-python-docs/sphinx/html/index.html#AWSIoTPythonSDK.MQTTLib.AWSIoTMQTTClient.publish" title="AWS docs" target="_blank" rel="noopener">.publish()</a> method publishes the message and takes three arguments: the topic to publish to, the message to be sent, and a Quality of Service (QoS) flag. Lets look at each of these in turn.</p>
+<h3 id="topics">Topics</h3>
+<p>Messages in AWS IoT are distributed and filtered using topics. Topics are a kind of tag that we can use to identify the source of the message and distribute it accordingly. It is just a single string, generally in the format</p>
+<pre><code>main_tag/secondary_tag/tertiary_tag/etc
+</code></pre>
+<p>For instance, if we had several factories each with several manufacturing lines with several stations each eqipped with sensors, we might do something like</p>
+<pre><code>factoryA/line22/drying/temperature
+</code></pre>
+<p>and then have another sensor on the same line publish to</p>
+<pre><code>factoryA/line22/milling/torque
+</code></pre>
+<p>That way we can direct these messages to the store or dashboard for the same line but seperate lambda functions, if that is needed for our application.<br>
+An IoT thing needs permission to publish to a specific topic. This is done by adding a certificate with a permissive policy to the thing. By using the topic naming convention above and wildcards in the policy, we can create hierarchies and differentiated permissions for things in different parts of our application or factory setup.<br>
+Now, for this demonstration example, we only have four sensors, and really we will only use one of them, so we will go with a simple topic. Like, say,</p>
+<pre><code>bme680/temperature
+</code></pre>
+<p>We will dive deeper into topics in the next demonstrations, but for now we will leave it at this simple one.</p>
+<h3 id="message">Message</h3>
+<p>The message contains the actual data along with any metadata. It is structured as a <a href="https://www.youtube.com/watch?v=wI1CWzNtE-M" title="JSON tutorial" target="_blank" rel="noopener">JSON</a> and we can put whatever we want in there, but we will want the data point, a timestamp for the time of sampling, and maybe an idication whether the reading was succesful or not. In our script, we will structure the message to look something like this, when the sensor reading is successful</p>
+<pre><code class="language-json">{
+    &quot;utc_timestamp&quot;: 1581417910,
+    &quot;value&quot;: 23.6,
+    &quot;origin&quot;: &quot;BME680 temperature&quot;,
+    &quot;status&quot;: &quot;success&quot;
+}
+</code></pre>
+<h3 id="quality-of-service-qos">Quality of Service (QoS)</h3>
+<p>The messages are published to AWS using the MQTT protocol. This is a protocol commonly used in manufacturing systems, and is documented <a href="http://mqtt.org/documentation" title="MQTT documentation" target="_blank" rel="noopener">online</a>. The <a href="https://docs.aws.amazon.com/iot/latest/developerguide/mqtt.html" title="AWS MQTT Documentation" target="_blank" rel="noopener">AWS flavour</a> of MQTT is a slightly simpler implementation of the protocol.<br>
+As for Quality of Service (QoS), it is a flag specifying what happens when messages get lost in the network. The AWS flavour of MQTT accepts two QoS flags. The flag 0 means that the message is delivered to subsrcibers &lsquo;at most once&rsquo;. The flag 1 means that the message is delivered to subsribers &lsquo;at least once&rsquo;. So for QoS=0 the publisher will send the message once and then forget about it. If it does not get delivered, it is lost. For QoS=1, however, the message is sent, and the publisher then waits for a reply from the subscriber before forgetting the message, and resends if neccessary. This ensures that the subscriber gets the message at least once.<br>
+Now, there are cases where QoS=0 is sufficient, but for this case we will use QoS=1.</p>
+<h1 id="connecting-to-aws-iot">Connecting to AWS IoT</h1>
+<p>Before we can publish a message, we need to set up and configure the connection to AWS IoT. For this, we are going to need many small bits of information. Let us start by setting up the client.</p>
+<pre><code class="language-python">from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+# Initialise client
+myAWSIoTMQTTClient = AWSIoTMQTTClient(clientId)
+</code></pre>
+<p>First of all, we are giving our client a client ID. This ID is used by the message broker to recognise the specific client or application that it is communicating with. This is especially importtant when we start subscribing to topics as well. For now, we just provide an ID allowed by the policy that we made earlier.<br><br>
+Next up we will setup the networking specifics.</p>
+<pre><code class="language-python">myAWSIoTMQTTClient.configureEndpoint(host, port)
+myAWSIoTMQTTClient.configureCredentials(rootCAPath, privateKeyPath, certificatePath)
+</code></pre>
+<p>We are specifying where the MQTT messages are going and how they are authenticated. The host is our AWS IoT custom endpoint which we can find in the AWS Console under IoT Core &gt; Settings. As for the port we will use the default 8883 for MQTT with the X.509 client certificate.<br><br>
+This brings us to the next order of business; certificates. The certificates are the ones we downloaded to our device earlier. We simply provide strings with the paths to each of these certificates; the root certificate file, the private key file, and finally the device certificate file.<br>
+Next, we configure what happens when connection between the client and the broker on AWS IoT is lost.</p>
+<pre><code class="language-python">myAWSIoTMQTTClient.configureAutoReconnectBackoffTime(1, 32, 20)
+myAWSIoTMQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
+myAWSIoTMQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
+myAWSIoTMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
+myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
+</code></pre>
+<p>With <code>.configureAutoReconnectBackoffTime(1, 32, 20)</code> we are telling the client to try to reconnect every 1 seconds after losing connection. If connection keeps being lost, for instance under poor networking conditions, this is exponentially increased to a maximum of every 32 seconds. This is to prevent having too many connection requests which would make the network conditions even worse. If connection is maintained for more than 20 seconds, the reconnect interval is reset to 1.<br>
+Next we are telling the client to keep all untransmitted messages while connection is lost by setting <code>.configureOfflinePublishQueueing(-1)</code>. If any other number is passed, this is the number of messages kept.<br>
+When connection is reestablished, we will want to send off any kept messages, but not all at once. With <code>.configureDrainingFrequency(2)</code> we are telling the client to send one queued message every 2 seconds.<br>
+In a moment, we will connect the client, by sending a connect request to the broker on AWS IoT. The client will then expect an acknowledgement of the request, but we do not want to wait forever. <code>.configureConnectDisconnectTimeout(10)</code> tells the client to wait a maximum of 10 seconds before timing out.<br>
+Earlier we decided to use QoS=1. This will only work if the server acknowledges any message sent. If that does not happen we will also want a timeout <code>.configureMQTTOperationTimeout(5)</code> means that we will wait 5 seconds for that acknowledgement.<br><br>
+Now, all that remains is to attempt the connection.</p>
+<pre><code class="language-python"># Connect to AWS IoT
+myAWSIoTMQTTClient.connect()
+</code></pre>
+<h1 id="bringing-it-all-together">Bringing it all together</h1>
+<p>Here is our bare-bones script for connecting and publishing to AWS IoT.</p>
+<pre><code class="language-python">from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
+import time
+
+# We will just hardcode the default port here, you might want a different one
+port = 8883 # default
+
+# Initialise the AWS IoT MQTT client
+myAWSIoTMQTTClient = AWSIoTMQTTClient(clientId)
+myAWSIoTMQTTClient.configureEndpoint(host, port)
+myAWSIoTMQTTClient.configureCredentials(rootCAPath, privateKeyPath, certificatePath)
+
+# Configure the client
+myAWSIoTMQTTClient.configureAutoReconnectBackoffTime(1, 32, 20)
+myAWSIoTMQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
+myAWSIoTMQTTClient.configureDrainingFrequency(2)  # 2 Hz
+myAWSIoTMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
+myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
+
+# Connect to AWS IoT
+myAWSIoTMQTTClient.connect()
+time.sleep(2)
+
+# Publish to the same topic in an eternal loop
+loopCount = 0
+while True:
+    message = {}
+    message['sequence'] = loopCount
+    message['timestamp_utc'] = datetime.utcnow().strftime(&quot;%Y-%m-%dT%H:%M:%S.%fZ&quot;)
+    # Value and any other data needed here
+    messageJson = json.dumps(message)
+    # This is the actual publishing to AWS
+    myAWSIoTMQTTClient.publish(topic, messageJson, 1)
+    loopCount += 1
+    time.sleep(5)
+</code></pre>
+<p>The script <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_publishing.py" target="_blank" rel="noopener">simple_publishing.py</a> is a full working example using the BME680 sensor. It can be called as follows</p>
+<pre><code class="language-bash">python simple_publishing.py -e &lt;your aws iot endpoint&gt; -r &lt;file containing root certificate&gt; -c &lt;file containing device certificate&gt; -k &lt;file containing private key&gt; -id &lt;a client ID&gt; -t &lt;the topic to publish to&gt;
+</code></pre>
+<h1 id="running-the-case">Running the Case</h1>
+<p>Running this script on a Pi with the BME680 sensor, when it is working, it should look like this</p>
+<pre><code>Published topic bme680/temperature: {&quot;status&quot;: &quot;success&quot;, &quot;timestamp_utc&quot;: &quot;2020-02-15T16:43:16.226983Z&quot;, &quot;value&quot;: 21.57999999999999, &quot;sequence&quot;: 25}
+
+Published topic bme680/temperature: {&quot;status&quot;: &quot;success&quot;, &quot;timestamp_utc&quot;: &quot;2020-02-15T16:43:17.348050Z&quot;, &quot;value&quot;: 21.57999999999999, &quot;sequence&quot;: 26}
+
+Published topic bme680/temperature: {&quot;status&quot;: &quot;success&quot;, &quot;timestamp_utc&quot;: &quot;2020-02-15T16:43:18.519356Z&quot;, &quot;value&quot;: 21.57999999999999, &quot;sequence&quot;: 27}
+</code></pre>
+<p>But the most interesting part, of course, is whether the data gets to AWS. Let us say that we published to the topic <code>BME680/temperature</code>. We can open the AWS Console, go to IoT Core, and find the Test tab. Here we can subscribe to a topic. When we type in the topic <code>BME680/temperature</code>,</p>
+<div align="center">
+	<img width=500 src="../iot-poc/images/aws_iot_test_simple_publish.PNG" alt="iot setup">
+	<br>
+</div>
+<p>We get the messages sent from the Pi.</p>
+<div align="center">
+	<img width=500 src="../iot-poc/images/aws_iot_message_simple_publish.PNG" alt="iot setup">
+	<br>
+</div>
+<p>Congratulations, you are now publishing to AWS IoT! From here the messages can be redirected to whereever you want using AWS SQS, SNS, or Kinesis.<br></p>
+<h1 id="in-production">In Production</h1>
+<p>This section is not part of the demonstration as such. It is but a short discussion of some of the considerations we have to take when bringing an IoT device to production in a manufacturing environment and how to improve upon the example to make it production ready.</p>
+<h2 id="hardware-setup">Hardware Setup</h2>
+<p>In real life, would we fire up a Raspberry PI running Python just to extract and publish data from a single sensor? No, probably not. In a real life setting, if we just wanted to publish data from a single sensor, we might use a microcontroller instead. On the other hand, if we are in an industrial setting and have hundreds of sensors that we want to query and publish, a Raspberry Pi will not be enough. Instead we might want to use proper gateway devices and controller modules. There are multiple options and suppliers of this type of hardware components, and which we choose all depends on our specific requirements for ease of installation, configurability, and data quality.<br>
+No matter what kind of hardware we have, our gateway device still needs to run some bit of software that gathers and publishes data to consumer applications. Many hardware suppliers also offer proprietary data feeders and even analytics, but now you know how to write your own simple data feeder using the AWS IoT SDK for Python.</p>
+<h2 id="script-improvement">Script Improvement</h2>
+<p>The focus for this demonstration was to demonstrate how to quickly get started publishing data to AWS IoT core with no added frills. Whether we use a microcontroller or a large server as our gateway device, we will want a bit more functionality for our script. Here are a few examples of what additional considerations we might take before deploying the device to production.</p>
+<h3 id="logging">Logging</h3>
+<p>All sorts of expected and unexpected stuff will happen in production, and it is at least nice to have logs telling us what happened. The AWS IoT SDK actually comes with a <a href="https://github.com/aws/aws-iot-device-sdk-python/blob/master/samples/basicPubSub/basicPubSub.py" target="_blank" rel="noopener">sample</a> script containing an example of logging:</p>
+<pre><code class="language-python">import logging
+logger = logging.getLogger(&quot;AWSIoTPythonSDK.core&quot;)
+logger.setLevel(logging.DEBUG) # You might want to pass logging level to your script
+streamHandler = logging.StreamHandler()
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+streamHandler.setFormatter(formatter)
+logger.addHandler(streamHandler)
+</code></pre>
+<p>We would also add logging for the interaction with our sensor(s).</p>
+<h3 id="error-handling">Error Handling</h3>
+<p>Besides logging loggging unexpected events, we might also want to automatically handle some of them and avoid crashes that need manual attention. In the example we created above, two parts in particular are susceptible to errors; connecting the MQTT client to AWS and querying the sensor.<br>
+The connection might fail for several reasons, but a common one is that multiple devices try to reconnect at the same time after a restart of the process they are monitoring. In this case, nothing is wrong as such, and we can just have the devices retry the connection. We will want to introduce a bit of randomness into that process to avoid creating another bottleneck. An elegant way to implement such retrying is with progressive backoff logic, and the AWS IoT SDK actually includes a module to do just that.<br>
+In the example script, whenever we fail to retrieve a value from my BME680 air quality sensor, we just generate a message with a None value. Depending on the specific application, we might want to do something different. In another demonstration, we will have a look at <a href="../../project/iot-poc-shadow" title="Shadow demonstration">implementing a Shadow</a> for our device. The Shadow can act as an intermediary between the data feed and an application, ensuring that simulations and machine learning models always have the latest readings, while the live data feed contains the full diversity of values and failed readings.</p>
+<h3 id="remote-configuration">Remote Configuration</h3>
+<p>One challenge we face when creating new data streams is specifying what data we need and how often we want to sample it. The dilemma is that we do not want to store too much data that will not be used but, on the other hand, to create good simulations or models, we need a good bit of historical data. What strategy to pursue is a business question but it behooves us as developers to allow for flexibility and build dials that allow us to adjust the tradeoff between cost and data quality/quantity. So let us think of an example of this.<br>
+At the end of the publishing loop, we tacitly added a line, <code>time.sleep(5)</code>, that ultimately determines how often we query our sensor and publish the data. If we double that time, we halve the amount of data and potentially also halve our expenses for data storage on this variable. Before the applications are in place, however, it is not really clear how often we would like to sample. We can make an educated guess to get it started but, at the end of the day, we want to be able to change it. So it seems a poor idea to hardcode it like we did for this example. Indeed, for the <a href="../../project/iot-poc-pubsub" title="Pulish and subscribe demo">next demonstration</a> we will explore how to develop a dynamic device that can be configured remotely.</p>
+<h2 id="device-lifecycle">Device Lifecycle</h2>
+<p>During the demonstration, we manually provisioned certificates for our device and started the script from the command line. For production purposes, especially if we have hundreds of devices, we might want to have a more rigid device lifecycle.</p>
+<h3 id="start-up-and-restarts">Start up and restarts</h3>
+<p>In a production setting, we will not want to go and restart the script manually each time there is an issue or our device restarts. This obviously becomes more relevant as the number of devices increases. If our gateway device runs Linux, we can just create a custom process to run our data feeder script as a service on boot. For a large fleet of devices we might want to consider introducing some randomness into the intitial connection requests to prevent a situation where all devices attempt to reconnect simultaneously after an outage.</p>
+<h3 id="certificates-and-security">Certificates and security</h3>
+<p>It is possible to get <a href="https://aws.amazon.com/blogs/iot/provisioning-with-a-bootstrap-certificate-in-aws-iot-core/" title="bootstrap certificate demonstration" target="_blank" rel="noopener">more advanced</a> about provisioning certificates for devices. At the very least, we will want to script the provisioning process.<br>
+Even when securely provisioned and deployed, it is still important to consider the security of the certificates. The certificates effectively allow some interaction with our AWS account and should an ill intentioned actor acquire access to these certificates they effectly gain free access to that functionality. AWS best practice is to use <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html" title="IAM Best Practices" target="_blank" rel="noopener">least privilege</a> policies.<br></p>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tag/iot/">IoT</a>
+  
+  <a class="badge badge-light" href="../../tag/data/">Data</a>
+  
+  <a class="badge badge-light" href="../../tag/data-engineering/">Data Engineering</a>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="../../"><img class="avatar mr-3 avatar-circle" src="../../author/anders-e.-nielsen/avatar_huaf22d72e35256be9d48177f1f21d9377_326351_270x270_fill_q75_lanczos_center.jpg" alt="Anders E. Nielsen"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Anders E. Nielsen</a></h5>
+      <h6 class="card-subtitle">Data Professional &amp; Research Scientist</h6>
+      <p class="card-text">I apply modern data technology to solve real-world problems. My interests include statistics, machine learning, computational biology, and IoT.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:andellegaard@gmail.com" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/anders-ellegaard-nielsen-6a0857125/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/AnHosu" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="../../project/iot-poc-greengrass/">Build an Edge with Greengrass</a></li>
+      
+      <li><a href="../../project/iot-poc/">Industrial IoT with AWS and Python</a></li>
+      
+      <li><a href="../../project/iot-poc-greengrass-ml/">Machine Learning at the Edge and other Advanced Features of Greengrass</a></li>
+      
+      <li><a href="../../project/iot-poc-pubsub/">Publishing and Subscribing with AWS IoT</a></li>
+      
+      <li><a href="../../project/iot-poc-shadow/">Thing Shadows with AWS IoT</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+    <div class="project-related-pages content-widget-hr">
+      
+      
+
+      
+      
+      
+
+      
+      
+      
+
+      
+      
+      
+    </div>
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2021 Anders E. Nielsen
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a>, <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>, and <a href="https://github.com/rstudio/blogdown" target="_blank" rel="noopener">R Blogdown</a>.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="../../js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="../../en/js/wowchemy.min.cf8ca859a9b74f8b1cd804621b13e5f1.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>
