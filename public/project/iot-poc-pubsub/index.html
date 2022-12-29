@@ -1,0 +1,1344 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Anders E. Nielsen" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="In this tutorial, we will take a closer look at the pub/sub model of MQTT and demonstrate its usefulness by having a sensor publish data and change behaviour in response to subscribed messages." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="../../project/iot-poc-pubsub/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#023e8a" />
+  
+
+  
+  
+    
+    <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono&display=swap">
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/wowchemy.f7eaf83122b08ab266aaa8a2d08cb1e8.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="../../index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="../../project/iot-poc-pubsub/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="anders e" />
+  <meta property="og:url" content="/project/iot-poc-pubsub/" />
+  <meta property="og:title" content="Publishing and Subscribing with AWS IoT | anders e" />
+  <meta property="og:description" content="In this tutorial, we will take a closer look at the pub/sub model of MQTT and demonstrate its usefulness by having a sensor publish data and change behaviour in response to subscribed messages." /><meta property="og:image" content="/project/iot-poc-pubsub/featured.png" />
+    <meta property="twitter:image" content="/project/iot-poc-pubsub/featured.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2020-06-16T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2020-06-16T00:00:00&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/project/iot-poc-pubsub/"
+  },
+  "headline": "Publishing and Subscribing with AWS IoT",
+  
+  "image": [
+    "/project/iot-poc-pubsub/featured.png"
+  ],
+  
+  "datePublished": "2020-06-16T00:00:00Z",
+  "dateModified": "2020-06-16T00:00:00Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Anders E. Nielsen"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "anders e",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "In this tutorial, we will take a closer look at the pub/sub model of MQTT and demonstrate its usefulness by having a sensor publish data and change behaviour in response to subscribed messages."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Publishing and Subscribing with AWS IoT | anders e</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="196caa900b421d6419cfb8b63111cb1f" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="../../js/wowchemy-init.min.a8a181ea67095ef9fbb0e99ffbf585a0.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../post/"><span>Blog</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article article-project">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+<div class="article-container pt-3">
+  <h1>Publishing and Subscribing with AWS IoT</h1>
+
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+    
+    2020-06-16
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+<div class="btn-links mb-3">
+  
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <a class="btn btn-outline-primary btn-page-header" href="https://github.com/AnHosu" target="_blank" rel="noopener">
+    <i class="fab fa-github mr-1"></i>
+    Go to project repo
+  </a>
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+    
+      
+    
+  
+  <a class="btn btn-outline-primary btn-page-header" href="../../project/iot-poc/" >
+    <i class="fas fa-network-wired mr-1"></i>
+    iIoT Meta Post
+  </a>
+
+
+</div>
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 720px;">
+  <div style="position: relative">
+    <img src="../../project/iot-poc-pubsub/featured.png" alt="" class="featured-image">
+    
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <p>In this demonstration, we will add upon the <a href="../../project/iot-poc-publishing/" title="simple publishing">previous</a>, by having our gateway device, the Raspberry Pi, subscribe to messages on a topic.<br><br>
+With publishing, the information flow is from the device to AWS IoT, but with subscribing, the flow is reversed to be from AWS IoT to the client we configure for our device. Applications are obvious candidates for subscribers to messages but, as we will see, the ability to subscribe is extremely useful for structuring and managing devices remotely.<br><br>
+In general terms, we want our device to do the following</p>
+<pre><code>prepare the sensor
+configure connection to AWS
+define what happens with subscriptions
+start subscribing
+while true
+    react to any incoming messages
+    get a sensor reading
+    pack it up
+    publish it
+</code></pre>
+<p>For the demonstration, are once again using the Bosch BME680 air quality sensor connected to a Raspberry Pi 3 model B+. The BME680 does four different measurements, and we will utilise the temperature, pressure, and humidity sensing capabilities. The Pi is just there to query the sensor and run the AWS IoT SDK. It essentially plays the part of a microcontroller, and so anything we accomplish here can be done with a microcontroller or any other compute device. In the final section of this demonstration, we will discuss some of the additional considerations for a similar setup in an actual industrial setting.</p>
+<div align="center">
+	<img width="500" src="../iot-poc/images/pubsub_architecture.png" alt="pubsub overview">
+  <br>
+  Schematic of the architecture we are building in this demonstration. Note the two-way communication between IoT Core and our thing.
+</div>
+<br>
+<p>Connecting to AWS IoT and publishing messages were covered in the <a href="../../project/iot-poc-publishing/">previous</a> demonstration. In this demonstration, we focus on subscribing to messages and combining publishing and subscribing within one client.</p>
+<h1 id="registering-the-sensor-in-iot-core">Registering the Sensor in IoT Core</h1>
+<p>Just as it is the case with publishing, we need to register the device that will subscribe to messages. We can use the same thing and certificate as in the <a href="../../project/iot-poc-publishing/#registering-the-sensor-in-iot-core">previous demonstration</a>, but we need to change the policy to allow subscription through using that certificate.
+For subscription to work, we need to add two additional statements to the policy. We need to allow <code>iot:Subscribe</code> to a topic filter and allow <code>iot:Receive</code> for a specific topic. The distinction between topic and topic filter can seem nebulous, but imagine a manufacturing line with hundreds of sensors publishing to topics with the prefix <code>factoryA/line22</code>. Then we might create a policy that allows subscription to all the topics <code>factoryA/line22/*</code>, where the asterisk is a wildcard, and policies that allow receiving of messages to specific topics such as <code>factoryA/line22/milling/torque</code>.
+Here is an example of such a policy document that allows subscription and receiving to a single topic.</p>
+<pre><code class="language-json">{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;iot:Publish&quot;
+      ],
+      &quot;Resource&quot;: [
+        &quot;arn:aws:iot:your-region:your-aws-account:topic/bme680/temperature&quot;,
+        &quot;arn:aws:iot:your-region:your-aws-account:topic/bme680/pressure&quot;,
+        &quot;arn:aws:iot:your-region:your-aws-account:topic/bme680/humidity&quot;,
+        &quot;arn:aws:iot:your-region:your-aws-account:topic/bme680/actions&quot;
+      ]
+    },
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;iot:Receive&quot;
+      ],
+      &quot;Resource&quot;: [
+        &quot;arn:aws:iot:your-region:your-aws-account:topic/bme680/actions&quot;
+      ]
+    },
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;iot:Subscribe&quot;
+      ],
+      &quot;Resource&quot;: [
+        &quot;arn:aws:iot:your-region:your-aws-account:topicfilter/bme680/actions&quot;
+      ]
+    },
+    {
+      &quot;Effect&quot;: &quot;Allow&quot;,
+      &quot;Action&quot;: [
+        &quot;iot:Connect&quot;
+      ],
+      &quot;Resource&quot;: [
+        &quot;arn:aws:iot:your-region:your-aws-account:client/simple-subscribing&quot;
+      ]
+    }
+  ]
+}
+</code></pre>
+<p>This is the actual policy document for the following examples. It might seem like we are repeating the same thing many times, but there is a good reason for it. The subscription action is only checked whenever a client connects to AWS, whereas the receive policy is checked each time a message is sent. This means that we have the option to disallow messages from a specific topic to devices using this certificate, even if they are already subscribing to the topic.</p>
+<h1 id="subscribing-to-topics">Subscribing to Topics</h1>
+<p>Like publishing, subscribing can be done with just one line of code. We just need to call the <a href="https://s3.amazonaws.com/aws-iot-device-sdk-python-docs/sphinx/html/index.html#AWSIoTPythonSDK.MQTTLib.AWSIoTMQTTClient.subscribe" title="subscribe docs" target="_blank" rel="noopener">.subscribe()</a> function of the MQTT client.</p>
+<pre><code class="language-python">AWSIoTMQTTClient.subscribe(topic, 1, callback_function)
+</code></pre>
+<p>The first argument is the topic to listen to. Note that the certificate provided to the client must have a policy that allows subscription to that specific topic.<br>
+The second argument is the Quality of Service, <a href="../../project/iot-poc-publishing/#quality-of-service-qos">just as for publishing</a>, 0 means that the message is delivered at most once and 1 means at least once. Remember that now the roles are reversed, and the client we are configuring is the one that will receive the message have to send a confirmation of a message received. Fortunately that is all taken care of behind the scenes in the client we are configuring.<br>
+The third argument is a custom function that is called whenever a message is received on the topic. This function should follow the pattern <code>callback_function(client, userdata, message)</code>. <code>message</code> will then be an object containing the topic, <code>message.topic</code>, and the body, <code>message.payload</code>, of the message. The two variables <code>client</code> and <code>userdata</code> are there for compatibility of the callback stack; they are flagged for deprecation, and it is not recommended to rely on them. The simplest thing to do when receiving a message, save for doing nothing at all, would be to print the message. Such a function might look like this</p>
+<pre><code class="language-python">def callback_function(client, userdata, message):
+    print(&quot;Received a new message:\n{0}&quot;.format(message.payload))
+    print(&quot;from topic:\n{0}&quot;.format(message.topic))
+</code></pre>
+<p>In the next section, we will use this function to do cool things.<br><br>
+The subscription can be set up as soon as connection between the client and AWS IoT is established. The client will then listen for any published messages for as long as it lives or until the subscription is terminated. This also means that we do not have to implement an infinite loop like during publishing.<br><br>
+With this, we have everything needed to set up a subscription:</p>
+<pre><code class="language-python"># Configure client and connect
+myAWSIoTMQTTClient = AWSIoTMQTTClient(clientId)
+myAWSIoTMQTTClient.configureEndpoint(host, port)
+myAWSIoTMQTTClient.configureCredentials(rootCAPath, privateKeyPath, certificatePath)
+myAWSIoTMQTTClient.configureAutoReconnectBackoffTime(1, 32, 20)
+myAWSIoTMQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
+myAWSIoTMQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
+myAWSIoTMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
+myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
+myAWSIoTMQTTClient.connect()
+time.sleep(2)
+
+# Define what happens when messages are received
+def callback_function(client, userdata, message):
+    print(&quot;Received a new message:\n{0}&quot;.format(message.payload))
+    print(&quot;from topic:\n{0}&quot;.format(message.topic))
+
+# Subscribe
+AWSIoTMQTTClient.subscribe(topic, 1, callback)
+
+# Wait for messages to arrive
+while True:
+    time.sleep(5)
+</code></pre>
+<p>A full working example can be found <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_subscribing.py" title="simple subscribing example" target="_blank" rel="noopener">here</a>. We run the script from a terminal on the Pi:</p>
+<pre><code class="language-bash">python simple_subscribing.py -e &lt;your aws iot endpoint&gt; -r &lt;file containing root certificate&gt; -c &lt;file containing device certificate&gt; -k &lt;file containing private key&gt; -id &lt;a client ID&gt; -t &lt;the topic to subscribe to&gt;
+</code></pre>
+<p>Nothing happens before we start publishing messages to our topic of choice. I ran the example on my Pi, using the topic <code>/bme680/actions</code>. I then moved to the test suite at AWS IoT Core &gt; Test, and published a message to that topic.<br></p>
+<div align="center">
+	<img width=500 src="../iot-poc/images/aws_iot_test_simple_subscribe.PNG" alt="simple subscribe">
+  <br>
+</div>
+<p>The console output on the Pi then looks like this:</p>
+<pre><code>Received a new message:
+{
+    &quot;message&quot;: &quot;Hello from AWS IoT Console&quot;
+}
+from topic:
+bme680/action
+</code></pre>
+<p>Congratulations! You now know how to subscribe to a topic using the AWS IoT Python SDK. The real power of subscription, however, lies in combining it with publishing. In the next section, we will build a small example of how to use subscription with publishing to great effect.</p>
+<h1 id="a-subscription-example">A Subscription Example</h1>
+<p>In the case of simple publishing, we were getting temperature readings from the BME680 sensor and published them to AWS IoT. However, the BME680 sensor is also able to measure relative humidity and air pressure. In real life we would want to use this expensive sensor to measure all three at once, but for this case we are going to build a way for us to remotely toggle between measuring these three variables. We will set up a subsription that listens to commands published on a specific topic. We will then use the content of that message to change which variable is measured and published by the device and sensor.<br>
+First we will choose our topics. We will publish on three different topics depending on the variable that we are measuring.</p>
+<pre><code>bme680/temperature
+bme680/pressure
+bme680/humidity
+</code></pre>
+<p>In addition to this, we will reserve a topic for publishing actions to our device.</p>
+<pre><code>bme680/action
+</code></pre>
+<p>Imagine now that we will publish messages on this topic telling the device what to do. For instance, we might send the message</p>
+<pre><code class="language-json">{
+    &quot;action&quot;:&quot;pressure&quot;
+}
+</code></pre>
+<p>telling the device to switch to measuring pressure and publish on the appropriate topic. Publishing this message will be simple enough using the AWS IoT test suite, but we need to code up the response behaviour first. To this end, we will use the callback function</p>
+<pre><code class="language-python">topic = None
+variable = None
+def callback_function(client, userdata, message):
+    payload = json.loads(message.payload)
+    global pubtopic
+    global variable
+    if &quot;action&quot; not in payload:
+        topic = None
+        variable = None
+    else:
+        if payload[&quot;action&quot;] == &quot;temperature&quot;:
+            topic = &quot;bme680/temperature&quot;
+            variable = &quot;temperature&quot;
+        elif payload[&quot;action&quot;] == &quot;pressure&quot;:
+            topic = &quot;bme680/pressure&quot;
+            variable = &quot;pressure&quot;
+        elif payload[&quot;action&quot;] == &quot;humidity&quot;:
+            topic = &quot;bme680/humidity&quot;
+            variable = &quot;humidity&quot;
+        else:
+            topic = None
+            variable = None
+</code></pre>
+<p>We will then use these global variables to adjust what variable we get from the sensor before publishing.</p>
+<pre><code class="language-python">while True:
+    if sensor.get_sensor_data():
+        # Get the value currently toggled
+        value = None
+        if variable = &quot;temperature&quot;:
+            value = sensor.data.temperature
+        elif variable = &quot;pressure&quot;:
+            value = sensor.data.pressure
+        elif variable = &quot;humidity&quot;:
+            value = sensor.data.humidity
+        elif:
+            value = None
+        message = {}
+        message['value'] = value
+        message['variable'] = variable
+        message['timestamp_utc'] = datetime.utcnow().strftime(&quot;%Y-%m-%dT%H:%M:%S.%fZ&quot;)
+        message['status'] = &quot;success&quot;
+        messageJson = json.dumps(message)
+         # This is the actual publishing to AWS
+        myAWSIoTMQTTClient.publish(topic, messageJson, 1)
+        print('Published topic %s: %s\n' % (topic, messageJson))
+        loopCount += 1
+    else:
+        message = {}
+        message['value'] = None
+        message['timestamp_utc'] = datetime.utcnow().strftime(&quot;%Y-%m-%dT%H:%M:%S.%fZ&quot;)
+        message['status'] = &quot;fail&quot;
+        messageJson = json.dumps(message)
+         # This is the actual publishing to AWS
+        myAWSIoTMQTTClient.publish(topic, messageJson, 1)
+        print('Published topic %s: %s\n' % (topic, messageJson))
+</code></pre>
+<p>The whole script is <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_pubsub.py" title="simple pubsub example" target="_blank" rel="noopener">here</a>. When run, it will start to listen to the topic subscibed to. Once it receives a message with instructions it will start querying the sensor as instructed and publish. This way we can toggle between different sensors and even shut off messages when we do not need them and thus save money.<br>
+This might not be exactly the thing that you want your device to do, but now you have the building blocks to create whatever response you want. As a challenge, why not try to set up a topic that controls how often values are published from the device? With such functionality, you could adjust the tradeoff between storage cost and data granularity over time.</p>
+<h1 id="in-production">In Production</h1>
+<p>Besides the considerations mentioned in the <a href="../../project/iot-poc-publishing/#in-production">previous demonstration</a>, a few additional considerations apply now that we are able to establish two way communication with our devices in the IoT.</p>
+<h2 id="applications">Applications</h2>
+<p>First the fun part. What might we actually do with this added capability?</p>
+<h3 id="alternate-data-frequency">Alternate data frequency</h3>
+<p>If we store and process less data, it will cost us less but will also give the data scientists less of that precious data paydirt. We might want to change the frequency of the data according to current business priorities. We will almost definitely want to change the rate to respond to the process. A simple on/off switch for when the process is not running will work wonders. I would, however, love to see a combined IoT and analytics application that chooses the sampling frequency based on variance in the data and automatically adjusts sampling accordingly.</p>
+<h3 id="have-an-equipment-debugging-mode">Have an equipment-debugging mode</h3>
+<p>The idea of a debugging mode is common in digital applications. IoT means brining the digital world to our physical equipment. Imagine having a debugging mode for our manufacturing equipment. Specifically, this could be a toggleable mode with telemetry from additional sources and at a high frequency.</p>
+<h3 id="respond-to-low-frequency-changes">Respond to low-frequency changes</h3>
+<p>Control loop managed by PLCs do a great job of keeping a process in control and running smoothly and continuosly. One thing they do not do, however, is respond well to low frequency changes and business-induced changes. Think of a batch changeover or the change between product variants - it takes time and effort to get the equipment running smoothly again. If we have actuating devices as part of the IoT we can start having our manufacturing equipment respond to business priorities or just deal with changes that the PLC does not consider. An example could be an automatic change of settings on a change of product variant according to the predictions of a simulation or a model.</p>
+<h2 id="security">Security</h2>
+<p>If you are in manufacturing or some other regulated context, it might sound scary to have a two way communication between your site and the cloud. In all fairness, this could pose a security risk, the magnitude of which depends on the extent of the liberties given to the IoT and connected applications. As developers, there are a number of considerations we can make to increase the robustness of the IoT and lessen the burden on ourselves when we maintain the application. This is by no means a full list, but just a few obvious starting points.</p>
+<h3 id="do-not-couple-control-loop-and-iot">Do not couple control loop and IoT</h3>
+<p>The end goal of our IoT application might be a kind of outer automation that responds to rare changes and optimises business parameters, but coupling our IoT with quality critical process control might not be a good idea, at least right away. Remember that even though our vision camera is not directly connected to our gateway device, we might still be able to get that delicious data by reading it from a database associated with the vision system.</p>
+<h3 id="limit-the-power-of-actions">Limit the power of actions</h3>
+<p>Should someone with malicious content get access to publishing to a topic that initiates actions in the our gateway devices they will only be able to cause as much damage as we allow.<br>
+For one of my first setups, I made my device run any bash command sent from the cloud. This is a fun exercise, but probably a bad idea in a real manufactuing setting.</p>
+<h3 id="topic-management">Topic management</h3>
+<p>One thing, I have found useful is to use seperate topic hierarchies for topics that are intended for publishing data and topics that are intended for triggering work or actions.<br>
+We have <a href="project/iot-poc-publishing/#topics">previously</a> discussed using hierarchies of topics to structure data published from a manufacturing site. If we have a topic hierarchy like <code>factoryA/line22/milling/torque</code>, it might be tempting to make the action topic something like <code>factoryA/line22/milling/action</code>. This could be a bad idea, since it is easy to create a policy like <code>factoryA/line22/*</code> that allows access to publishing and action topics. If instead we make topics like <code>action/factoryA/line22/milling</code> then at least it is more difficult to make policy mistakes while still keeping some of the hierarchical structure.<br>
+Even without considering mistakes, poor topic management can quickly create a weak spot for our IoT both in terms of security and developer friendliness. AWS does not manage our topics, so we need to do it. That being said, the AWS Device Shadow functionality might just be what we need to make this much simpler. Fortunately, Shadows are the subject of the <a href="../../project/iot-poc-shadow/">next demonstration</a>.</p>
+<h3 id="read-about-security-best-practices">Read about security best practices</h3>
+<p><a href="https://docs.aws.amazon.com/iot/latest/developerguide/security.html" title="AWS IoT Security Docs" target="_blank" rel="noopener">AWS documentation</a> is quite extensive and has better explanations and recommendations for security than I could ever conceive. Make sure to stay on top of current security best practices.</p>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tag/iot/">IoT</a>
+  
+  <a class="badge badge-light" href="../../tag/data/">Data</a>
+  
+  <a class="badge badge-light" href="../../tag/data-engineering/">Data Engineering</a>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="../../"><img class="avatar mr-3 avatar-circle" src="../../author/anders-e.-nielsen/avatar_huaf22d72e35256be9d48177f1f21d9377_326351_270x270_fill_q75_lanczos_center.jpg" alt="Anders E. Nielsen"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Anders E. Nielsen</a></h5>
+      <h6 class="card-subtitle">Data Professional &amp; Research Scientist</h6>
+      <p class="card-text">I apply modern data technology to solve real-world problems. My interests include statistics, machine learning, computational biology, and IoT.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:andellegaard@gmail.com" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/anders-ellegaard-nielsen-6a0857125/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/AnHosu" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="../../project/iot-poc-greengrass/">Build an Edge with Greengrass</a></li>
+      
+      <li><a href="../../project/iot-poc/">Industrial IoT with AWS and Python</a></li>
+      
+      <li><a href="../../project/iot-poc-greengrass-ml/">Machine Learning at the Edge and other Advanced Features of Greengrass</a></li>
+      
+      <li><a href="../../project/iot-poc-publishing/">Publishing Industrial Data with AWS IoT</a></li>
+      
+      <li><a href="../../project/iot-poc-shadow/">Thing Shadows with AWS IoT</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+    <div class="project-related-pages content-widget-hr">
+      
+      
+
+      
+      
+      
+
+      
+      
+      
+
+      
+      
+      
+    </div>
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Anders E. Nielsen
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a>, <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>, and <a href="https://github.com/rstudio/blogdown" target="_blank" rel="noopener">R Blogdown</a>.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="../../js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="../../en/js/wowchemy.min.cf8ca859a9b74f8b1cd804621b13e5f1.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

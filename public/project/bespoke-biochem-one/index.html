@@ -1,0 +1,2100 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Anders E. Nielsen" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Developing a bespoke Bayesian model for fitting the Hill equation in biochemical assays" />
+
+  
+  <link rel="alternate" hreflang="en-us" href="../../project/bespoke-biochem-one/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#023e8a" />
+  
+
+  
+  
+    
+    <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono&display=swap">
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/wowchemy.f7eaf83122b08ab266aaa8a2d08cb1e8.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="../../index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="../../project/bespoke-biochem-one/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="anders e" />
+  <meta property="og:url" content="/project/bespoke-biochem-one/" />
+  <meta property="og:title" content="Bespoke Bayesian Model for Biochemical Assays | anders e" />
+  <meta property="og:description" content="Developing a bespoke Bayesian model for fitting the Hill equation in biochemical assays" /><meta property="og:image" content="/project/bespoke-biochem-one/featured.jpg" />
+    <meta property="twitter:image" content="/project/bespoke-biochem-one/featured.jpg" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2021-11-20T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2021-12-19T20:38:00&#43;02:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/project/bespoke-biochem-one/"
+  },
+  "headline": "Bespoke Bayesian Model for Biochemical Assays",
+  
+  "image": [
+    "/project/bespoke-biochem-one/featured.jpg"
+  ],
+  
+  "datePublished": "2021-11-20T00:00:00Z",
+  "dateModified": "2021-12-19T20:38:00+02:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Anders E. Nielsen"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "anders e",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "Developing a bespoke Bayesian model for fitting the Hill equation in biochemical assays"
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Bespoke Bayesian Model for Biochemical Assays | anders e</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="75d20c5ba7cb5b656e86e2373716dfd6" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="../../js/wowchemy-init.min.a8a181ea67095ef9fbb0e99ffbf585a0.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../post/"><span>Blog</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article article-project">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+
+<div class="article-container pt-3">
+  <h1>Bespoke Bayesian Model for Biochemical Assays</h1>
+
+  
+
+  
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    2021-12-19
+  </span>
+  
+
+  
+
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+  
+
+
+
+
+<div class="btn-links mb-3">
+  
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  
+  
+    
+  
+  <a class="btn btn-outline-primary btn-page-header" href="https://github.com/AnHosu/bespoke-bayesian-biochem" target="_blank" rel="noopener">
+    <i class="fab fa-github mr-1"></i>
+    Go to project repo
+  </a>
+
+
+</div>
+
+
+</div>
+
+
+<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 476px;">
+  <div style="position: relative">
+    <img src="../../project/bespoke-biochem-one/featured_hub196e30fbaee8bea744539b2a7a78be0_84167_720x0_resize_q75_lanczos.jpg" alt="" class="featured-image">
+    
+  </div>
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<script src="../../project/bespoke-biochem-one/index_files/header-attrs/header-attrs.js"></script>
+
+
+<p>I am on a quest to improve the model fitting I do on biochemical assays. For some time, I have had this feeling that I should be able to extract more information from the data gathered in biochemical assays, in particular assays with a high throughput. I have been using classical machine learning techniques and generic fitting and optimisation functions to interpret data from such assays. While this approach works, it also neglects much of the available domain expertise. Many of the underlying biochemical mechanisms are known and I would like my models to take that into account so I get results that are more directly interpretable in the context of the hypothesis that required the assay in the first place. In other words, I want a bespoke model.</p>
+<p>I will be developing the bespoke model one minimally viable step at a time. In this study, I am building a Bayesian model for biochemical assays where the underlying data generating process is the Hill equation for tissue responses <span class="citation">[<a href="#ref-Neubig597" role="doc-biblioref">1</a>]</span>. I will then test the model in two simulated example studies.</p>
+<p>I was inspired to write this study after reading the chapter “Generalized Linear Madness” in the book Statistical Rethinking by R. McElreath <span class="citation">[<a href="#ref-McElreath:2016" role="doc-biblioref">2</a>]</span> and the writings of M. Betancourt <span class="citation">[<a href="#ref-Betancourt:2019" role="doc-biblioref">3</a>]</span>. For an introduction to bespoke Bayesian models, I highly recommend these resources.</p>
+<p>If you are following along, we will build the Bayesian models in Stan and make use of the Rstan interface to extract posterior samples. For data wrangling and visualisation, we will use the Tidyverse.</p>
+<pre class="r"><code>library(ggplot2)
+library(magrittr)
+
+options(mc.cores = parallel::detectCores())
+
+colour &lt;- list(
+  orange_dark = &quot;#fb8500&quot;,
+  orange_light = &quot;#ffb703&quot;,
+  blue_dark = &quot;#023047&quot;,
+  azure = &quot;#219ebc&quot;,
+  blue_light = &quot;#8ecae6&quot;
+)
+
+set.seed(4444)</code></pre>
+<div id="contents" class="section level1">
+<h1>Contents</h1>
+<ul>
+<li><a href="#contents">Contents</a></li>
+<li><a href="#domain-expertise">Domain Expertise</a>
+<ul>
+<li><a href="#hill-equation">Hill Equation</a></li>
+<li><a href="#from-domain-expertise-to-probabilistic-model">From Domain Expertise to Probabilistic Model</a>
+<ul>
+<li><a href="#a-prior-for-the-hill-coefficient">A prior for the Hill coefficient</a></li>
+<li><a href="#a-prior-for-the-maximum-tissue-response">A prior for the maximum tissue response</a></li>
+<li><a href="#a-prior-for-the-minimum-tissue-response">A prior for the minimum tissue response</a></li>
+<li><a href="#a-prior-for-potency">A prior for potency</a></li>
+<li><a href="#a-prior-for-experiment-noise">A prior for experiment noise</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#example-studies">Example Studies</a>
+<ul>
+<li><a href="#example-study-1---exploring-kinetics">Example Study 1 - Exploring Kinetics</a>
+<ul>
+<li><a href="#a-model-for-study-1">A model for study 1</a></li>
+<li><a href="#prior-predictive-check-in-tidyverse">Prior predictive check in Tidyverse</a></li>
+<li><a href="#building-a-stan-model-for-study-1">Building a Stan model for study 1</a></li>
+<li><a href="#fitting-study-1">Fitting study 1</a></li>
+</ul></li>
+<li><a href="#example-study-2---new-drug">Example Study 2 - New Drug</a>
+<ul>
+<li><a href="#a-model-for-study-2">A model for study 2</a></li>
+<li><a href="#prior-predictive-check-with-stan">Prior predictive check with Stan</a></li>
+<li><a href="#building-a-stan-model-for-study-2">Building a Stan model for study 2</a></li>
+<li><a href="#fitting-study-2">Fitting study 2</a></li>
+</ul></li>
+<li><a href="#assessing-posterior-quality">Assessing posterior quality</a></li>
+<li><a href="#comparing-to-another-fitting-method">Comparing to another fitting method</a></li>
+</ul></li>
+<li><a href="#next-steps">Next Steps</a></li>
+<li><a href="#references">References</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+</div>
+<div id="domain-expertise" class="section level1">
+<h1>Domain Expertise</h1>
+<p>Before we start coding a model or even looking at any data, let’s formally discuss the biochemical domain experitise.</p>
+<div id="hill-equation" class="section level2">
+<h2>Hill Equation</h2>
+<p>When a ligand, e.g. a drug, is an antagonist to a receptor that causes some tissue response, the strength of that response, <span class="math inline">\(\mu_i\)</span>, declines with increased concentration of that ligand, <span class="math inline">\([A_i]\)</span>. The response is known to follow the Hill Equation <span class="citation">[<a href="#ref-Neubig597" role="doc-biblioref">1</a>]</span>.</p>
+<p><span class="math display">\[\mu_i = top - \frac{bottom - top}{1 + 10^{(\log_{10}(IC_{50}) - \log_{10}([A_i]))^{n_H}}}\]</span></p>
+<p>When tissue response is plotted against log ligand concentration, the Hill equation is a downwards sloping S-curve where <span class="math inline">\(top\)</span> is the maximum response and <span class="math inline">\(bottom\)</span> is the minimum response. <span class="math inline">\(IC_{50}\)</span> is the concentration at which the response is halfway between <span class="math inline">\(top\)</span> and <span class="math inline">\(bottom\)</span>. The final parameter, the Hill coefficient <span class="math inline">\(n_H\)</span>, affects the steepness of the curve and is determined by the underlying kinetics. At <span class="math inline">\(n_H = 1\)</span>, a ligand binding is independent of previously bound ligands. At <span class="math inline">\(n_H &lt; 1\)</span> binding has diminishing returns and at <span class="math inline">\(n_H &gt; 1\)</span> ligands cooperatively bind for increasing returns on tissue response.</p>
+<p>The Hill Equation appears in various forms in literature. Notably, when the ligand is an agonist, the curve has a positive slope and the halfway point is then often named <span class="math inline">\(EC_{50}\)</span>. The logarithm base used could also be any other, but base 10 is a common choice, as 10 times dilutions or other whole-number dilutions are easier to make.</p>
+<p>Let’s plot an example curve</p>
+<pre class="r"><code>hill_function &lt;- function(log_conc, bottom, top, log_IC50, nH) {
+  top + (bottom - top)/(1 + 10^((log_IC50 - log_conc)*nH))
+}</code></pre>
+<pre class="r"><code>bottom &lt;- 0
+top &lt;- 1
+log_IC50 &lt;- -3
+nH &lt;- 1
+ggplot() +
+  xlim(log_IC50 - 3, log_IC50 + 3) +
+  geom_function(
+    fun = hill_function,
+    args = list(bottom = bottom, top = top, log_IC50 = log_IC50, nH = nH),
+    aes(colour = &quot;Tissue response&quot;)
+  ) +
+  labs(
+    x = &quot;log ligand concentration&quot;,
+    y = &quot;response&quot;,
+    title = &quot;Hill Equation Example&quot;
+  ) +
+  scale_colour_manual(values = c(&quot;Tissue response&quot; = colour$azure)) +
+  theme_minimal() +
+  theme(legend.title = element_blank())</code></pre>
+<p><img src="../../project/bespoke-biochem-one/index_files/figure-html/hill_equation-1.png" width="90%" /></p>
+<p>In the real world, we cannot sample the true tissue response exactly. As a proxy for the tissue response, we employ assays that are performed <em>in vitro</em>. Such assays are sensitive to environmental conditions and, even in the most strictly controlled settings, yield noisy responses. Baring any systematic bias, the assay response, <span class="math inline">\(y_i\)</span> should average to the true tissue response though.</p>
+<pre class="r"><code>assay_response &lt;- function(log_conc, bottom, top, log_IC50, nH, sigma) {
+  noise &lt;- rnorm(length(log_conc), 0, sigma)
+  hill_function(log_conc, bottom, top, log_IC50, nH) + noise
+}</code></pre>
+<pre class="r"><code>tibble::tibble(
+  log_conc = seq(log_IC50 -3, log_IC50 + 3, length.out = 5),
+  y = assay_response(log_conc, bottom, top, log_IC50, nH, (top - bottom)/20)
+) %&gt;% 
+  ggplot(aes(log_conc, y)) +
+  geom_point(aes(colour = &quot;Noisy assay response&quot;)) +
+  geom_function(
+    fun = hill_function,
+    args = list(bottom = bottom, top = top, log_IC50 = log_IC50, nH = nH),
+    aes(colour = &quot;Tissue response&quot;)
+  ) +
+  scale_colour_manual(values = c(
+    &quot;Tissue response&quot; = colour$azure,
+    &quot;Noisy assay response&quot; = colour$orange_light
+  )) +
+  labs(
+    x = &quot;log ligand concentration&quot;,
+    y = &quot;response&quot;,
+    colour = &quot;&quot;
+  ) +
+  theme_minimal()</code></pre>
+<p><img src="../../project/bespoke-biochem-one/index_files/figure-html/noisy_assay_response-1.png" width="90%" /></p>
+</div>
+<div id="from-domain-expertise-to-probabilistic-model" class="section level2">
+<h2>From Domain Expertise to Probabilistic Model</h2>
+<p>With the basic domain knowledge in place, we are ready to start thinking about the assay in terms of probability distributions.</p>
+<p>The first expression relates our observed assay responses, <span class="math inline">\(y_i\)</span>, to the true underlying tissue response, <span class="math inline">\(\mu_i\)</span>. Given repeat observations, the assay response should average to the tissue response and the variance should be small and finite, so it is not too far a stretch to think of the assay response as a sample from a normal distribution.</p>
+<p><span class="math display">\[y_i \sim {\sf Normal}(\mu_i, \sigma)\]</span></p>
+<p>Where <span class="math inline">\(\sigma\)</span> is a parameter that is shared among all observations.</p>
+<p>We already know how the tissue response relates to the ligand concentration, <span class="math inline">\([A_i]\)</span>, the variable of our assay; it is the Hill equation.</p>
+<p><span class="math display">\[\mu_i = top - \frac{bottom - top}{1 + 10^{(\log_{10}(IC_{50}) - \log_{10}([A_i]))^{n_H}}}\]</span></p>
+<p>These two expressions define our observational model or likelihood function. Next, we need to specify our prior model, and this is where domain expertise comes in handy.</p>
+<p>The prior model needs to have prior assumptions and corresponding distributions for each parameter in the model. The parameters that need priors are <span class="math inline">\(IC_{50}\)</span>, <span class="math inline">\(bottom\)</span>, <span class="math inline">\(top\)</span>, <span class="math inline">\(n_H\)</span>, and <span class="math inline">\(\sigma\)</span>.</p>
+<p><span class="math inline">\(\mu_i\)</span> is an unobserved variable - it is a deterministic function of the model parameters and our variable, <span class="math inline">\([A_i]\)</span>, so it does not need a prior.</p>
+<p>The priors will always have to be specific to the assay at hand. In this study, we are not considering a real assay, but will be simulating instead. Even so, we can still discuss general prior strategies for parameters of the model, in the light of our general knowledge about the biochemical processes. Later, when we start simulating, we can lock in specific priors.</p>
+<p>Let’s consider each parameter in turn, starting with <span class="math inline">\(n_H\)</span>.</p>
+<div id="a-prior-for-the-hill-coefficient" class="section level3">
+<h3>A prior for the Hill coefficient</h3>
+<p>The Hill coefficient will in many cases be well known. For instance, if the receptor that causes the tissue response is known to have only one binding site for the ligand, it extremely unlikely that we will observe any cooperative or competitive kinetics.</p>
+<p>When each ligand binds an individual receptor, the binding should be independent, regardless of the nature of the ligand. Hence, in theory, <span class="math inline">\(n_H = 1\)</span> and we can assign a narrow prior, say <span class="math inline">\(n_H \sim {\sf Normal}(1, 0.1)\)</span>. This prior puts 95% of the probability between 0.8 and 1.2. If we were very sure, we could go for an even narrower prior.</p>
+<p>In case we encountered a response with cooperative binding, we would just move the prior distribution a bit above 1. For instance, if we were studying hemoglobin, we could put the prior at <span class="math inline">\({\sf Normal}(2.5, 0.5)\)</span> or thereabouts.</p>
+<p>We know one more thing though. The Hill coefficient cannot be less than zero, as that would change the kinetics of the system. With the narrow prior around <span class="math inline">\(n_H = 1\)</span> it is not really an issue, as there is virtually no probability mass below 0, but for kinetics with diminishing returns, an exponential prior or a half-normal distribution may be preferable.</p>
+</div>
+<div id="a-prior-for-the-maximum-tissue-response" class="section level3">
+<h3>A prior for the maximum tissue response</h3>
+<p>When discussing the <span class="math inline">\(top\)</span> and <span class="math inline">\(bottom\)</span> parameters, it is worth discussing assay technique. Even though the assay is performed <em>in vitro</em>, the subject, e.g. tissue, receptor, or enzyme, is often a biological construct and thus likely to exhibit batch variation. Furthermore, the raw assay reading carries no particular meaning. Instead, we employ controls to get a normalised response. For instance, we might use a bit of buffer as a negative control and assign the corresponding response to 1 and, at the other end, we might use a known strongly binding ligand as a positive control and assign the corresponding response to 0. The raw readings are then normalised between these two controls to yield the assay response, <span class="math inline">\(y_i\)</span>.</p>
+<p>Back to the maximum response. In most contexts, the maximum response is not all that interesting compared to the other parameters. We expect the maximum response to be in the vicinity of the negative control, and if we were doing regular curve fitting, we might just fix the maximum response at 1.</p>
+<p>In terms of probabilities, it means that we have very strong prior knowledge about the maximum response. We could allow it to vary a bit, but I assert that is would not offer much utility.</p>
+</div>
+<div id="a-prior-for-the-minimum-tissue-response" class="section level3">
+<h3>A prior for the minimum tissue response</h3>
+<p>The minimum response, <span class="math inline">\(bottom\)</span>, is much more interesting, as it represents the greatest effect a ligand can have on a tissue response. Analogous to the negative control, we set the response of a positive control to 0. However, we cannot necessarily fix the minimum response at this point.</p>
+<p>Imagine an assay where we are testing a chemical compound in the hopes of identifying a new antagonist for the tissue response of interest. If the compound is not a ligand for the receptor, there is no response and <span class="math inline">\(bottom = top\)</span>. On the other hand, if we come across a ligand, then it might elicit a stronger or weaker response than the positive control.</p>
+<p>What does this mean in terms of a prior? It means that screening experiments require a relatively wide prior for the <span class="math inline">\(bottom\)</span> parameter; we only know that it should be less than <span class="math inline">\(top\)</span> and that it is unlikely to be much smaller than 0. However, if we are studying the kinetics of the system and we have a known strong ligand as positive control, we can choose a much narrower prior around 0.</p>
+</div>
+<div id="a-prior-for-potency" class="section level3">
+<h3>A prior for potency</h3>
+<p>Deciding on a prior for <span class="math inline">\(IC_{50}\)</span> is difficult for two reasons. If we are screening new compounds, we might have no idea about the potency of the compound or whether it even has potency at all. Secondly, <span class="math inline">\(IC_{50}\)</span> is a concentration and the tissue response depends on the ligand concentration relative to this concentration. In other words, it is the magnitude of the potency that matters.</p>
+<p>The way to handle this is by thinking of a prior for <span class="math inline">\(\log_{10}(IC_{50})\)</span> instead. Units matter, but if we use Molar concentration then <span class="math inline">\(\log_{10}(IC_{50}) = -9\)</span> would correspond to an extremely potent ligand and <span class="math inline">\(\log_{10}(IC_{50}) = 0\)</span> would correspond to extremely low potency.</p>
+</div>
+<div id="a-prior-for-experiment-noise" class="section level3">
+<h3>A prior for experiment noise</h3>
+<p>Hopefully, the experiment noise is minimal. Consider <span class="math inline">\(\sigma = 0.1\)</span>. Since we expect most readings to fall in the range <span class="math inline">\([0, 1]\)</span>, this noise level translates to 95% of assay responses being within +-20% of the tissue response. This might be a lot or it might be what is expected from a biological assay, but the point is that, as long as we normalise the assay responses, this parameter should be easy to reason about. For instance, <span class="math inline">\(\sigma\)</span> can never be less than zero, and if it is higher than 0.5, then the assay is more noise than signal.</p>
+</div>
+</div>
+</div>
+<div id="example-studies" class="section level1">
+<h1>Example Studies</h1>
+<p>Let’s move on to some simulated studies</p>
+<div id="example-study-1---exploring-kinetics" class="section level2">
+<h2>Example Study 1 - Exploring Kinetics</h2>
+<p>In this study we are imagining a situation where we are trying to learn more about the kinetics of a tissue response. We are investigating a receptor for which we have a known strongly binding antagonist. We suspect that the receptor has multiple binding sites and that ligand binding is not independent. We also do not know the potency, <span class="math inline">\(IC_{50}\)</span>, of the antagonist, but we know that maximum tissue response is observed at <span class="math inline">\([A_i] &gt; 10^{-3}\)</span>.</p>
+<p>Let’s set some ‘secret’ values for the system and simulate assay readings. Later, we will try to recover these values.</p>
+<pre class="r"><code>study_1_params &lt;- list(
+  bottom = 0,
+  top = 1,
+  log_IC50 = -5.6,
+  nH = 1.4,
+  sigma = 0.05
+)</code></pre>
+<div id="a-model-for-study-1" class="section level3">
+<h3>A model for study 1</h3>
+<p>Before performing the experiment, i.e. simulating observations, we should take some time to reflect on our domain expertise and translate it into a bespoke probabilistic model for this particular scenario.</p>
+<p>We know that we will measure an assay response, <span class="math inline">\(y_i\)</span>, for a number of ligand concentrations <span class="math inline">\([A_i]\)</span>. We also know that the assay response averages to the tissue response, <span class="math inline">\(\mu_i\)</span>, but that observations are noisy:</p>
+<p><span class="math display">\[y_i \sim {\sf Normal}(\mu_i, \sigma)\]</span></p>
+<p>The tissue response is a deterministic function of four kinetic parameters, as described by the Hill equation:</p>
+<p><span class="math display">\[\mu_i = top - \frac{bottom - top}{1 + 10^{(\log_{10}(IC_{50}) - \log_{10}([A_i]))^{n_H}}}\]</span></p>
+<p>The <span class="math inline">\(top\)</span> parameter should, on average, be equal to our negative control, which we fix at 1. Our negative control is just water or buffer, and we have no reason to believe that the maximum tissue response when ligand concentration is infinitely small is any different from the buffer. Thus, our domain expertise tells us to put a very narrow prior on this parameter:</p>
+<p><span class="math display">\[top \sim {\sf Normal}(1, 0.01)\]</span></p>
+<p>The <span class="math inline">\(bottom\)</span> parameter should, on average, be equal to our positive control, which we fix at 0. Our positive control is an extreme concentration of the ligand to be sure that it elicits the minimum tissue response. We have no reason to believe that the minimum tissue response when ligand concentration is infinitely large is any different from the extreme concentration. Thus, our domain expertise tells us to put a very narrow prior on this parameter too:</p>
+<p><span class="math display">\[bottom \sim {\sf Normal}(0, 0.01)\]</span></p>
+<p>We do not know much about the Hill coefficient, <span class="math inline">\(n_H\)</span>, as we have limited experience with the underlying kinetics. We do, however, know that the Hill coefficient should not be less than 0. While <span class="math inline">\(n_H\)</span> may be more or less than 1, we also know that it is very unlikely that it is orders of magnitude smaller or larger. We can place a wide log-normal prior on this parameter to keep it positive and we can choose distribution parameters such that there is equal probability above and below 1:</p>
+<p><span class="math display">\[n_H \sim {\sf LogNormal}(0, 1)\]</span></p>
+<p>We also do not know much about <span class="math inline">\(\log_{10}(IC_{50})\)</span>, but we consider -9 and -3 fairly extreme values, so we can just use a wide normal prior that keeps the parameter mostly in that range:</p>
+<p><span class="math display">\[\log_{10}(IC_{50}) \sim {\sf Normal}(-6, 1.5)\]</span></p>
+<p>Finally, we should consider how noisy our observations might be. We have little experience with this assay, so we expect a lot of noise. Let’s say that we expect the assay response to be within 20% above or below the tissue response, in most cases. This roughly translates to an expectation of <span class="math inline">\(\sigma = 0.1\)</span>. We also know that <span class="math inline">\(\sigma &gt; 0\)</span>, so we can use an exponential prior with an expectation of 0.1, i.e. a rate of 10:</p>
+<p><span class="math display">\[\sigma \sim {\sf Exp}(10)\]</span></p>
+</div>
+<div id="prior-predictive-check-in-tidyverse" class="section level3">
+<h3>Prior predictive check in Tidyverse</h3>
+<p>With the model specified, my hands are itching to start fitting. That would be a poor idea, though. Before fitting, we should verify that the model as a whole conforms to our domain knowledge. Even though we have chosen what we think are reasonable priors, it it difficult to get an intuition about how all those priors interact. However, since the model is probabilistic and generative, we can sample predictions from it without fitting anything first. If the distribution of those prior predictions agree with our expectations, then we are good to go.</p>
+<p>For a simple model like this, it is fairly easy to perform such a prior predictive check with Tidyverse and basic R functionality. First we sample parameters from the prior distributions, then we calculate the deterministic variables, and finally draw out the curves.</p>
+<pre class="r"><code>n_samples &lt;- 50
+# A function to easily sample prior parameters
+study_1_priors &lt;- function(n) {
+  tibble::tibble(
+    top = rnorm(n, 1, 0.01),
+    bottom = rnorm(n, 0, 0.01),
+    nH = rlnorm(n, 0, 1),
+    log_IC50 = rnorm(n, -6, 1.5),
+    sigma = rexp(n, 10)
+  )
+}
+# Draw each corresponding assay response
+study_1_prior_pred_samples &lt;- study_1_priors(n_samples) %&gt;%
+  dplyr::filter(top &gt; bottom) %&gt;% # This is very unlikely to happen though
+  dplyr::mutate(
+    tissue_response = purrr::pmap(
+      list(top, bottom, nH, log_IC50, sigma),
+      ~ geom_function(
+        fun = assay_response,
+        args = list(
+          top = ..1,
+          bottom = ..2,
+          nH = ..3,
+          log_IC50 = ..4,
+          sigma = ..5
+        ),
+        colour = colour$blue_dark,
+        alpha = 0.5
+      )
+    )
+  )
+
+p &lt;- ggplot() +
+  xlim(-9, -3) +
+  theme_minimal() +
+  labs(x = &quot;Ligand concentration [M]&quot; , y = &quot;Prior assay response&quot;)
+Reduce(`+`, study_1_prior_pred_samples$tissue_response, init = p)</code></pre>
+<p><img src="../../project/bespoke-biochem-one/index_files/figure-html/prior_pred_check_example_1-1.png" width="90%" /></p>
+<p>This looks much like the curves we would expect from a real assay. Extreme concentrations have extreme responses and the s-shaped part of the curve is somewhere in between. In some cases, the noise is extreme but that is probably to be expected from an assay where we have little or no experience.</p>
+<p>I initially set the prior for <span class="math inline">\(n_H\)</span> way too wide, resulting in many extreme responses. That does not comply with domain knowledge, so I shrunk the prior.</p>
+</div>
+<div id="building-a-stan-model-for-study-1" class="section level3">
+<h3>Building a Stan model for study 1</h3>
+<p>Now we are almost ready to fit the model. To do so, I have implemented it in Stan. There are other excellent introductions to Stan, see the <a href="https://mc-stan.org/docs/2_28/stan-users-guide/index.html">Stan User Guide</a> or some of the references below.</p>
+<p>Here is the Stan model that corresponds to the model described above.</p>
+<pre class="r"><code>writeLines(readLines(&quot;hill_equation_study_1.stan&quot;))</code></pre>
+<pre><code>data {
+  int&lt;lower=0&gt; N; // Number of observations
+  vector[N] log_conc; // Tested concentration on log10 scale
+  vector[N] y; // Normalised assay responses
+}
+parameters {
+  real bottom;
+  real&lt;lower=bottom&gt; top;
+  real log_IC50;
+  real&lt;lower=0&gt; nH;
+  real&lt;lower=0&gt; sigma;
+}
+model {
+  vector[N] mu;
+  bottom ~ normal(0, 0.01);
+  top ~ normal(1, 0.01);
+  log_IC50 ~ normal(-6, 1.5);
+  nH ~ lognormal(0, 1);
+  sigma ~ exponential(10);
+  for ( i in 1:N) {
+    mu[i] = top + (bottom - top)/(1 + 10^((log_IC50 - log_conc[i])*nH));
+  }
+  y ~ normal(mu, sigma);
+}</code></pre>
+</div>
+<div id="fitting-study-1" class="section level3">
+<h3>Fitting study 1</h3>
+<p>Now we can simulate some observations and fit the model. To make the simulation realistic, we generate observations in a wide space of ligand concentration, from <span class="math inline">\(\log_{10}([A_i]) = -9\)</span> to <span class="math inline">\(\log_{10}([A_i]) = -3\)</span>. To make it a challenge, we will generate just 6 observations.</p>
+<p>Fitting our bespoke Bayesian model amounts to sampling from the posterior distribution. Here I am drawing 1000 samples per chain from the posterior. This is not a large model, so we could easily sample a lot more if we wanted.</p>
+<pre class="r"><code>n_observations &lt;- 6
+n_posterior_samples &lt;- 1e3
+
+# Determine the log concentrations at which to simulate
+study_1_concentrations &lt;- seq(-9, -3, length.out = n_observations)
+
+# Simulate observations using our &#39;secret&#39; parameters
+study_1_observations &lt;- rlang::exec(
+  assay_response,
+  study_1_concentrations,
+  !!!study_1_params
+)
+
+# Everything the model needs to know
+study_1_data_list &lt;- list(
+  N = n_observations,
+  log_conc = study_1_concentrations,
+  y = study_1_observations
+)
+
+# This compiles the model and samples from the posterior
+study_1_post &lt;- rstan::stan(
+  &quot;hill_equation_study_1.stan&quot;,
+  data = study_1_data_list,
+  chains = 4,
+  iter = n_posterior_samples * 2,
+  warmup = n_posterior_samples,
+  seed = 4444
+)</code></pre>
+<p>Now we have samples from the posterior distribution. Let’s put them to work!</p>
+<p>Recall that the underlying research question was the kinetics of the tissue response. So more than the actual tissue response, we are interested in the posterior marginal distributions for the Hill coefficient, <span class="math inline">\(n_H\)</span>, and the potency, <span class="math inline">\(\log_{10}(IC_{50})\)</span>. We can extract samples for the marginal distribution of each of our model parameters.</p>
+<pre class="r"><code># Extract samples from the posterior distribution
+posterior_samples &lt;- rstan::extract(study_1_post) %&gt;% 
+  tibble::as_tibble() %&gt;%
+  dplyr::select(bottom, top, log_IC50, nH, sigma)
+
+# True parameters of the simulation.
+parameter_tibble &lt;- study_1_params %&gt;%
+  tibble::as_tibble() %&gt;%
+  tidyr::pivot_longer(
+    dplyr::everything(),
+    names_to = &quot;parameter&quot;,
+    values_to = &quot;truth&quot;
+  )
+
+# Plot each of the marginal distributions, comparing prior, posterior, and true
+#  simulation parameters
+posterior_samples %&gt;%
+  tidyr::pivot_longer(
+    dplyr::everything(),
+    names_to = &quot;parameter&quot;,
+    values_to = &quot;sample&quot;
+  ) %&gt;%
+  dplyr::left_join(parameter_tibble, by = &quot;parameter&quot;) %&gt;%
+  ggplot() +
+  geom_histogram(
+    data = tidyr::pivot_longer(
+      study_1_priors(nrow(posterior_samples)),
+      dplyr::everything(),
+      names_to = &quot;parameter&quot;,
+      values_to = &quot;sample&quot;
+    ),
+    mapping = aes(x = sample, fill = &quot;Prior&quot;),
+    bins = 50,
+    alpha = 0.5
+  ) +
+  geom_histogram(aes(x = sample, fill = &quot;Posterior&quot;), bins = 50, alpha = 0.5) +
+  geom_vline(aes(xintercept = truth, colour = &quot;truth&quot;), alpha = 0.5) +
+  facet_wrap(~ parameter, scales = &quot;free&quot;) +
+  theme_minimal() +
+  scale_colour_manual(values = c(&quot;truth&quot; = colour$orange_light)) +
+  scale_fill_manual(values = c(
+    &quot;Prior&quot; = colour$azure,
+    &quot;Posterior&quot; = colour$blue_dark
+  )) +
+  labs(
+    y = &quot;Posterior sample count&quot;,
+    x = &quot;&quot;,
+    colour = &quot;&quot;,
+    fill = &quot;&quot;,
+    title = &quot;Marginal Posterior and Prior Distributions&quot;
+  )</code></pre>
+<p><img src="../../project/bespoke-biochem-one/index_files/figure-html/posterior_marginals_example_1-1.png" width="90%" /></p>
+<p>There are so many exciting things to discuss here. I have opted to plot samples from both the posterior and prior distributions, so we can appreciate how the data worked to update our prior beliefs to posterior distributions.</p>
+<p>The first thing to notice is that the parameters for which we selected very narrow priors, i.e. <span class="math inline">\(top\)</span> and <span class="math inline">\(bottom\)</span>, nothing has changed. The data is not enough to overwhelm the strong priors and the posterior is mostly informed by the prior.</p>
+<p>On the other hand, the data has provided enough information to concentrate the probability density to a much narrower interval for the three remaining parameters. The posterior median for <span class="math inline">\(\log_{10}(IC_{50})\)</span> is very close to the truth. <span class="math inline">\(nH\)</span> is a bit more uncertain, but most of the probability is concentrated well above one, which correctly suggests cooperatively binding ligands.</p>
+<pre class="r"><code>post_summaries &lt;- rstan::summary(
+  study_1_post,
+  pars = c(&quot;bottom&quot;, &quot;top&quot;, &quot;log_IC50&quot;, &quot;nH&quot;, &quot;sigma&quot;),
+  probs = c(0.055, 0.5, 0.945)
+)$summary
+
+tibble::as_tibble(post_summaries) %&gt;% 
+  dplyr::select(c(&quot;5.5%&quot;, &quot;50%&quot;, &quot;94.5%&quot;)) %&gt;%
+  dplyr::mutate(parameter = rownames(post_summaries), .before = 1) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">parameter</th>
+<th align="right">5.5%</th>
+<th align="right">50%</th>
+<th align="right">94.5%</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">bottom</td>
+<td align="right">-0.0170975</td>
+<td align="right">-0.0010557</td>
+<td align="right">0.0144481</td>
+</tr>
+<tr class="even">
+<td align="left">top</td>
+<td align="right">0.9861742</td>
+<td align="right">1.0016366</td>
+<td align="right">1.0170142</td>
+</tr>
+<tr class="odd">
+<td align="left">log_IC50</td>
+<td align="right">-5.7516723</td>
+<td align="right">-5.5360470</td>
+<td align="right">-5.4050335</td>
+</tr>
+<tr class="even">
+<td align="left">nH</td>
+<td align="right">0.9012444</td>
+<td align="right">1.6121050</td>
+<td align="right">4.1663929</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma</td>
+<td align="right">0.0434627</td>
+<td align="right">0.0712316</td>
+<td align="right">0.1351734</td>
+</tr>
+</tbody>
+</table>
+<p>At this point, we can draw a conclusion for our experiment: Given our model assumptions, data strongly suggests cooperatively binding kinetics with a 89% compatibility interval for <span class="math inline">\(\log_{10}(IC_{50})\)</span> at about <span class="math inline">\([-5.75, -5.41]\)</span>.</p>
+<p>To improve the result, we could run another experiment using this much narrower range for <span class="math inline">\(\log_{10}(IC_{50})\)</span> as a prior and for determining ligand concentrations to test, as that interval is likely to contain the s-shaped part of the Hill curve.</p>
+<p>Speaking of the Hill curve, let’s see what our posterior predictions look like for the tissue response as a function of log ligand concentration.</p>
+<pre class="r"><code>study_1_post_pred &lt;- posterior_samples %&gt;%
+  tidyr::expand_grid(log_conc = seq(-3, -9, length.out = 50)) %&gt;% 
+  dplyr::mutate(tissue_response = purrr::pmap_dbl(
+    list(log_conc, bottom, top, log_IC50, nH),
+    hill_function
+  )) %&gt;%
+  dplyr::group_by(log_conc) %&gt;%
+  dplyr::summarise(
+    response_mean = mean(tissue_response),
+    response_upper = quantile(tissue_response, probs = 0.945),
+    response_lower = quantile(tissue_response, probs = 0.055)
+  ) %&gt;%
+  ggplot() +
+  geom_ribbon(
+    aes(
+      x = log_conc,
+      ymin = response_lower,
+      ymax = response_upper,
+      fill = &quot;89% interval&quot;
+    ),
+    alpha = 0.5
+  ) +
+  geom_line(aes(x = log_conc, y = response_mean, colour = &quot;Posterior mean&quot;)) +
+  geom_point(
+    data = tibble::tibble(
+      log_conc = study_1_concentrations,
+      observations = study_1_observations
+    ),
+    aes(x = log_conc, y = observations, colour = &quot;Observations&quot;)
+  ) +
+  geom_function(
+    fun = hill_function,
+    args = study_1_params[-5],
+    mapping = aes(colour = &quot;True tissue response&quot;)
+  ) +
+  labs(
+    y = &quot;Tissue response&quot;,
+    x = &quot;Log ligand concentration [M]&quot;,
+    colour = &quot;&quot;,
+    fill = &quot;&quot;
+  ) +
+  scale_fill_manual(values = c(&quot;89% interval&quot; = colour$azure)) +
+  theme_minimal()
+study_1_post_pred +
+  scale_colour_manual(values = c(
+    &quot;Posterior mean&quot; = colour$blue_dark,
+    &quot;Observations&quot; = colour$orange_light,
+    &quot;True tissue response&quot; = colour$orange_dark
+  ))</code></pre>
+<p><img src="../../project/bespoke-biochem-one/index_files/figure-html/posterior_predictive_example_1-1.png" width="90%" /></p>
+<p>The true tissue response is all contained in the 89% interval for the posterior predicted response, despite noisy observations and despite the fact that 5 out of 6 observations lie outside the s-shaped part of the curve.</p>
+<p>However, it also seems that we got lucky and had an observation very close to the true <span class="math inline">\(\log_{10}(IC_{50})\)</span>. This point quite clearly provides an anchor for the entire model. We might not always be this lucky. In that case, however, the posterior marginal distributions for the kinetic parameters would just be much more informed by the priors, in turn telling us that we should perform more experiments.</p>
+</div>
+</div>
+<div id="example-study-2---new-drug" class="section level2">
+<h2>Example Study 2 - New Drug</h2>
+<p>In this study, we imagine that we are developing a new potential drug candidate. As a part of the development process, we have produced a modified version of an endogenous ligand and we are looking to assess its potency, <span class="math inline">\(\log_{10}(IC_{50})\)</span>, and efficacy, which is defined in terms of <span class="math inline">\(bottom\)</span>.</p>
+<p>We are able to approximate the tissue response <em>in vitro</em>, but it involves complex biochemistry, so noisy measurements are to be expected.</p>
+<p>The tissue response to the endogenous ligand is well characterised, so we know that the ligands bind independently, i.e. <span class="math inline">\(n_H = 1\)</span>, and we know that for the endogenous ligand <span class="math inline">\(\log_{10}(IC_{50}) = -7.2\)</span>.</p>
+<p>Let’s set some ‘secret’ values for the system and simulate assay readings. Later, we will try to recover these values.</p>
+<pre class="r"><code>study_2_params &lt;- list(
+  bottom = 0.2,
+  top = 1,
+  log_IC50 = -7.6,
+  nH = 1,
+  sigma = 0.1
+)</code></pre>
+<div id="a-model-for-study-2" class="section level3">
+<h3>A model for study 2</h3>
+<p>We are still assuming the same kinetics for the tissue response as in study 1.</p>
+<p><span class="math display">\[y_i \sim {\sf Normal}(\mu_i, \sigma)\]</span></p>
+<p><span class="math display">\[\mu_i = top - \frac{bottom - top}{1 + 10^{(\log_{10}(IC_{50}) - \log_{10}([A_i]))^{n_H}}}\]</span></p>
+<p>Our assumptions about the <span class="math inline">\(top\)</span> parameter are the same as in study 1.</p>
+<p><span class="math display">\[top \sim {\sf Normal}(1, 0.01)\]</span></p>
+<p>In this case, we have produced a variant of the endogenous ligand. The most likely scenario is that our modification causes the ligand to lose efficacy such that the minimum tissue response is somewhere between 0 and 1. However, there is a small chance that our superior design yields a ligand that is more efficacious than the endogenous ligand and thus has a minimum response below 0. Our prior for the <span class="math inline">\(bottom\)</span> parameter should thus be concentrated between 0 and 1 but with some probability below 0. I have opted for a normal prior.</p>
+<p>Note that this prior puts some probability in the scenario where the <span class="math inline">\(bottom\)</span> parameter is larger than the <span class="math inline">\(top\)</span> parameter. This is not consistent with our domain knowledge and it is a challenge that we will handle in a moment.</p>
+<p><span class="math display">\[bottom \sim {\sf Normal}(0.25, 0.25)\]</span></p>
+<p>Changing the ligand will not change the receptor, so it is extremely unlikely that the Hill coefficient changes.</p>
+<p><span class="math display">\[n_H \sim {\sf Normal}(1, 0.01)\]</span></p>
+<p>The modified ligand is likely to lose potency, i.e. have a higher <span class="math inline">\(\log_{10}(IC_{50})\)</span>, compared to the endogenous ligand which has <span class="math inline">\(\log_{10}(IC_{50}) = -7.2\)</span>, but we might get lucky and see an increase. This is not much to go on, but it should still allow us to use a narrower prior than in study 1.</p>
+<p><span class="math display">\[\log_{10}(IC_{50}) \sim {\sf Normal}(-6, 0.7)\]</span></p>
+<p>Noise is expected to be quite severe.</p>
+<p><span class="math display">\[\sigma \sim {\sf Exp}(10)\]</span></p>
+</div>
+<div id="prior-predictive-check-with-stan" class="section level3">
+<h3>Prior predictive check with Stan</h3>
+<p>As in the previous study, we should check that the prior predictive distribution conforms to expectations as given by our domain expertise.</p>
+<p>This time I have opted to utilise Stan to sample from the priors. It is a bit of extra work, but it scales well for larger and more complex models.</p>
+<p>One challenge we have, is the constraint that <span class="math inline">\(top \ge bottom\)</span>. A way to handle this could be to discard any samples that violates the constraint and replace them with new samples until the desired number of samples are obtained. I would like something a bit more elegant.</p>
+<p>In Stan, constraints can be set on parameters and, during Monte Carlo sampling from the posterior, those constraints are enforced. However, when we want to use random number generators to sample from the prior distributions, we have to enforce it ourselves. I have implemented a small Stan program to sample from the priors in study 2:</p>
+<pre class="r"><code>writeLines(readLines(&quot;hill_equation_study_2_prior.stan&quot;))</code></pre>
+<pre><code>functions {
+  // A lower-bounded normal distribution random number generator
+  real normal_lower_rng(real mu, real sigma, real lower_bound) {
+    // Locate the lower bound
+    real p_lower_bound = normal_cdf(lower_bound, mu, sigma);
+    // Uniformly sample probabilities in the bounded range
+    real u = uniform_rng(p_lower_bound, 1);
+    // Transform back to a normal distribution
+    real y = mu + sigma * inv_Phi(u);
+    return y;
+  }
+  // An upper-bounded normal distribution random number generator
+  real normal_upper_rng(real mu, real sigma, real upper_bound) {
+    // Locate the upper bound
+    real p_upper_bound = normal_cdf(upper_bound, mu, sigma);
+    // Uniformly sample probabilities in the bounded range
+    real u = uniform_rng(0, p_upper_bound);
+    // Transform back to a normal distribution
+    real y = mu + sigma * inv_Phi(u);
+    return y;
+  }
+}
+data {
+  int&lt;lower=0&gt; N; // Number of samples
+  vector[N] log_conc; // Tested concentration on log10 scale
+}
+generated quantities{
+  real&lt;lower = 0&gt; nH = normal_lower_rng(1, 0.01, 0);
+  real top = normal_rng(1, 0.01);
+  real bottom = normal_upper_rng(0.25, 0.25, top);
+  real log_IC50 = normal_rng(-6, 0.7);
+  real sigma = exponential_rng(10);
+  vector[N] mu;
+  vector[N] y;
+  for ( i in 1:N) {
+    mu[i] = top + (bottom - top)/(1 + 10^((log_IC50 - log_conc[i])*nH));
+    y[i] = normal_rng(mu[i], sigma);
+  }
+}</code></pre>
+<p>Note that there is no <code>model</code> block in the code. This program should not run a Monte Carlo simulation. Rather, it should just pull samples from the prior distributions. This can be accomplished with Stan’s Fixed Parameter mode.</p>
+<pre class="r"><code>n_prior_samples &lt;- 50
+log_conc &lt;- seq(-9, -3, length.out = n_prior_samples)
+
+prior &lt;- rstan::stan(
+  &quot;hill_equation_study_2_prior.stan&quot;,
+  data = list(N = n_prior_samples, log_conc = log_conc),
+  algorithm = &quot;Fixed_param&quot;,
+  chains = 1,
+  iter = 100,
+  warmup = 0,
+  seed = 4444
+)
+
+samples &lt;- rstan::extract(prior)
+
+sample_readings &lt;- lapply(1:100, function(i) {
+  tibble::tibble(
+  y = samples$y[i,],
+  x = log_conc
+) %&gt;% 
+  geom_line(mapping = aes(x, y), colour = colour$blue_dark, alpha = 0.5)
+})
+p &lt;- ggplot() + 
+  theme_minimal() +
+  labs(x = &quot;Ligand concentration [M]&quot; , y = &quot;Prior assay response&quot;)
+Reduce(`+`, sample_readings, init = p)</code></pre>
+<p><img src="../../project/bespoke-biochem-one/index_files/figure-html/prior_2_stan-1.png" width="90%" /></p>
+<p>We expect most potential curves to reach 50% of their minimum response well above -7.2, corresponding to lost potency. There is, however, still a small chance of increased potency, i.e. a value smaller than -7.2. Likewise for the minimum response, we find it most likely that a modification will cause the minimum response to be somewhere between 0 and 1, yet there is a chance that the minimum response is less than zero.</p>
+<p>All in all, these seem like suitable priors, but we also note that the amount of noise could severely impact conclusions.</p>
+</div>
+<div id="building-a-stan-model-for-study-2" class="section level3">
+<h3>Building a Stan model for study 2</h3>
+<p>Here is the Stan model that corresponds to the model described above. Note that we do not need to specify our own distribution functions to satisfy constraints. When running the simulation, Stan keeps track of constraints and makes sure that they are satisfied.</p>
+<pre class="r"><code>writeLines(readLines(&quot;hill_equation_study_2_post.stan&quot;))</code></pre>
+<pre><code>data {
+  int&lt;lower=0&gt; N;
+  vector[N] log_conc;
+  vector[N] y;
+}
+parameters {
+  real bottom;
+  real&lt;lower=bottom&gt; top;
+  real log_IC50;
+  real&lt;lower=0&gt; nH;
+  real&lt;lower=0&gt; sigma;
+}
+model {
+  vector[N] mu;
+  bottom ~ normal(0.25, 0.25);
+  top ~ normal(1, 0.01);
+  log_IC50 ~ normal(-6, 0.7);
+  nH ~ normal(1, 0.01);
+  sigma ~ exponential(10);
+  for ( i in 1:N) {
+    mu[i] = top + (bottom - top)/(1 + 10^((log_IC50 - log_conc[i])*nH));
+  }
+  y ~ normal(mu, sigma);
+}</code></pre>
+</div>
+<div id="fitting-study-2" class="section level3">
+<h3>Fitting study 2</h3>
+<p>Now we can simulate some observations and fit the model. As we do not expect our modified ligand to stray too far from the curve of the endogenous ligand, we generate observations in a narrow space of ligand concentration, from <span class="math inline">\(\log_{10}([A_i]) = -7.5\)</span> to <span class="math inline">\(\log_{10}([A_i]) = -4.5\)</span>. To make it a challenge, we will generate just 6 observations.</p>
+<p>As for study 1, I am drawing 1000 samples per chain from the posterior.</p>
+<pre class="r"><code>n_observations &lt;- 6
+n_posterior_samples &lt;- 1e3
+
+# Determine the log concentrations at which to simulate
+study_2_concentrations &lt;- seq(-7.5, -4.5, length.out = n_observations)
+
+# Simulate observations using our &#39;secret&#39; parameters
+study_2_observations &lt;- rlang::exec(
+  assay_response,
+  study_2_concentrations,
+  !!!study_2_params
+)
+
+# Everything the model needs to know
+data_list &lt;- list(
+  N = n_observations,
+  log_conc = study_2_concentrations,
+  y = study_2_observations
+)
+
+# This compiles the model and samples from the posterior
+study_2_post &lt;- rstan::stan(
+  &quot;hill_equation_study_2_post.stan&quot;,
+  data = data_list,
+  chains = 4,
+  iter = n_posterior_samples * 2,
+  warmup = n_posterior_samples,
+  seed = 4444
+)</code></pre>
+<p>The underlying research question for this study was primarily concerned with the <span class="math inline">\(\log_{10}(IC_{50})\)</span> and <span class="math inline">\(bottom\)</span> parameters. So more than the actual tissue response, we are interested in the marginal posterior distributions for these two parameters. Let’s start by summarising the marginal posterior distributions.</p>
+<pre class="r"><code>study_2_priors &lt;- function(n) {
+  tibble::tibble(
+    top = rnorm(n, 1, 0.01),
+    bottom = rnorm(n, 0.25, 0.25),
+    nH = rnorm(n, 1, 0.01),
+    log_IC50 = rnorm(n, -6, 0.7),
+    sigma = rexp(n, 10)
+  )
+}
+
+# Extract samples from the posterior distribution
+posterior_samples &lt;- rstan::extract(study_2_post) %&gt;% 
+  tibble::as_tibble() %&gt;%
+  dplyr::select(bottom, top, log_IC50, nH, sigma)
+
+# True parameters of the simulation.
+parameter_tibble &lt;- study_2_params %&gt;%
+  tibble::as_tibble() %&gt;%
+  tidyr::pivot_longer(
+    dplyr::everything(),
+    names_to = &quot;parameter&quot;,
+    values_to = &quot;truth&quot;
+  )
+
+# Plot each of the marginal distributions, comparing prior, posterior, and true
+#  simulation parameters
+posterior_samples %&gt;%
+  tidyr::pivot_longer(
+    dplyr::everything(),
+    names_to = &quot;parameter&quot;,
+    values_to = &quot;sample&quot;
+  ) %&gt;%
+  dplyr::left_join(parameter_tibble, by = &quot;parameter&quot;) %&gt;%
+  ggplot() +
+  geom_histogram(
+    data = tidyr::pivot_longer(
+      study_2_priors(nrow(posterior_samples)),
+      dplyr::everything(),
+      names_to = &quot;parameter&quot;,
+      values_to = &quot;sample&quot;
+    ),
+    mapping = aes(x = sample, fill = &quot;Prior&quot;),
+    bins = 50,
+    alpha = 0.5
+  ) +
+  geom_histogram(aes(x = sample, fill = &quot;Posterior&quot;), bins = 50, alpha = 0.5) +
+  geom_vline(aes(xintercept = truth, colour = &quot;truth&quot;), alpha = 0.5) +
+  facet_wrap(~ parameter, scales = &quot;free&quot;) +
+  theme_minimal() +
+  scale_colour_manual(values = c(&quot;truth&quot; = colour$orange_light)) +
+  scale_fill_manual(
+    values = c(&quot;Prior&quot; = colour$azure, &quot;Posterior&quot; = colour$blue_dark)
+  ) +
+  labs(
+    y = &quot;Posterior sample count&quot;,
+    x = &quot;&quot;,
+    colour = &quot;&quot;,
+    fill = &quot;&quot;,
+    title = &quot;Marginal Posterior and Prior Distributions&quot;
+  )</code></pre>
+<p><img src="../../project/bespoke-biochem-one/index_files/figure-html/posterior_marginals_study_2-1.png" width="90%" /></p>
+<p>The first thing to notice here is that the posterior probability mass is more concentrated than the prior. However, the marginal posterior distributions for <span class="math inline">\(\log_{10}(IC_{50})\)</span> and <span class="math inline">\(bottom\)</span> are still relatively wide. Recall that a difference of one in <span class="math inline">\(\log_{10}(IC_{50})\)</span> is an order of magnitude in terms of concentration. Small changes in potency matter a lot if we have to manufacture the compound at one point. So our data did not tell us much about the precise potency and efficacy of this modified ligand.</p>
+<p>On the other hand, the posterior probability mass is mostly at <span class="math inline">\(\log_{10}(IC_{50}) &lt; -7.2\)</span> and <span class="math inline">\(bottom &gt; 0\)</span>, i.e. we are quite certain that our modified ligand has higher potency than the endogenous ligand but elicits a smaller response. With well defined priors and a small amount of data, we have a perfectly good screening experiment.</p>
+<p>If we were interested in gaining a better understanding of the modified ligand, we could perform more experiments and get those posterior probability masses even more concentrated. We also see that the true noise of the assay is quite high; reducing it might help to better learn the underlying tissue response.</p>
+<pre class="r"><code>post_summaries &lt;- rstan::summary(
+  study_2_post,
+  pars = c(&quot;bottom&quot;, &quot;top&quot;, &quot;log_IC50&quot;, &quot;nH&quot;, &quot;sigma&quot;),
+  probs = c(0.055, 0.5, 0.945)
+)$summary
+
+tibble::as_tibble(post_summaries) %&gt;% 
+  dplyr::select(c(&quot;5.5%&quot;, &quot;50%&quot;, &quot;94.5%&quot;)) %&gt;%
+  dplyr::mutate(parameter = rownames(post_summaries), .before = 1) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">parameter</th>
+<th align="right">5.5%</th>
+<th align="right">50%</th>
+<th align="right">94.5%</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">bottom</td>
+<td align="right">0.0848792</td>
+<td align="right">0.1544085</td>
+<td align="right">0.2183073</td>
+</tr>
+<tr class="even">
+<td align="left">top</td>
+<td align="right">0.9831631</td>
+<td align="right">0.9995818</td>
+<td align="right">1.0156166</td>
+</tr>
+<tr class="odd">
+<td align="left">log_IC50</td>
+<td align="right">-7.7146376</td>
+<td align="right">-7.4971292</td>
+<td align="right">-7.2296555</td>
+</tr>
+<tr class="even">
+<td align="left">nH</td>
+<td align="right">0.9842731</td>
+<td align="right">0.9999304</td>
+<td align="right">1.0161020</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma</td>
+<td align="right">0.0405449</td>
+<td align="right">0.0680069</td>
+<td align="right">0.1388871</td>
+</tr>
+</tbody>
+</table>
+<p>At this point, we can draw a conclusion for our experiment: Given our model assumptions, data strongly suggests that the modified ligand has higher potency than the endogenous ligand with a 89% credibility interval for <span class="math inline">\(\log_{10}(IC_{50})\)</span> at about <span class="math inline">\([-8.08, -7.22]\)</span>. We also conclude that the modified ligand has less efficacy than the endogenous ligand with a 89% credibility interval for <span class="math inline">\(bottom\)</span> at about <span class="math inline">\([0.12, 0.30]\)</span></p>
+<p>Before accepting the conclusion, it is a good idea to look at the posterior predictions and compare them to the data.</p>
+<pre class="r"><code>posterior_samples %&gt;%
+  tidyr::expand_grid(log_conc = seq(-3, -9, length.out = 50)) %&gt;% 
+  dplyr::mutate(tissue_response = purrr::pmap_dbl(
+    list(log_conc, bottom, top, log_IC50, nH),
+    hill_function
+  )) %&gt;%
+  dplyr::group_by(log_conc) %&gt;%
+  dplyr::summarise(
+    response_mean = mean(tissue_response),
+    response_upper = quantile(tissue_response, probs = 0.945),
+    response_lower = quantile(tissue_response, probs = 0.055)
+  ) %&gt;%
+  ggplot() +
+  geom_ribbon(
+    aes(
+      x = log_conc,
+      ymin = response_lower,
+      ymax = response_upper,
+      fill = &quot;89% interval&quot;
+    ),
+    alpha = 0.5
+  ) +
+  geom_line(aes(x = log_conc, y = response_mean, colour = &quot;Posterior mean&quot;)) +
+  geom_point(
+    data = tibble::tibble(
+      log_conc = study_2_concentrations,
+      observations = study_2_observations
+    ),
+    aes(x = log_conc, y = observations, colour = &quot;Observations&quot;)
+  ) +
+  geom_function(
+    fun = hill_function,
+    args = study_2_params[-5],
+    mapping = aes(colour = &quot;True tissue response&quot;)
+  ) +
+  scale_colour_manual(values = c(
+    &quot;Posterior mean&quot; = colour$blue_dark,
+    &quot;Observations&quot; = colour$orange_light,
+    &quot;True tissue response&quot; = colour$orange_dark
+  )) +
+  labs(
+    y = &quot;Tissue response&quot;,
+    x = &quot;Log ligand concentration [M]&quot;,
+    colour = &quot;&quot;,
+    fill = &quot;&quot;
+  ) +
+  scale_fill_manual(values = c(&quot;89% interval&quot; = colour$azure)) +
+  theme_minimal()</code></pre>
+<p><img src="../../project/bespoke-biochem-one/index_files/figure-html/posterior_predictive_study_2-1.png" width="90%" /></p>
+<p>The true tissue response is all contained in the 89% interval for the posterior predicted response, despite noisy observations and despite the fact that 4 out of 6 observations lie outside the s-shaped part of the curve.</p>
+</div>
+</div>
+<div id="assessing-posterior-quality" class="section level2">
+<h2>Assessing posterior quality</h2>
+<p>During the two studies, I avoided a rather important subject, namely assessing the quality of our posterior estimate. The algorithm that explores and samples from the posterior, Hamiltonian Monte Carlo (HMC), is as much a part of the Bayesian model as priors and as such should enjoy the same deliberate consideration.</p>
+<p>We have observed that the posterior predictive distribution yields reasonable predictions, which gives us a lot of confidence in the model as a whole. In these studies, we could also compare the predictions to the true underlying parameters of the simulations, so we know that the model is at least somewhat right.</p>
+<p>All is not perfectly well, however. In study one, Stan complains that during the HMC run there were divergent transitions:</p>
+<pre class="r"><code>rstan::check_divergences(study_1_post)</code></pre>
+<pre><code>5 of 4000 iterations ended with a divergence (0.125%).
+Try increasing &#39;adapt_delta&#39; to remove the divergences.</code></pre>
+<p><a href="https://mc-stan.org/misc/warnings.html#runtime-warnings">Stan is noisy</a> and will complain when something seems wrong in the HMC sampler.</p>
+<p>In this case, it is divergent transitions which usually happens when an iteration ends up in a part of parameter space where the probabilities have large gradients.</p>
+<p>Increasing <code>adapt_delta</code> as suggested by Stan will help avoid the divergent transitions, but why were they there in the first place? Let’s look at some diagnostic parameters for the posterior in the first study:</p>
+<pre class="r"><code>post_summaries &lt;- rstan::summary(
+  study_1_post,
+  pars = c(&quot;bottom&quot;, &quot;top&quot;, &quot;log_IC50&quot;, &quot;nH&quot;, &quot;sigma&quot;),
+  probs = c(0.055, 0.5, 0.945)
+)$summary
+
+tibble::as_tibble(post_summaries) %&gt;% 
+  dplyr::select(c(&quot;n_eff&quot;, &quot;Rhat&quot;)) %&gt;%
+  dplyr::mutate(parameter = rownames(post_summaries), .before = 1) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">parameter</th>
+<th align="right">n_eff</th>
+<th align="right">Rhat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">bottom</td>
+<td align="right">1610.7382</td>
+<td align="right">1.002482</td>
+</tr>
+<tr class="even">
+<td align="left">top</td>
+<td align="right">3738.8936</td>
+<td align="right">1.000015</td>
+</tr>
+<tr class="odd">
+<td align="left">log_IC50</td>
+<td align="right">1401.6208</td>
+<td align="right">1.002600</td>
+</tr>
+<tr class="even">
+<td align="left">nH</td>
+<td align="right">523.3805</td>
+<td align="right">1.012667</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma</td>
+<td align="right">1414.4814</td>
+<td align="right">1.000310</td>
+</tr>
+</tbody>
+</table>
+<p><code>n_eff</code> is an estimate of the number of independent samples from the posterior. <code>Rhat</code> is a measure of convergence. Values <span class="math inline">\(\hat{R} &gt; 1.01\)</span> indicate that convergence has not entirely been reached.</p>
+<p>According to the diagnostics, the marginal posterior for <span class="math inline">\(n_H\)</span> has been challenging to estimate. This is not altogether surprising, considering that we only have one good point on the s-shaped part of the curve. There are many combinations of <span class="math inline">\(\log_{10}(IC_{50})\)</span> and <span class="math inline">\(n_H\)</span> that would pass though the point equally well and some of them have extreme probability gradients.</p>
+<p>So why does increasing <code>adapt_delta</code> work? Intuitively, it causes Stan to pick a smaller step size for the HMC sampler. This reduces the chance that the sample ends up in a far off part of parameter space where gradients are extreme. The trade-off is that the posterior might be less efficiently sampled, so for larger models, one might have to do more samples to fully explore the posterior.</p>
+<p>Let’s try running study one with an increased <code>adapt_delta</code>.</p>
+<pre class="r"><code>study_1_post_improved &lt;- rstan::stan(
+  &quot;hill_equation_study_1.stan&quot;,
+  data = study_1_data_list,
+  chains = 4,
+  iter = n_posterior_samples * 2,
+  warmup = n_posterior_samples,
+  seed = 4444,
+  control = list(adapt_delta = 0.95)
+)</code></pre>
+<p>That should improve the situation.</p>
+<pre class="r"><code>rstan::check_divergences(study_1_post_improved)</code></pre>
+<pre><code>0 of 4000 iterations ended with a divergence.</code></pre>
+<p>Indeed it did!. Let’s also have a look at the diagnostics.</p>
+<pre class="r"><code>post_summaries &lt;- rstan::summary(
+  study_1_post_improved,
+  pars = c(&quot;bottom&quot;, &quot;top&quot;, &quot;log_IC50&quot;, &quot;nH&quot;, &quot;sigma&quot;),
+  probs = c(0.055, 0.5, 0.945)
+)$summary
+
+tibble::as_tibble(post_summaries) %&gt;% 
+  dplyr::select(c(&quot;n_eff&quot;, &quot;Rhat&quot;)) %&gt;%
+  dplyr::mutate(parameter = rownames(post_summaries), .before = 1) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">parameter</th>
+<th align="right">n_eff</th>
+<th align="right">Rhat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">bottom</td>
+<td align="right">2103.743</td>
+<td align="right">0.9995628</td>
+</tr>
+<tr class="even">
+<td align="left">top</td>
+<td align="right">3942.552</td>
+<td align="right">1.0001219</td>
+</tr>
+<tr class="odd">
+<td align="left">log_IC50</td>
+<td align="right">1152.528</td>
+<td align="right">1.0010730</td>
+</tr>
+<tr class="even">
+<td align="left">nH</td>
+<td align="right">1380.143</td>
+<td align="right">1.0016422</td>
+</tr>
+<tr class="odd">
+<td align="left">sigma</td>
+<td align="right">1375.529</td>
+<td align="right">1.0041702</td>
+</tr>
+</tbody>
+</table>
+<p>The numbers have improved and we have more faith in the posterior samples. Remember though that having good diagnostics alone does not imply a good model. The diagnostic check should be combined with prior and posterior predictive checks to ensure that the model is reasonable.</p>
+<p>There is so much more to discuss about diagnosing HMC - we have barely scratched the surface here. <code>?rstan::check_hmc_diagnostics</code> is a great place to start, if you want to learn more.</p>
+</div>
+<div id="comparing-to-another-fitting-method" class="section level2">
+<h2>Comparing to another fitting method</h2>
+<p>Before wrapping up, I’d like to return to my initial goal, which was to squeeze more information out of the data I get from biochemical assays.</p>
+<p>At this point, all we have done is fit a model to two experiments of six data points each and, despite the assistance from Stan, it has taken more code and more computation than a ‘classic’ fit would have. So was it worth it? Let’s compare.</p>
+<p>Here I am fitting the data from study one using non-linear least squares. To make it fair, I have put in as much information as the optimisation algorithm allows: the initial guess is at the median of the priors we set for study one and the parameters are roughly constrained to the 95% prior interval.</p>
+<pre class="r"><code>mod &lt;- nls(
+  y ~ top + (bottom - top)/(1 + 10^((log_IC50 - log_conc)*nH)),
+  data = study_1_data_list,
+  algorithm = &quot;port&quot;,
+  start = list(bottom = 0, top = 1, log_IC50 = -6, nH = 1),
+  lower = list(bottom = -0.02, top = 0.98, log_IC50 = -9, nH = 0),
+  upper = list(bottom = 0.02, top = 1.02, log_IC50 = -3, nH = 100)
+)
+
+study_1_post_pred +
+  geom_function(
+    fun = hill_function,
+    args = mod$m$getPars(),
+    mapping = aes(colour = &quot;NLS fit&quot;)
+  ) +
+  scale_colour_manual(values = c(
+    &quot;Posterior mean&quot; = colour$blue_dark,
+    &quot;Observations&quot; = colour$orange_light,
+    &quot;True tissue response&quot; = colour$orange_dark,
+    &quot;NLS fit&quot; = &quot;black&quot;
+  ))</code></pre>
+<p><img src="../../project/bespoke-biochem-one/index_files/figure-html/posterior_predictive_study_1_improved-1.png" width="90%" /></p>
+<p>The NLS fit is obviously close to the true tissue response and it took much less code and time to fit. Compared to our Bayesian model, the NLS fit is not bad. In fact, it will be useful in many cases, but there are a few notable differences.</p>
+<p>With the Bayesian model, we get an estimate of the amount of noise in the experiment, in addition to the parameters of the Hill equation. Such an estimate can be very useful for understanding and continuous improvement of the biochemical assays.</p>
+<p>With the Bayesian model, we also get marginal posterior distributions. With a regular fit, we only get a point estimate for each parameter and any uncertainty is lost. We do not always need anything but a point estimate to answer our hypotheses, but the marginal posterior distributions can be useful in future experimental design and as priors for the next experiment.</p>
+<p>Finally there is an added robustness. Biological data has all sorts of weird behaviour. In a situation where the data points are all over the place, due to some unknown external factor, the resulting Bayesian model would show little or no change from the prior model, whereas the NLS model would fail altogether. So with a Bayesian model, we can rely on probabilities to tell us when an experiment is an outlier.</p>
+<p>At the end of the day, the chosen method depends on the downstream application of the parameters and the hypotheses that we are trying to answer with the data. For now, I am keeping both in my toolbox, but I am seeing increased usefulness for the Bayesian approach, especially in screening experiments.</p>
+</div>
+</div>
+<div id="next-steps" class="section level1">
+<h1>Next Steps</h1>
+<p>In the preceding two study examples, we spent a lot of time fuzzing over just a few data points. In real applications, however, data is often more abundant and more diverse. In particular, I am thinking of screening experiments. In screening experiments, one might test a large number of potential ligands at once, meaning that there is more data but also more behaviour to be captured.</p>
+<p>In my next study, I will be discussing development of a bespoke Bayesian model for high-throughput biochemical screening assays. Stay tuned!</p>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references csl-bib-body">
+<div id="ref-Neubig597" class="csl-entry">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><span class="smallcaps">Neubig</span>, R. R., <span class="smallcaps">Spedding</span>, M., <span class="smallcaps">Kenakin</span>, T. and <span class="smallcaps">Christopoulos</span>, A. (2003). International union of pharmacology committee on receptor nomenclature and drug classification. XXXVIII. Update on terms and symbols in quantitative pharmacology. <em>Pharmacological Reviews</em> <strong>55</strong> 597–606 Available at <a href="https://pharmrev.aspetjournals.org/content/55/4/597">https://pharmrev.aspetjournals.org/content/55/4/597</a>.</div>
+</div>
+<div id="ref-McElreath:2016" class="csl-entry">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><span class="smallcaps">McElreath</span>, R. (2020). <em>Statistical rethinking: A bayesian course with examples in r and stan</em>. CRC Press.</div>
+</div>
+<div id="ref-Betancourt:2019" class="csl-entry">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline"><span class="smallcaps">Betancourt</span>, M. (2019). Probabilistic modeling and statistical inference. Available at <a href="https://github.com/betanalpha/knitr_case_studies/tree/master/modeling_and_inference">https://github.com/betanalpha/knitr_case_studies/tree/master/modeling_and_inference</a>.</div>
+</div>
+</div>
+</div>
+<div id="license" class="section level1">
+<h1>License</h1>
+<p>The content of this project itself is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International license</a>, and the underlying code is licensed under the <a href="https://github.com/AnHosu/bespoke-bayesian-biochem/blob/main/LICENSE">GNU General Public License v3.0 license</a>.</p>
+</div>
+
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tag/bayesian-data-analysis/">Bayesian data analysis</a>
+  
+  <a class="badge badge-light" href="../../tag/bayesian-statistics/">Bayesian statistics</a>
+  
+  <a class="badge badge-light" href="../../tag/r/">R</a>
+  
+  <a class="badge badge-light" href="../../tag/stan/">Stan</a>
+  
+  <a class="badge badge-light" href="../../tag/statistics/">Statistics</a>
+  
+  <a class="badge badge-light" href="../../tag/modelling/">Modelling</a>
+  
+  <a class="badge badge-light" href="../../tag/biochemistry/">Biochemistry</a>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="../../"><img class="avatar mr-3 avatar-circle" src="../../author/anders-e.-nielsen/avatar_huaf22d72e35256be9d48177f1f21d9377_326351_270x270_fill_q75_lanczos_center.jpg" alt="Anders E. Nielsen"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Anders E. Nielsen</a></h5>
+      <h6 class="card-subtitle">Data Professional &amp; Research Scientist</h6>
+      <p class="card-text">I apply modern data technology to solve real-world problems. My interests include statistics, machine learning, computational biology, and IoT.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:andellegaard@gmail.com" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/anders-ellegaard-nielsen-6a0857125/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/AnHosu" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="../../project/bespoke-biochem-two/">Bespoke Bayesian Model for High Throughput Biochemical Assays</a></li>
+      
+      <li><a href="../../post/bayesian-olympics/">Olympic Athletes over Time - A Tidy Bayesian Data Exploration</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+    <div class="project-related-pages content-widget-hr">
+      
+      
+
+      
+      
+      
+
+      
+      
+      
+
+      
+      
+      
+    </div>
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2022 Anders E. Nielsen
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a>, <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>, and <a href="https://github.com/rstudio/blogdown" target="_blank" rel="noopener">R Blogdown</a>.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="../../js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="../../en/js/wowchemy.min.cf8ca859a9b74f8b1cd804621b13e5f1.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>
