@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AI | anders e</title>
+    <link>/tag/ai/</link>
+      <atom:link href="/tag/ai/index.xml" rel="self" type="application/rss+xml" />
+    <description>AI</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2023 Anders E. Nielsen</copyright><lastBuildDate>Wed, 15 Mar 2023 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_512x512_fill_lanczos_center_3.png</url>
+      <title>AI</title>
+      <link>/tag/ai/</link>
+    </image>
+    
+    <item>
+      <title>Bayesian Optimisation Tools and Tutorials</title>
+      <link>/project/bayesian-optimisation/</link>
+      <pubDate>Wed, 15 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>/project/bayesian-optimisation/</guid>
+      <description>&lt;p&gt;I often find that the most valuable industrial processes, like manufacturing, drug development, or supply chains, suffer from the same challenge. There is little relevant historical data available and it is extremely expensive to conduct experiments on the processes.
+This is a challenge, if we want to optimise these processes. Yet we absolutely want to optimise those processes.&lt;/p&gt;
+&lt;p&gt;My go-to tool in these cases is Bayesian optimisation.&lt;/p&gt;
+&lt;p&gt;Bayesian optimisation uses a probabilistic model to represent an opaque an complex process. This model is updated with sequential experiments that the model itself helps design. With relatively few experiments, Bayesian optimisation can find good maxima or minima.&lt;/p&gt;
+&lt;p&gt;The probabilistic model allows us to incorporate our prior knowledge about the process at hand and gives us a head start in the optimisation. However, for the same reason, Bayesian optimisation is sensitive to initial assumption, and there are a lot of moving parts.&lt;/p&gt;
+&lt;p&gt;With this project, I aim to introduce and discuss the components of Bayesian optimisation. However, I will focus less on the mathematical intricacies and put more emphasis on the assumptions and implementation of the components.&lt;/p&gt;
+&lt;h2 id=&#34;posts-on-bayesian-optimisation&#34;&gt;Posts on Bayesian Optimisation&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://anhosu.com/post/bayesian-opt-r/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Bayesian Optimisation from Scratch in R&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post introduces and demonstrates all the core components of Bayesian optimisation and implements them from scratch in R. This is a great place to start.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kernel Functions&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Acquisition Functions&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Neural Networks as Surrogate Models&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Latin Hypercube Sampling and other Initial Designs for Bayesian Optimisation&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Benchmarking Bayesian Optimisation&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;h2 id=&#34;license&#34;&gt;License&lt;/h2&gt;
+&lt;p&gt;The content of this project itself is licensed under the &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Creative Commons Attribution-ShareAlike 4.0 International license&lt;/a&gt;, and the underlying code is licensed under the &lt;a href=&#34;LICENSE&#34;&gt;GNU General Public License v3.0 license&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

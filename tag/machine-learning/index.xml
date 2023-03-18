@@ -5,7 +5,7 @@
     <link>/tag/machine-learning/</link>
       <atom:link href="/tag/machine-learning/index.xml" rel="self" type="application/rss+xml" />
     <description>Machine Learning</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2023 Anders E. Nielsen</copyright><lastBuildDate>Tue, 16 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2023 Anders E. Nielsen</copyright><lastBuildDate>Wed, 15 Mar 2023 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_512x512_fill_lanczos_center_3.png</url>
       <title>Machine Learning</title>
@@ -13,10 +13,39 @@
     </image>
     
     <item>
+      <title>Bayesian Optimisation Tools and Tutorials</title>
+      <link>/project/bayesian-optimisation/</link>
+      <pubDate>Wed, 15 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>/project/bayesian-optimisation/</guid>
+      <description>&lt;p&gt;I often find that the most valuable industrial processes, like manufacturing, drug development, or supply chains, suffer from the same challenge. There is little relevant historical data available and it is extremely expensive to conduct experiments on the processes.
+This is a challenge, if we want to optimise these processes. Yet we absolutely want to optimise those processes.&lt;/p&gt;
+&lt;p&gt;My go-to tool in these cases is Bayesian optimisation.&lt;/p&gt;
+&lt;p&gt;Bayesian optimisation uses a probabilistic model to represent an opaque an complex process. This model is updated with sequential experiments that the model itself helps design. With relatively few experiments, Bayesian optimisation can find good maxima or minima.&lt;/p&gt;
+&lt;p&gt;The probabilistic model allows us to incorporate our prior knowledge about the process at hand and gives us a head start in the optimisation. However, for the same reason, Bayesian optimisation is sensitive to initial assumption, and there are a lot of moving parts.&lt;/p&gt;
+&lt;p&gt;With this project, I aim to introduce and discuss the components of Bayesian optimisation. However, I will focus less on the mathematical intricacies and put more emphasis on the assumptions and implementation of the components.&lt;/p&gt;
+&lt;h2 id=&#34;posts-on-bayesian-optimisation&#34;&gt;Posts on Bayesian Optimisation&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://anhosu.com/post/bayesian-opt-r/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Bayesian Optimisation from Scratch in R&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post introduces and demonstrates all the core components of Bayesian optimisation and implements them from scratch in R. This is a great place to start.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kernel Functions&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Acquisition Functions&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Neural Networks as Surrogate Models&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Latin Hypercube Sampling and other Initial Designs for Bayesian Optimisation&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Benchmarking Bayesian Optimisation&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;h2 id=&#34;license&#34;&gt;License&lt;/h2&gt;
+&lt;p&gt;The content of this project itself is licensed under the &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Creative Commons Attribution-ShareAlike 4.0 International license&lt;/a&gt;, and the underlying code is licensed under the &lt;a href=&#34;LICENSE&#34;&gt;GNU General Public License v3.0 license&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Machine Learning at the Edge and other Advanced Features of Greengrass</title>
-      <link>/project/iot-poc-greengrass-ml/</link>
+      <link>/post/iot-poc-greengrass-ml/</link>
       <pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/project/iot-poc-greengrass-ml/</guid>
+      <guid>/post/iot-poc-greengrass-ml/</guid>
       <description>&lt;p&gt;We are about to build something really cool. Machine learning inference managed from the cloud but performed at the edge might sound like a sequence of flimsy business colloquialisms and to some extent they might be. In this demonstration, however, we will dive into the actual technical substance behind these terms.&lt;br&gt;
 Specifically, we will discuss and apply advanced features of AWS Greengrass, including&lt;/p&gt;
 &lt;ul&gt;
@@ -29,24 +58,24 @@ Specifically, we will discuss and apply advanced features of AWS Greengrass, inc
 &lt;li&gt;The Greengrass service role&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;The target of the demonstration is to build a small IoT application that predicts whether it is raining or not, given the current temperature, relative humidity, and pressure. The weather data comes from our BME680 air quality sensor, and our Raspberry Pi 3B+ will play the role of gateway device but also runs the code querying the sensor.&lt;br&gt;
-We will be utilising expertise from the previous demonstrations of &lt;a href=&#34;../../project/iot-poc-publishing/&#34;&gt;publishing&lt;/a&gt;, &lt;a href=&#34;../../project/iot-poc-pubsub/&#34;&gt;subscribing&lt;/a&gt;, &lt;a href=&#34;../../project/iot-poc-shadow/&#34;&gt;Shadows&lt;/a&gt;, and &lt;a href=&#34;../../project/iot-poc-greengrass/&#34;&gt;general Greengrass features&lt;/a&gt;.&lt;br&gt;&lt;/p&gt;
+We will be utilising expertise from the previous demonstrations of &lt;a href=&#34;../../post/iot-poc-publishing/&#34;&gt;publishing&lt;/a&gt;, &lt;a href=&#34;../../post/iot-poc-pubsub/&#34;&gt;subscribing&lt;/a&gt;, &lt;a href=&#34;../../post/iot-poc-shadow/&#34;&gt;Shadows&lt;/a&gt;, and &lt;a href=&#34;../../post/iot-poc-greengrass/&#34;&gt;general Greengrass features&lt;/a&gt;.&lt;br&gt;&lt;/p&gt;
 &lt;h1 id=&#34;set-up&#34;&gt;Set Up&lt;/h1&gt;
 &lt;p&gt;To build the target demonstration, we will walk through three parts. First we will set up a local Shadow within our Greengrass group and use obtained sensor values to contiuously update the Shadow. Then we will enable synchronisation between the local Shadow and a cloud copy of the Shadow. Last, but not least, we will set up inference with a Tensorflow2 machine learning model.&lt;br&gt;
-We will not cover installing and setting up Greengrass Group with a device, as this was covered in the &lt;a href=&#34;../../project/iot-poc-greengrass/#install-and-configure-greengrass&#34;&gt;general introduction to Greengrass&lt;/a&gt;. Be sure to refer to previous demonstrations when in doubt.&lt;br&gt;&lt;/p&gt;
+We will not cover installing and setting up Greengrass Group with a device, as this was covered in the &lt;a href=&#34;../../post/iot-poc-greengrass/#install-and-configure-greengrass&#34;&gt;general introduction to Greengrass&lt;/a&gt;. Be sure to refer to previous demonstrations when in doubt.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_architecture.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_architecture.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
     This is the overall architechture of the application we will build in this demonstration.
 &lt;/div&gt;
 &lt;p&gt;Let us get started!&lt;/p&gt;
 &lt;h1 id=&#34;publish-to-local-shadow&#34;&gt;Publish to Local Shadow&lt;/h1&gt;
 &lt;p&gt;In this section, we will set up a local Shadow and build a Lambda function that takes values published by our sensor and updates the Shadow.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_architecture_repub.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_architecture_repub.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
 	&lt;br&gt;
     This is the part of the architecture we will build in this section.
 &lt;/div&gt;
 &lt;h2 id=&#34;prepare-the-thing&#34;&gt;Prepare the Thing&lt;/h2&gt;
-&lt;p&gt;We &lt;a href=&#34;../../project/iot-poc-greengrass/#associate-a-thing-with-a-greengrass-group&#34;&gt;register and add&lt;/a&gt; our Thing, the sensor, to our Greengrass group.&lt;br&gt;
+&lt;p&gt;We &lt;a href=&#34;../../post/iot-poc-greengrass/#associate-a-thing-with-a-greengrass-group&#34;&gt;register and add&lt;/a&gt; our Thing, the sensor, to our Greengrass group.&lt;br&gt;
 We already have a &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;script&lt;/a&gt; that connects our Thing and publishes readings to our Greengrass Group on a local topic. There is no need to modify it in any way. We will just leave it running, continuously publishing values to a local topic. I went with the topic &lt;code&gt;bme680/readings&lt;/code&gt; but any topic goes.&lt;/p&gt;
 &lt;h2 id=&#34;the-local-shadow-service&#34;&gt;The Local Shadow Service&lt;/h2&gt;
 &lt;p&gt;Any Thing we include in our Greengrass Group lives only inside the Group and only connects to the cloud when first discovering the Group. This is great for reducing the number of devices connected to the cloud, but it also means that we cannot directly take advantage of the Shadow that is in the cloud.&lt;br&gt;
@@ -64,9 +93,9 @@ message[&amp;quot;state&amp;quot;] = { &amp;quot;reported&amp;quot; : {&amp;quot
 client.publish(&#39;$aws/things/my_sensor/shadow/update&#39;, json.dumps(message))
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The message goes to whichever MQTT server the client is connected to. Since we are connected to Greengrass Core and not AWS IoT, the message never reaches the cloud. So even though the topic is exactly the same as if we were updating the cloud based Shadow, the cloud based Shadow is not updated.&lt;br&gt;
-As a matter of fact, the message also does not reach the local Shadow. At least not yet. Since we are working with local topics, we need to &lt;a href=&#34;../../project/iot-poc-greengrass/#configure-subscriptions-in-greengrass&#34;&gt;set up subscriptions&lt;/a&gt; and deploy them to the Group before any messages are relayed.&lt;/p&gt;
+As a matter of fact, the message also does not reach the local Shadow. At least not yet. Since we are working with local topics, we need to &lt;a href=&#34;../../post/iot-poc-greengrass/#configure-subscriptions-in-greengrass&#34;&gt;set up subscriptions&lt;/a&gt; and deploy them to the Group before any messages are relayed.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_subscription_toshadow.png&#34; alt=&#34;Subscription with local Shadow&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_subscription_toshadow.png&#34; alt=&#34;Subscription with local Shadow&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;This is how it could look, but since there is a much easier way, this is not how we will do it.&lt;/p&gt;
 &lt;h2 id=&#34;republish-to-shadow&#34;&gt;Republish to Shadow&lt;/h2&gt;
@@ -100,12 +129,12 @@ THING_NAME = os.environ(&#39;THING_NAME&#39;)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The last step we need is to actually provide the environment variable to the instance of our Lambda function in the Greengrass Group. We do this by locating our Greengrass Group in the console and configure the Lambda in question.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;Configure Greengrass Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;Configure Greengrass Lambda&#34;&gt;
 	Note that the name of your Greengrass Group and Lambdas may be different
 &lt;/div&gt;
 &lt;p&gt;At the bottom of the configuration options, we find a set of fields where we can provide key value pairs, and we just go ahead and provide ours.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_environment_variable.png&#34; alt=&#34;Environment variable&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_environment_variable.png&#34; alt=&#34;Environment variable&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Now, when we deploy the Lambda function, the environment variable will be available for use. This means that if we have multiple sensors we we can use the same Lambda Alias to create multiple Lambda functions deployed to the Greengrass Group serving their exact device. Less code and less work for us.&lt;/p&gt;
 &lt;h3 id=&#34;build-the-republishing-lambda-function&#34;&gt;Build the republishing Lambda function&lt;/h3&gt;
@@ -171,58 +200,58 @@ def function_handler(event, context):
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The full example script can also be found &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_repub_lambda.py&#34; title=&#34;Lambda for publishing to Shadow&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;. We now need to pack this script in a zip file along with the Greengrass SDK, so we can create a Lambda function. We create the Lambda function and upload the zip file&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/lambda_repub.png&#34; alt=&#34;Repub Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/lambda_repub.png&#34; alt=&#34;Repub Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We then create an alias, navigate to the Greengrass console and associate the Lambda function with our Greengrass Group using the alias.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_add.png&#34; alt=&#34;Repub Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_add.png&#34; alt=&#34;Repub Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_add_existing.png&#34; alt=&#34;Repub Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_add_existing.png&#34; alt=&#34;Repub Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We then cofigure the Lambda function. We need to increase the timeout limit to at least 10 seconds, we need to enable access to &lt;code&gt;/sys&lt;/code&gt; so it can get the CPU temperature of the Pi, and we should provide the environment variable as discussed above.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;Configure Greengrass Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;Configure Greengrass Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configurations_repub.png&#34; alt=&#34;Configure repub Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configurations_repub.png&#34; alt=&#34;Configure repub Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;That is it for the Lambda function.&lt;/p&gt;
 &lt;h2 id=&#34;subscriptions&#34;&gt;Subscriptions&lt;/h2&gt;
 &lt;p&gt;We only need one subsription, one going from our device to the Lambda we just created.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_subscription_repub_shadow.png&#34; alt=&#34;Repub to Shadow subscription&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_subscription_repub_shadow.png&#34; alt=&#34;Repub to Shadow subscription&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;That is it for the first part. Once we deploy, We have a Thing publishing sensor readings, they are transformed and used to update the local Shadow. Right now there is not much to see though, as we have done nothing to make use of or even visualise the local Shadow. We will get there soon though.&lt;/p&gt;
 &lt;h1 id=&#34;setup-shadow-synchronisation&#34;&gt;Setup Shadow Synchronisation&lt;/h1&gt;
 &lt;p&gt;In this section, we will set up Shadow synchronisation between the local Shadow and the Shadow of our device in the cloud.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_architecture_sync.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_architecture_sync.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
     This is the part of the architecture we will build in this section.
 &lt;/div&gt;
 &lt;p&gt;Synchronising the Shadow just means that the local Shadow service will send regular updates to the cloud based Shadow such that the status quo is reflected there as well. We would usually do this to support an application running in the cloud, but in this case we are doing it mostly for show.&lt;br&gt;
 It is important to note that the synchronisation works both ways. Updates that are done to the local Shadow will eventually be reflected in the cloud based Shadow and vice versa. We will not have anything directly updating the cloud Shadow in this case, however.&lt;br&gt;
 Setting up synchronisation is actually fairly straight forward. We navigate to our Greengrass group and find the Device page. Next to the Device we added earlier it should be saing &amp;lsquo;Local Shadow Only&amp;rsquo;. All we have to do is to expand the options for that Device by clicking the three dots and selecting Enable Shadow Synchronisation.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_sync_enable.png&#34; alt=&#34;Local to Cloud Shadow Sync&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_sync_enable.png&#34; alt=&#34;Local to Cloud Shadow Sync&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Now we deploy the change.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img src=&#34;../iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img src=&#34;../../project/iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We can test whether it works by navigating to the page of the particular Device and going to its Shadow tab. If everything we did in the previous section works and the Shadow synchronisation works, we should see that the Shadow gets updated.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_sync_working.png&#34; alt=&#34;Shadow sync working&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_sync_working.png&#34; alt=&#34;Shadow sync working&#34;&gt;
 &lt;/div&gt;
 &lt;h1 id=&#34;machine-learning-inference-at-the-edge&#34;&gt;Machine Learning Inference at the Edge&lt;/h1&gt;
 &lt;p&gt;In this section, we will deploy a machine learning model into the Greengrass group and have it do inference based on the data coming from our Device.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_architecture_inference.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_architecture_inference.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
     This is the part of the architecture we will build in this section.
 &lt;/div&gt;
 &lt;p&gt;Specifically, we are going to create a Lambda function that loads a machine learning pipeline consisting of a model that transforms the data into features that are then evaluted in a neural network based model. We will get the data from the local Shadow such that the inference does not rely on live data and inference is effectively decoupled from the data stream.&lt;/p&gt;
 &lt;h2 id=&#34;prepare-the-gateway-device&#34;&gt;Prepare the Gateway Device&lt;/h2&gt;
-&lt;p&gt;In order for Greengrass Core to run Lambda functions it needs access to runtimes on the Gateway Device where it runs. When we set up Greengrass Core, we &lt;a href=&#34;../../project/iot-poc-greengrass/#install-and-configure-greengrass&#34;&gt;verified&lt;/a&gt; that our desired runtime, Python 3.7, was indeed present on the Device, our Pi, and accessible to Greengrass Core. Our approach to the use of additional libraries has been to include them in the Lambda deployment package. For instance, we included the Greengrass SDK with the Lambda function we created above.&lt;br&gt;
+&lt;p&gt;In order for Greengrass Core to run Lambda functions it needs access to runtimes on the Gateway Device where it runs. When we set up Greengrass Core, we &lt;a href=&#34;../../post/iot-poc-greengrass/#install-and-configure-greengrass&#34;&gt;verified&lt;/a&gt; that our desired runtime, Python 3.7, was indeed present on the Device, our Pi, and accessible to Greengrass Core. Our approach to the use of additional libraries has been to include them in the Lambda deployment package. For instance, we included the Greengrass SDK with the Lambda function we created above.&lt;br&gt;
 Machine learning frameworks like Tensorflow or MXNET are not just libraries but rely on their own runtimes. This means that using such frameworks with Greengrass is slightly more complicated, as we cannot just include the library with the Lambda. Lambdas running in a Greengrass Group can, however, utilise machine learning runtimes if they are installed and available. In fact any library can be used in a Lambda function without including it in the deployment package, as long as it is installed in a shared location on the device.&lt;br&gt;
 For this case we are going to use Tensorflow2 to do inference, but Greengrass does support &lt;a href=&#34;https://docs.aws.amazon.com/greengrass/latest/developerguide/ml-inference.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;other options&lt;/a&gt;.&lt;/p&gt;
 &lt;h3 id=&#34;install-tensorflow&#34;&gt;Install Tensorflow&lt;/h3&gt;
@@ -244,7 +273,7 @@ We will use these two models as examples of doing machine learning inference.&lt
 However, Greengrass is a seperate service and needs permission to access other services. We already had Greengrass access Lambda to fetch deployment packages and that worked smoothly, but we will have to understand why before we can ensure the same for S3.&lt;br&gt;&lt;br&gt;
 Greengrass has a service role that determines what other services and actions it has permissions to use. The service role can be found in the AWS IoT console under the Settings tab where we also find our custom endpoint. Somewhere in the list of settings is the Greengrass service role.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_iot_settings_greengrassrole.png&#34; alt=&#34;Greengrass service role&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_iot_settings_greengrassrole.png&#34; alt=&#34;Greengrass service role&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Per default, the policy attached to Greengrass is the managed policy &lt;code&gt;AWSGreengrassResourceAccessRolePolicy&lt;/code&gt;. At the time of writing, &lt;a href=&#34;https://console.aws.amazon.com/iam/home?region=eu-west-1#/policies/arn:aws:iam::aws:policy/service-role/AWSGreengrassResourceAccessRolePolicy&#34; title=&#34;GG Service managed policy&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;the policy&lt;/a&gt; is at version 5 and, among other things, it contains these actions:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
@@ -290,19 +319,19 @@ Greengrass has a service role that determines what other services and actions it
 This gives us a choice when storing our machine learning resources: we can either create a new service policy that allows Greengrass to access S3 objects in a format we specify, or we can comply with the constraints of the default policy and name our resources accordingly. The former might not be a good idea because replacing the policy with one we specify means forgoing the benefits of using a managed policy. So we will do the latter and create a bucket with a name containing the string &lt;code&gt;greengrass&lt;/code&gt; and put our machine learning resources in there.&lt;br&gt;&lt;br&gt;
 A machine learning resource must be zipped, so we will zip the contents of the two SavedModel folders and put them in the S3 bucket. I have &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/ml_resources/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;included&lt;/a&gt; the zipped models in the project repo as well.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_s3_resource.png&#34; alt=&#34;ML Resources in a bucket&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_s3_resource.png&#34; alt=&#34;ML Resources in a bucket&#34;&gt;
 	Machine learning resources in an S3 bucket.
 &lt;/div&gt;
 &lt;p&gt;Greengrass will unzip the contents when deploying into the Group. Now we just need to tell Greengrass where the resources are and where to put them.&lt;/p&gt;
 &lt;h3 id=&#34;create-machine-learning-resources-in-greengrass&#34;&gt;Create machine learning resources in Greengrass&lt;/h3&gt;
 &lt;p&gt;Now we are ready to configure machine learning resources in Greengrass. To do so, we locate our Greengrass Group in the console and navigate to the Resources page and the Machine Learning tab. We click the &amp;lsquo;Add machine learning resource&amp;rsquo; button.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_add_resource.png&#34; alt=&#34;Add ML Resource&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_add_resource.png&#34; alt=&#34;Add ML Resource&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Let us start by creating a resource for the standardiser model. First we will give the resouce a name. I went for &lt;code&gt;standardiser&lt;/code&gt; but anything goes. Next, we will need to point to the resource in our S3 bucket. Under &amp;lsquo;Model source&amp;rsquo; we choose &amp;lsquo;Upload a model in S3&amp;rsquo;, select the bucket we just created, and then select the zipped standardiser model. Finally, we will specify a local path on which to keep the unzipped model. Greengrass will create this path on our Core Device and it will be available to the Lambda functions that this machine learning resource is attached to. Any path works, but remember it, as we will need it when we create the inference Lambda function. I went with &lt;code&gt;/ggml/tensorflow/standardiser&lt;/code&gt;.&lt;br&gt;
 We have not created the Lambda function yet, so we cannot attach the resource just yet. We Will have a chance to do so later, though. Click Save to create the resource.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_create_resource.png&#34; alt=&#34;Add ML Resource&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_create_resource.png&#34; alt=&#34;Add ML Resource&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;This created the ML resource for the standardiser. We will need to repeat the process to create a resource for the neural network model, which I named &lt;code&gt;rain_predictor&lt;/code&gt; and stored at &lt;code&gt;/ggml/tensorflow/rain_predictor&lt;/code&gt;.&lt;/p&gt;
 &lt;h2 id=&#34;inference-lambda&#34;&gt;Inference Lambda&lt;/h2&gt;
@@ -440,21 +469,21 @@ def function_handler(event, context):
 &lt;p&gt;The script can also be found &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/ml_inference_lambda.py&#34; title=&#34;Inference Lambda script&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
 We zip this script along with the Greengrass SDK and create a deployment package.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/lambda_ggml_inference.png&#34; alt=&#34;Inference Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/lambda_ggml_inference.png&#34; alt=&#34;Inference Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We then create an alias, go to the Greengrass console, and add the Lambda function to our Group.&lt;/p&gt;
 &lt;h3 id=&#34;attach-machine-learning-resources&#34;&gt;Attach machine learning resources&lt;/h3&gt;
 &lt;p&gt;Now we can finally attach the machine learning resources to our Lambda function. We navigate to our Greengrass Group and under the Lambdas tab select our inference Lambda. Under the Resources tab, we select the option to &amp;lsquo;Add machine learning resource&amp;rsquo;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_resources_add.png&#34; alt=&#34;Attach ML resources&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_resources_add.png&#34; alt=&#34;Attach ML resources&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Since we have already created the resources, we select the option to &amp;lsquo;Attach an existing machine learning resource&amp;rsquo;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_resources_existing.png&#34; alt=&#34;Attach ML resources&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_resources_existing.png&#34; alt=&#34;Attach ML resources&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We select either of the two resources, click &amp;lsquo;Save&amp;rsquo;, and repeat the the process for the other resource.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_resources.png&#34; alt=&#34;Attach ML resources&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_resources.png&#34; alt=&#34;Attach ML resources&#34;&gt;
 &lt;/div&gt;
 &lt;h3 id=&#34;configure-the-lambda&#34;&gt;Configure the Lambda&lt;/h3&gt;
 &lt;p&gt;Our inference Lambda is almost done, we just need to configure it properly. All Lambda functions we have used with Greengrass so far have been on-demand functions that were spawned in response to an MQTT message. This inference Lambda is a bit different. Instead of waiting to process an input on-demand, we want this function run on on a fixed schedule, which we implemented by having the inference code repeat every 10 seconds. In fact, we do not want the Lambda to respnd to any events at all and consequently left the &lt;code&gt;function_handler&lt;/code&gt; empty.&lt;/p&gt;
@@ -465,7 +494,7 @@ def function_handler(event, context):
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Once the Lambda is deployed to our Greengrass Group, we just want it to run forever in the infinite loop we created. This is called a long-lived Lambda, and we can choose this option on the configuration page of the Lambda in the Greengrass Group. While we are in there, we will also give the Lambda a longer timeout and some more memory. Our ML model is small, but ML models are often large and require much more memory.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configurations_longlived.png&#34; alt=&#34;Config long-lived Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configurations_longlived.png&#34; alt=&#34;Config long-lived Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;h1 id=&#34;deploy-and-verify&#34;&gt;Deploy and Verify&lt;/h1&gt;
 &lt;p&gt;That is it; everything is in place for doing machine learning inference at the edge.&lt;br&gt;
@@ -474,12 +503,12 @@ First let us ensure that Greengrass is running using:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Then we deploy everything we have created.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img src=&#34;../iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img src=&#34;../../project/iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Finally, we make sure that the Thing is online and is publishing values from our sensor.&lt;br&gt;&lt;br&gt;
 Now, if everything works is right, we should be doing inference at the edge. We should be predicting whether it is raining or not and publishing the result to the local Shadow. Since the local Shadow is being synchronised with the cloud based Shadow, we should be able to see the predictions if we go to the Shadow page of our Thing.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_mlpred.png&#34; alt=&#34;Shadow with prediction&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_mlpred.png&#34; alt=&#34;Shadow with prediction&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;And there it is! It is a sunny day, so the prediction was right this time, but do not expect it to be very precise. Instead bask in the glory of accomplishment and enjoy the fact that you now know how to manage machine learning models in the cloud and do inference on the edge. Congratulations!&lt;/p&gt;
 &lt;h1 id=&#34;in-production&#34;&gt;In Production&lt;/h1&gt;

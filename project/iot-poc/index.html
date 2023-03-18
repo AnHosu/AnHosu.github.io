@@ -529,7 +529,7 @@
         
 
         <li class="nav-item">
-          <a class="nav-link " href="../../post/"><span>Blog</span></a>
+          <a class="nav-link " href="../../post/"><span>Posts</span></a>
         </li>
 
         
@@ -632,26 +632,18 @@
 
 
 
-
-
-
-
-
-
-
+  
 
   
   
-    
   
-
-
 <div class="article-container pt-3">
   <h1>Industrial IoT with AWS and Python</h1>
 
   
 
   
+    
 
 
 <div class="article-metadata">
@@ -685,7 +677,7 @@
 
 </div>
 
-  
+    
 
 
 
@@ -731,7 +723,7 @@
   
     
   
-  <a class="btn btn-outline-primary btn-page-header" href="https://github.com/AnHosu" target="_blank" rel="noopener">
+  <a class="btn btn-outline-primary btn-page-header" href="https://github.com/AnHosu/iot_poc" target="_blank" rel="noopener">
     <i class="fab fa-github mr-1"></i>
     Go to project repo
   </a>
@@ -740,14 +732,7 @@
 </div>
 
 
-</div>
-
-
-<div class="article-header article-container featured-image-wrapper mt-4 mb-4" style="max-width: 720px; max-height: 453px;">
-  <div style="position: relative">
-    <img src="../../project/iot-poc/featured_hu22624a91d8d2b4f226492bbd1212164f_48840_720x0_resize_lanczos_3.png" alt="" class="featured-image">
-    <span class="article-header-caption">IoT with AWS overview</span>
-  </div>
+  
 </div>
 
 
@@ -789,7 +774,7 @@ In IoT terms the sensor is the &lsquo;Thing&rsquo; or &lsquo;Device&rsquo;, and 
 <h2 id="1-publish-industrial-data-with-aws-iot">1) Publish Industrial Data with AWS IoT</h2>
 <p>The simplest way to do IoT with AWS. We will register our sensor as a thing in AWS IoT Core and will be using the AWS IoT Python SDK to publish sensor readings to a topic. We go through concepts such as things, topics, MQTT, and more.<br>
 In this case, the Raspberry Pi is simply simulating a microcontroller that will query the sensor and publish the result.<br><br>
-<a href="../../project/iot-poc-publishing/" title="simple publishing case">Get started here</a>.
+<a href="../../post/iot-poc-publishing/" title="simple publishing case">Get started here</a>.
 Here is the full <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_publishing.py" title="simple publishing example" target="_blank" rel="noopener">example script</a>.</p>
 <div align="center">
 	<img width="500" src="images/publishing_architecture.png" alt="IoT overview">
@@ -799,7 +784,7 @@ Here is the full <a href="https://github.com/AnHosu/iot_poc/blob/master/example_
 <h2 id="2-publish-and-subscribe">2) Publish and Subscribe</h2>
 <p>In this case, we build upon the previous case and will construct a setup where our device will not just send data but also respond to messages sent to it.<br>
 The Raspberry Pi is still just simulating a microcontroller, but we start to see how having compute at the edge is useful and can be managed with AWS IoT.<br><br>
-<a href="pubsub" title="simple pub/sub case">Get started here</a>. Here is the full <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_pubsub.py" title="simple pubsub example" target="_blank" rel="noopener">example script</a>.</p>
+<a href="../../post/iot-poc-pubsub" title="simple pub/sub case">Get started here</a>. Here is the full <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_pubsub.py" title="simple pubsub example" target="_blank" rel="noopener">example script</a>.</p>
 <div align="center">
 	<img width="500" src="images/pubsub_architecture.png" alt="pubsub overview">
   <br>
@@ -808,7 +793,7 @@ The Raspberry Pi is still just simulating a microcontroller, but we start to see
 <h2 id="3-utilise-thing-shadows">3) Utilise Thing Shadows</h2>
 <p>Using the Thing Shadow feature of AWS IoT, we will create a twin/shadow of our device in the cloud and update it whenever a new reading is available. We could use this cool feature to build a digital twin of our process.<br>
 The Raspberry Pi is still simulating a microcontroller that will query the sensor, but instead of just publishing the result, it will update the Shadow document of the thing, our sensor.<br><br>
-<a href="../../project/iot-poc/shadow/" title="Shadow case">Get started here</a>. Here is the full <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/shadow.py" title="shadow example" target="_blank" rel="noopener">example script</a>.</p>
+<a href="../../post/iot-poc-shadow/" title="Shadow case">Get started here</a>. Here is the full <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/shadow.py" title="shadow example" target="_blank" rel="noopener">example script</a>.</p>
 <div align="center">
 	<img width=500 src="images/shadow_architecture.png" alt="iot setup">
 	<br>
@@ -816,7 +801,7 @@ The Raspberry Pi is still simulating a microcontroller that will query the senso
 </div>
 <h2 id="4-build-an-edge-with-greengrass">4) Build an Edge with Greengrass</h2>
 <p>Now our Pi will act the part of gateway device. The gateway device effectively represents an edge that is manageable from the cloud and where data transformations or calculations can happen. This could be signal processing, edge analytics, or even machine learning models. Greengrass is the AWS software offering for gateway devices. In this demonstration, we will set up Greengrass on the Pi, connect a thing, our sensor, to Greengrass, and deploy a calculation from the cloud to the edge using a Lambda function.<br><br>
-<a href="greengrass" title="Greengrass case">Get started here</a>. Here is the full <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py" title="Example of Thing for Greengrass" target="_blank" rel="noopener">example script for a local device</a> and the <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_sys_lambda.py" title="Lambda example" target="_blank" rel="noopener">Lambda function</a> we will deploy into Greengrass Core.</p>
+<a href="../../post/iot-poc-greengrass" title="Greengrass case">Get started here</a>. Here is the full <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py" title="Example of Thing for Greengrass" target="_blank" rel="noopener">example script for a local device</a> and the <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_sys_lambda.py" title="Lambda example" target="_blank" rel="noopener">Lambda function</a> we will deploy into Greengrass Core.</p>
 <div align="center">
 	<img width=500 src="images/greengrass_group_architecture.png" alt="iot setup">
     <br>
@@ -825,7 +810,7 @@ The Raspberry Pi is still simulating a microcontroller that will query the senso
 </div>
 <h2 id="5-advanced-greengrass-features">5) Advanced Greengrass Features</h2>
 <p>In this final demonstration, we will combine everything from the previous demonstrations to deploy a machine learning model from the cloud into Greengrass and do inference at the edge. This requires us to explore additional advanced features and configurations of Greengrass, but shows how, with a few means and a bit of engineering, we can achieve quite complex functionality.<br><br>
-<a href="greengrass_ml" title="Advanced Greengrass case">Get started here</a>. This demonstration uses the same <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py" title="Example of Thing for Greengrass" target="_blank" rel="noopener">example script for a local device</a> as the previous but has two new examples of Lambda functions, <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/ml_inference_lambda.py" title="ML inference Lambda" target="_blank" rel="noopener">including one</a> doing machine learning inference.</p>
+<a href="../../post/iot-poc-greengrass-ml" title="Advanced Greengrass case">Get started here</a>. This demonstration uses the same <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py" title="Example of Thing for Greengrass" target="_blank" rel="noopener">example script for a local device</a> as the previous but has two new examples of Lambda functions, <a href="https://github.com/AnHosu/iot_poc/blob/master/example_scripts/ml_inference_lambda.py" title="ML inference Lambda" target="_blank" rel="noopener">including one</a> doing machine learning inference.</p>
 <div align="center">
 	<img width=500 src="images/greengrass_ml_architecture.png" alt="Greengrass ML Demo Architechture">
 	<br>
@@ -1011,15 +996,15 @@ The topic system is quite flexible and we will have to rely on our own rigid nam
     <h3>Related</h3>
     <ul>
       
-      <li><a href="../../project/iot-poc-greengrass/">Build an Edge with Greengrass</a></li>
+      <li><a href="../../post/iot-poc-greengrass/">Build an Edge with Greengrass</a></li>
       
-      <li><a href="../../project/iot-poc-greengrass-ml/">Machine Learning at the Edge and other Advanced Features of Greengrass</a></li>
+      <li><a href="../../post/iot-poc-greengrass-ml/">Machine Learning at the Edge and other Advanced Features of Greengrass</a></li>
       
-      <li><a href="../../project/iot-poc-publishing/">Publishing Industrial Data with AWS IoT</a></li>
+      <li><a href="../../post/iot-poc-publishing/">Publishing Industrial Data with AWS IoT</a></li>
       
-      <li><a href="../../project/iot-poc-pubsub/">Publishing and Subscribing with AWS IoT</a></li>
+      <li><a href="../../post/iot-poc-pubsub/">Publishing and Subscribing with AWS IoT</a></li>
       
-      <li><a href="../../project/iot-poc-shadow/">Thing Shadows with AWS IoT</a></li>
+      <li><a href="../../post/iot-poc-shadow/">Thing Shadows with AWS IoT</a></li>
       
     </ul>
   </div>

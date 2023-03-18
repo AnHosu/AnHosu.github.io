@@ -1,0 +1,1906 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Anders E. Nielsen" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="All the basic components of Bayesian optimisation introduced and implemented in R" />
+
+  
+  <link rel="alternate" hreflang="en-us" href="../../post/bayesian-opt-r/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#023e8a" />
+  
+
+  
+  
+    
+    <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono&display=swap">
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/wowchemy.f7eaf83122b08ab266aaa8a2d08cb1e8.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="../../index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="../../post/bayesian-opt-r/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="anders e" />
+  <meta property="og:url" content="/post/bayesian-opt-r/" />
+  <meta property="og:title" content="Bayesian Optimisation from Scratch in R | anders e" />
+  <meta property="og:description" content="All the basic components of Bayesian optimisation introduced and implemented in R" /><meta property="og:image" content="/post/bayesian-opt-r/featured.png" />
+    <meta property="twitter:image" content="/post/bayesian-opt-r/featured.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2023-03-12T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2023-03-12T14:05:00&#43;01:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/bayesian-opt-r/"
+  },
+  "headline": "Bayesian Optimisation from Scratch in R",
+  
+  "image": [
+    "/post/bayesian-opt-r/featured.png"
+  ],
+  
+  "datePublished": "2023-03-12T00:00:00Z",
+  "dateModified": "2023-03-12T14:05:00+01:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Anders E. Nielsen"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "anders e",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "All the basic components of Bayesian optimisation introduced and implemented in R"
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Bayesian Optimisation from Scratch in R | anders e</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="11faf5839e97d7db6614218145102f23" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="../../js/wowchemy-init.min.a8a181ea67095ef9fbb0e99ffbf585a0.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link  active" href="../../post/"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Bayesian Optimisation from Scratch in R</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    2023-03-12
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    28 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.243">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Bayesian Optimisation from Scratch in R</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="bayes-opt_files/libs/clipboard/clipboard.min.js"></script>
+  <script src="bayes-opt_files/libs/quarto-html/quarto.js"></script>
+  <script src="bayes-opt_files/libs/quarto-html/popper.min.js"></script>
+  <script src="bayes-opt_files/libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="bayes-opt_files/libs/quarto-html/anchor.min.js"></script>
+  <link href="bayes-opt_files/libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="bayes-opt_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <script src="bayes-opt_files/libs/bootstrap/bootstrap.min.js"></script>
+  <link href="bayes-opt_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="bayes-opt_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="quarto-content" class="container-fluid page-layout-article">
+<div class="page-columns">
+<main class="content">
+<header id="title-block-header">
+</header>
+<p>Bayesian optimisation is a powerful technique for optimising expensive functions or processes. In many applications, such as drug discovery, manufacturing, machine learning, or scientific experimentation, the function or process to be optimised may be time consuming or costly to evaluate. Bayesian optimisation provides a framework for sequential experimentation and for finding optima with as few evaluations as possible.</p>
+<p>This post seeks to introduce the core ideas and components of Bayesian optimisation. Along with the introduction are implementations of all the core components of Bayesian optimisation in R. The implementations only use base R and Tidyverse - they are designed to be simple and not necessarily efficient.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4444</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>set_dim <span class="ot">&lt;-</span> <span class="st">`</span><span class="at">dim&lt;-</span><span class="st">`</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>colour <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">orange_dark =</span> <span class="st">"#fb8500"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">orange_light =</span> <span class="st">"#ffb703"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">blue_dark =</span> <span class="st">"#023047"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">azure =</span> <span class="st">"#219ebc"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">blue_light =</span> <span class="st">"#8ecae6"</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The core idea behind Bayesian optimisation is to use a surrogate model to approximate a true function, and then use this approximation to determine the next point to evaluate. Typically, Gaussian processes or other similar probabilistic models are used as surrogate models.</p>
+<p>The surrogate model is initialised with a few points and an acquisition function is then used to determine the next point to evaluate. The acquisition function balances exploration, ie. searching the regions of covariate space where the uncertainty is high, and exploitation ie. searching the regions where the surrogate model predicts a high value.</p>
+<p>After the next point is evaluated, it is added to the existing data and the surrogate model is updated. The process of selecting the next point to evaluate and updating the surrogate model is repeated until a stopping criterion is met. This could be when subsequent experiments stop yielding significantly different or better results. In real-world applications, a budget might only allow for so many experiments.</p>
+<p>Bayesian optimisation has several advantages over other optimisation methods, including its ability to handle expensive functions and processes with a small number of evaluations. It also performs well in cases with noisy or uncertain data. However, while it can be considered a machine learning model, the surrogate model obtained through Bayesian optimisation is not a universally good approximation of the objective function and is not necessarily suitable for cases where extensive inference or interpretation is needed.</p>
+<section id="core-components-of-bayesian-optimisation" class="level2">
+<h2 class="anchored" data-anchor-id="core-components-of-bayesian-optimisation">Core Components of Bayesian Optimisation</h2>
+<p>There are five main components to Bayesian optimisation</p>
+<section id="objective-function" class="level5">
+<h5 class="anchored" data-anchor-id="objective-function">Objective Function</h5>
+<p>The objective function is the function or process that needs to be optimised, but which is expensive or time consuming to evaluate. The objective function is typically a black box, meaning that its mathematical form is unknown, and only its inputs and outputs can be observed.</p>
+</section>
+<section id="surrogate-model" class="level5">
+<h5 class="anchored" data-anchor-id="surrogate-model">Surrogate Model</h5>
+<p>The surrogate is a regression model that is used to approximate the objective function. The most commonly used surrogate model in Bayesian optimization is a Gaussian process, which is a flexible, non-parametric model that can capture complex, non-linear relationships between the inputs and outputs of the objective function.</p>
+</section>
+<section id="acquisition-function" class="level5">
+<h5 class="anchored" data-anchor-id="acquisition-function">Acquisition Function</h5>
+<p>The acquisition function is a function that is used to determine the next point to evaluate in the search space. The acquisition function balances exploration and exploitation.</p>
+</section>
+<section id="initial-training-data" class="level5">
+<h5 class="anchored" data-anchor-id="initial-training-data">Initial Training Data</h5>
+<p>Bayesian optimisation requires some initial data to construct the surrogate model. This data can be obtained by evaluating the objective function at a few points in the search space. Given that the total experiment budget is often limited, much consideration often goes into deciding these initial training points.</p>
+</section>
+<section id="stopping-criterion" class="level5">
+<h5 class="anchored" data-anchor-id="stopping-criterion">Stopping Criterion</h5>
+<p>Bayesian optimisation might require a stopping criterion to determine when to stop the search. This could be some measure of convergence, but often the number of experiments or deadlines set the constraints.</p>
+<p>In the following sections, each of these components are discussed in greater detail and are implemented in R.</p>
+</section>
+</section>
+<section id="objective-function-1" class="level2">
+<h2 class="anchored" data-anchor-id="objective-function-1">Objective Function</h2>
+<p>Bayesian optimization can be applied to optimise any function or process that can be thought of as a black box function, <span class="math inline">\(f\)</span>, that takes as input a set of covariates, <span class="math inline">\(\mathbf{x}\)</span>, and returns a scalar, <span class="math inline">\(y\)</span>. Sometimes the actual readings from such function are noisy, i.e.</p>
+<p><span class="math display">\[y = f(\mathbf{x}) + \epsilon\]</span></p>
+<p>where <span class="math inline">\(\epsilon\)</span> is the noise, often assumed to be Gaussian <span class="math inline">\(\epsilon \sim \mathcal{N}(0, \sigma_{\epsilon}^2)\)</span>.</p>
+<p>Some common examples of real world objective functions include</p>
+<p><strong>ML Hyperparameters</strong>. Machine learning model hyperparameters such as learning rate or regularisation strength are expensive to optimise, since they require retraining the model for each iteration. Here the model hyperparameters would be the input and the model output would be the scalar objective for Bayesian optimisation.</p>
+<p><strong>Design of experiments</strong>. Optimising the parameters of chemical or biological experiments can save both time and money, or even accelerate the discovery of new drugs or products.</p>
+<p><strong>Manufacturing</strong>. A manufacturing process can often be thought of as have a set of defined inputs (material, flow, settings, etc.) and measurable outputs that should be maximised (eg. product output or yield) or minimised (eg. waste).</p>
+<section id="benchmarking-functions" class="level3">
+<h3 class="anchored" data-anchor-id="benchmarking-functions">Benchmarking Functions</h3>
+<p>Since we are just exploring Bayesian optimisation at a high level, we will not have an actual black box process to optimise. Instead, we will use a benchmark function to test our implementation of Bayesian optimisation.</p>
+<p>There are many good benchmark functions. One such is the Ackley function. It is defined as:</p>
+<p><span class="math display">\[f(\mathbf{x}) = -a\exp\left(-b\sqrt{\frac{1}{d}\sum_{i=1}^dx_i^2}\right) - \exp\left(\frac{1}{d}\sum_{i=1}^d \cos(c x_i)\right) + a + \exp(1)\]</span></p>
+<p>where <span class="math inline">\(d\)</span> is the number of dimensions and <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, and <span class="math inline">\(c\)</span> are constants. The global minimum of the Ackley function is <span class="math inline">\(f(\mathbf{x})=0\)</span> at <span class="math inline">\(\mathbf{x}=(0,0,...,0)\)</span>.</p>
+<p>For this implementation the constants are set at <span class="math inline">\(a = 20\)</span>, <span class="math inline">\(b = 0.2\)</span> and <span class="math inline">\(c = 2\pi\)</span>, and the function can be applied to a matrix of observations, <span class="math inline">\(\mathbf{X}\)</span>, rather than just a single vector of covariates.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ackley <span class="ot">&lt;-</span> <span class="cf">function</span>(X) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X))) <span class="fu">dim</span>(X) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">ncol</span>(X)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  part1 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">20</span><span class="sc">*</span><span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.2</span><span class="sc">*</span><span class="fu">sqrt</span>(<span class="dv">1</span><span class="sc">/</span>d<span class="sc">*</span><span class="fu">rowSums</span>(X<span class="sc">^</span><span class="dv">2</span>)))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  part2 <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fu">exp</span>(<span class="dv">1</span><span class="sc">/</span>d<span class="sc">*</span><span class="fu">rowSums</span>(<span class="fu">cos</span>(<span class="dv">2</span><span class="sc">*</span>pi<span class="sc">*</span>X)))</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  part1 <span class="sc">+</span> part2 <span class="sc">+</span> <span class="dv">20</span> <span class="sc">+</span> <span class="fu">exp</span>(<span class="dv">1</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="todo-plot-ackley" class="level5">
+<h5 class="anchored" data-anchor-id="todo-plot-ackley">TODO: plot ackley</h5>
+</section>
+</section>
+</section>
+<section id="surrogate-model-gaussian-process-regression" class="level2">
+<h2 class="anchored" data-anchor-id="surrogate-model-gaussian-process-regression">Surrogate Model: Gaussian Process Regression</h2>
+<p>This section explores the virtues Gaussian processes and how they can be applied as surrogate models for Bayesian optimisation. This is the largest and most complex part of Bayesian optimisation, and the discussions and implementations will only take a brief glance at some of the considerations.</p>
+<p>A Gaussian process (GP) is a probabilistic model that defines a distribution over functions. A GP model assumes that a function can be represented as a collection of random variables with a multivariate Gaussian distribution. Intuitively, the GP assumes that data points with high correlation among the covariates have similar values of the output variable(s).</p>
+<p>Formally, a GP is defined by a mean function and a covariance function, also called a kernel function.</p>
+<p><span class="math display">\[p(f | \mathbf{X}) = \mathcal{N}(f | \mathbf{\mu}, \mathbf{\Sigma})\]</span></p>
+<p><span class="math inline">\(f\)</span> is the objective function and <span class="math inline">\(\mathbf{X}\)</span> is a set of observations for the covariates of <span class="math inline">\(f\)</span>. The mean function, <span class="math inline">\(\mathbf{\mu}\)</span>, specifies the expected value of the function at each point in the covariate space, while the covariance matrix, <span class="math inline">\(\mathbf{\Sigma}\)</span>, specifies how the function values at any two points in the covariate space are correlated. The covariance matrix is calculated using a kernel function and, in practice, the choice of kernel function is important for obtaining good and interpretable results with Bayesian optimisation, whereas the mean function is of much lesser consequence and is often set to <span class="math inline">\(\mathbf{\mu} = \mathbf{0}\)</span>.</p>
+<section id="kernels" class="level3">
+<h3 class="anchored" data-anchor-id="kernels">Kernels</h3>
+<p>The choice of kernel function reflects prior beliefs about smoothness, periodicity, and other properties of the objective function. Intuitively, the kernel is a function that specifies the similarity between pairs of vectors of covariates. In other words, the kernel should quantify how similar two data points are, given just the input.</p>
+<p>Formally, a kernel function <span class="math inline">\(k(\mathbf{x}, \mathbf{x'})\)</span> takes two input vectors <span class="math inline">\(\mathbf{x}\)</span> and <span class="math inline">\(\mathbf{x'}\)</span> and produces a scalar value that quantifies the similarity or covariance between the two vectors.</p>
+<p>The kernel function can be applied to the covariates, <span class="math inline">\(\mathbf{X}\)</span>, of a set of observed data points to create a covariance matrix, <span class="math inline">\(\mathbf{\Sigma}\)</span></p>
+<p><span class="math display">\[\Sigma_{ij} = k(\mathbf{x}_i, \mathbf{x}_j)\]</span></p>
+<p>for all combinations of observations <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>.</p>
+<p>Kernels themselves are an entire subject. For now, know that some examples of kernel functions used in GP include the radial basis function (RBF) kernel, the Matérn kernel, and the linear kernel.</p>
+<section id="implementing-the-rbf-kernel" class="level4">
+<h4 class="anchored" data-anchor-id="implementing-the-rbf-kernel">Implementing the RBF kernel</h4>
+<p>The RBF kernel is defined as</p>
+<p><span class="math display">\[k(\mathbf{x}_i, \mathbf{x}_j) = \sigma_f^2 \exp\left(-\frac{1}{2}\frac{\lVert \mathbf{x}_i - \mathbf{x}_j\rVert^2}{l^2}\right)\]</span></p>
+<p>where <span class="math inline">\(\sigma_f\)</span> and <span class="math inline">\(l\)</span> are parameters and <span class="math inline">\(\lVert \rVert\)</span> is the euclidean distance of the two vectors.</p>
+<p>This implementation can take two vectors or two matrices. For a vector input, it returns the kernel function value. For a matrix inputs, the covariance matrix, <span class="math inline">\(\mathbf{\Sigma}\)</span>, is returned.</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' RBF Kernel</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param l length scale</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma_f scale parameter </span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return matrix of dimensions (n, m)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>rbf_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">l =</span> <span class="fl">1.0</span>, <span class="at">sigma_f =</span> <span class="fl">1.0</span>) {</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  sqdist <span class="ot">&lt;-</span> (<span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>(X1 <span class="sc">%*%</span> <span class="fu">t</span>(X2))) <span class="sc">%&gt;%</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add</span>(<span class="fu">rowSums</span>(X1<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sweep</span>(<span class="dv">2</span>, <span class="fu">rowSums</span>(X2<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>), <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  sigma_f<span class="sc">**</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span> <span class="sc">/</span> l<span class="sc">**</span><span class="dv">2</span> <span class="sc">*</span> sqdist)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><span class="math inline">\(\sigma_f^2\)</span> is a variance parameter that simply scales the functions to the magnitude of <span class="math inline">\(f\)</span>. More interestingly, the length scale parameter, <span class="math inline">\(l\)</span> of the RBF kernel affects the smoothness and flexibility of the functions modelled with a GP that uses this kernel. For a small value of the length scale, the kernel results in very flexible functions, whereas a larger length scale yields very smooth functions.</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">l =</span> <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">expand_grid</span>(<span class="at">x1 =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="at">length.out =</span> <span class="dv">100</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">k =</span> purrr<span class="sc">::</span><span class="fu">map2_dbl</span>(x1, l, <span class="sc">~</span> <span class="fu">rbf_kernel</span>(.x, <span class="dv">0</span>, .y))) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> k, <span class="at">colour =</span> <span class="fu">factor</span>(l))) <span class="sc">+</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Euclidian distance of points"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Covariance"</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="st">"Length scale"</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"RBF kernel"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayes-opt_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The intuition here is that for small length scales two points have to be very close to have any correlation. This results in very flexible functions that do not expect much correlation between data points. For a large length scale, however, points that are far apart are still expected to behave in a similar way. This results in very smooth functions that expect similar output values across the entire covariate space.</p>
+<p>The RBF kernel is a popular choice for Gaussian processes in part because of this interpretability. There are other advantages to the RBF kernel, but it is not necessarily a good default choice for <em>every</em> problem.</p>
+</section>
+</section>
+<section id="gaussian-processes-as-a-distribution-over-functions" class="level3">
+<h3 class="anchored" data-anchor-id="gaussian-processes-as-a-distribution-over-functions">Gaussian processes as a distribution over functions</h3>
+<p>If the Gaussian process is a distribution over functions, it should be possible to sample random functions from it. And indeed it is! The only thing needed in order to sample from a Gaussian is a function for pulling random numbers from, well, a Gaussian.</p>
+<p>In practice, this amounts to plugging the mean and the covariance (kernel) into a multivariate Gaussian and sampling from it. Of course, a set of points, <span class="math inline">\(\mathbf{x}\)</span>, is required to compute <span class="math inline">\(\mathbf{\Sigma}\)</span>. Note, however, that no outputs, <span class="math inline">\(\mathbf{y}\)</span> are needed yet, so a grid for <span class="math inline">\(\mathbf{x}\)</span> will suffice.</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Random Samples from a Multivariate Gaussian</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Implementation inspired by https://juanitorduz.github.io/multivariate_normal/</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param n number of samples to sample</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param mu the mean of each input dimension</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma the covariance matrix</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param epsilon numerical tolerance added to the diagonal of the covariance</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#'  matrix. This is necessary for the Cholesky decomposition, in some cases.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return numerical vector of n samples</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>rmvnorm <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n =</span> <span class="dv">1</span>, mu, sigma, <span class="at">epsilon =</span> <span class="fl">1e-6</span>) {</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">length</span>(mu)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">all</span>(<span class="fu">dim</span>(sigma) <span class="sc">==</span> <span class="fu">c</span>(p,p))) <span class="fu">stop</span>(<span class="st">"incompatible arguments"</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    ev <span class="ot">&lt;-</span> <span class="fu">eigen</span>(sigma, <span class="at">symmetric =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>values</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">all</span>(ev <span class="sc">&gt;=</span> <span class="sc">-</span>epsilon<span class="sc">*</span><span class="fu">abs</span>(ev[1L]))) {</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"The covariance matrix (sigma) is not positive definite"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>    cholesky <span class="ot">&lt;-</span> <span class="fu">chol</span>(sigma <span class="sc">+</span> <span class="fu">diag</span>(p)<span class="sc">*</span>epsilon)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    sample <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(p<span class="sc">*</span>n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dim</span>(sample) <span class="ot">&lt;-</span> <span class="fu">c</span>(n, p)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sweep</span>(sample <span class="sc">%*%</span> cholesky, <span class="dv">2</span>, mu, <span class="at">FUN =</span> <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To assist the visualisation, here is a plot for the mean, uncertainty, and some samples of a Gaussian process for the case where there is only one covariate, i.e.&nbsp;<span class="math inline">\(\mathbf{X}\)</span> is of shape <span class="math inline">\((n,1)\)</span> where <span class="math inline">\(n\)</span> is the number of observations.</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>gpr_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(samples,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                     mu,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                     sigma,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                     X_pred,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">X_train =</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                     <span class="at">y_train =</span> <span class="cn">NULL</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">true_function =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  n_samples <span class="ot">&lt;-</span> <span class="fu">dim</span>(samples)[[<span class="dv">1</span>]]</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t</span>(samples),</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">paste</span>(<span class="st">"sample"</span>, <span class="fu">seq</span>(<span class="dv">1</span>, n_samples))</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> X_pred,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">uncertainty =</span> <span class="fl">1.6</span><span class="sc">*</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(sigma)),</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu =</span> mu,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower =</span> mu <span class="sc">-</span> uncertainty,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper =</span> mu <span class="sc">+</span> uncertainty,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">f =</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(true_function)) <span class="fu">true_function</span>(X_pred)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper, <span class="at">fill =</span> <span class="st">"89% interval"</span>),</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha =</span> <span class="fl">0.2</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> mu, <span class="at">colour =</span> <span class="st">"Mean"</span>)) <span class="sc">+</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"y"</span>,</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">"x"</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">colour =</span> <span class="st">""</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> <span class="st">""</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">Reduce</span>(</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">+</span><span class="st">`</span>,</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">init =</span> p,</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">lapply</span>(<span class="fu">paste</span>(<span class="st">"sample"</span>, <span class="fu">seq</span>(<span class="dv">1</span>, n_samples)), <span class="cf">function</span>(s) {</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .data[[s]], <span class="at">colour =</span> s), <span class="at">linetype =</span> <span class="dv">2</span>)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_colour_brewer</span>(<span class="at">palette =</span> <span class="st">"YlGnBu"</span>) <span class="sc">+</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">list</span>(<span class="st">"89% interval"</span> <span class="ot">=</span> colour<span class="sc">$</span>azure))</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(X_train) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(y_train)) {</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p <span class="sc">+</span> </span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>(</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">x =</span> X_train, <span class="at">y =</span> y_train),</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>        <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">shape =</span> <span class="st">"Training point"</span>),</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>        <span class="at">colour =</span> colour<span class="sc">$</span>orange_dark,</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>        <span class="at">size =</span> <span class="dv">4</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>      ) <span class="sc">+</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Training point"</span> <span class="ot">=</span> <span class="st">"+"</span>)) <span class="sc">+</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">shape =</span> <span class="st">""</span>)</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(true_function)) {</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p <span class="sc">+</span> </span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> f, <span class="at">colour =</span> <span class="st">"True function"</span>))</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p)</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This bit is at the core of Gaussian processes. Given a set of points, the corresponding <span class="math inline">\(\mathbf{\mu}\)</span> and <span class="math inline">\(\mathbf{\Sigma}\)</span> are calculated. Then those are plugged into a multivariate Gaussian to obtain predicted function values. In this case, <span class="math inline">\(\mathbf{\mu}\)</span> has just been set to <span class="math inline">\(\mathbf{0}\)</span>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>X_predict <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">length.out =</span> <span class="dv">100</span>), <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times =</span> <span class="fu">length</span>(X_predict))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">rbf_kernel</span>(X_predict, X_predict, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">sigma_f =</span> <span class="dv">1</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="at">n =</span> n_samples, mu, sigma)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">gpr_plot</span>(samples, mu, sigma, X_predict)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayes-opt_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="conditioning-the-gaussian-process" class="level3">
+<h3 class="anchored" data-anchor-id="conditioning-the-gaussian-process">Conditioning the Gaussian process</h3>
+<p>Until now, the GP has just represented a prior belief for the surrogate functions that might model the objective function. It is not a surrogate function yet.</p>
+<p>In order for the GP to be a useful surrogate model, it should provide posterior predictions for proposed points, given the available training data, i.e.&nbsp;a pair of <span class="math inline">\(\mathbf{X}\)</span> and <span class="math inline">\(\mathbf{y}\)</span>. For a GP, the joint distribution of training points and new proposed points is itself a GP. Consequently, it is possible to compute the joint distribution of training data and posterior prediction points directly.</p>
+<p>The mean and covariance of this joint distribution have well defined expressions. Given a set of training data, <span class="math inline">\(\mathbf{X}_t, \mathbf{y}_t\)</span>, and set of points on which to make predictions, <span class="math inline">\(\mathbf{X}_p\)</span>, the mean of the posterior predictive distribution is</p>
+<p><span class="math display">\[\mathbf{\mu}_{p|t} = \mathbf{\mu}_p + \mathbf{\Sigma}_{tp}^T \mathbf{\Sigma}_{tt}^{-1} (\mathbf{y}_t - \mathbf{\mu}_t)\]</span></p>
+<p>Where <span class="math inline">\(\mathbf{\Sigma}_{tp}\)</span> is the covariance matrix between training and prediction points and <span class="math inline">\(\mathbf{\Sigma}_{tt}\)</span> is the covariance matrix between training points.</p>
+<p>Recall though that often <span class="math inline">\(\mathbf{\mu} = \mathbf{0}\)</span>, so the equation will often show up as</p>
+<p><span class="math display">\[\mathbf{\mu}_{p|t} = \mathbf{\Sigma}_{tp} \mathbf{\Sigma}_{tt}^{-1} \mathbf{y}_t\]</span></p>
+<p>This is also what is implemented below.</p>
+<p>The covariance matrix of the posterior predictive distribution is</p>
+<p><span class="math display">\[\mathbf{\Sigma}_{p|t} = \mathbf{\Sigma}_{pp} - \mathbf{\Sigma}_{tp}^T \mathbf{\Sigma}_{tt}^{-1} \mathbf{\Sigma}_{tp}\]</span></p>
+<p>Where <span class="math inline">\(\mathbf{\Sigma}_{pp}\)</span> is the covariance matrix between prediction points.</p>
+<p>These formulas are straightforward linear algebra and could be implemented directly as such. However, they are somewhat numerically unstable. For greater stability, the implementation below calculates the posterior using the algorithm described in GPfML Ch 2</p>
+<section id="todo-source-here" class="level5">
+<h5 class="anchored" data-anchor-id="todo-source-here">TODO: source here</h5>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Get Parameters of the Posterior Gaussian Process</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param kernel kernel function used for the Gaussian process</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X_pred matrix (m, d) of prediction points</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X_train matrix (n, d) of training points</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param y_train column vector (n, d) of training observations</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param noise scalar of observation noise</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param ... named parameters for the kernel function</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return list of mean (mu) and covariance (sigma) for the Gaussian</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(kernel, X_pred, X_train, y_train, <span class="at">noise =</span> <span class="fl">1e-8</span>, ...) {</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X_pred))) <span class="fu">dim</span>(X_pred) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">length</span>(X_pred), <span class="dv">1</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X_train))) <span class="fu">dim</span>(X_train) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">length</span>(X_train), <span class="dv">1</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(y_train))) <span class="fu">dim</span>(y_train) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">length</span>(y_train), <span class="dv">1</span>)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  K <span class="ot">&lt;-</span> <span class="fu">kernel</span>(X_train, X_train, ...) <span class="sc">+</span> noise<span class="sc">**</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">diag</span>(<span class="fu">dim</span>(X_train)[[<span class="dv">1</span>]])</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  K_s <span class="ot">&lt;-</span> <span class="fu">kernel</span>(X_train, X_pred, ...)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  K_ss <span class="ot">&lt;-</span> <span class="fu">kernel</span>(X_pred, X_pred, ...) <span class="sc">+</span> <span class="fl">1e-8</span> <span class="sc">*</span> <span class="fu">diag</span>(<span class="fu">dim</span>(X_pred)[[<span class="dv">1</span>]])</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  K_inv <span class="ot">&lt;-</span> <span class="fu">solve</span>(K)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> (<span class="fu">t</span>(K_s) <span class="sc">%*%</span> K_inv) <span class="sc">%*%</span> y_train</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> K_ss <span class="sc">-</span> (<span class="fu">t</span>(K_s) <span class="sc">%*%</span> K_inv) <span class="sc">%*%</span> K_s</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">mu =</span> mu, <span class="at">sigma =</span> sigma)</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With a way to calculate the posterior, it is possible to condition a Gaussian process on some training data.</p>
+<p>Here is a bit of of training data for a one dimensional example</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">4.33</span>, <span class="sc">-</span><span class="fl">2.1</span>, <span class="fl">2.1</span>), <span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> <span class="fu">ackley</span>(X_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The Gaussian process is then conditioned on training data and applied to new proposed points in a single step</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X_predict <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">length.out =</span> <span class="dv">100</span>), <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">posterior</span>(rbf_kernel, X_predict, X_train, y_train)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Just like the prior distribution, it is possible to sample random functions from the posterior distribution</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">c</span>(post<span class="sc">$</span>mu)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> post<span class="sc">$</span>sigma</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="at">n =</span> n_samples, mu, sigma)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gpr_plot</span>(samples, mu, sigma, X_predict, X_train, y_train, <span class="at">true_function =</span> ackley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayes-opt_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>At this point, the fit is not too great and the sampled functions look nothing like the true function. However, this is only based on three data points and an arbitrary choice of kernel parameters.</p>
+<p>Both things will be handled in due time, but it gets worse before it gets better</p>
+</section>
+<section id="a-quick-note-on-noise" class="level4">
+<h4 class="anchored" data-anchor-id="a-quick-note-on-noise">A Quick Note on Noise</h4>
+<p>Recall that training data might be noisy, i.e.&nbsp;<span class="math inline">\(y = f(\mathbf{x}) + \epsilon\)</span>.</p>
+<p>Noise, too, is a subject all on its own. The key thing to remember is that noise can be accounted for by adding it to the diagonal of <span class="math inline">\(\mathbf{\Sigma}_{tt}\)</span>. This is already implemented in the function for the posterior above.</p>
+<p>The effect of noisy training data on the posterior is, unsurprisingly, more uncertainty.</p>
+<p>Here a bit of known noise is added to the observations</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>noise <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> <span class="fu">ackley</span>(X_train) <span class="sc">+</span> noise <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="fu">length</span>(X_train))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When recreating the plot from above, now using the noisy observations, the most noticeable difference is that the distribution mean no longer passes though each observation.</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">posterior</span>(rbf_kernel, X_predict, X_train, y_train, <span class="at">noise =</span> noise)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> post<span class="sc">$</span>mu</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> post<span class="sc">$</span>sigma</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="at">n =</span> n_samples, mu, sigma)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="fu">gpr_plot</span>(samples, mu, sigma, X_predict, X_train, y_train, <span class="at">true_function =</span> ackley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayes-opt_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="gaussian-process-regression" class="level3">
+<h3 class="anchored" data-anchor-id="gaussian-process-regression">Gaussian Process Regression</h3>
+<p>Until now, the kernel parameters have been set at fixed, arbitrary values. This is a waste of good parameters, and it is possible to do something better. The core idea of Gaussian process regression (GPR) is that the kernel parameters can be adapted to fit the training data.</p>
+<p>A common approach to estimating the parameters of a kernel function in GPR is Maximum likelihood estimation (MLE).</p>
+<p>The likelihood function for a Gaussian process is given by:</p>
+<p><span class="math display">\[p(\mathbf{y}_t \mid \mathbf{X}_t, \theta) = \mathcal{N}(\mathbf{y}_t \mid \mathbf{\mu}, \mathbf{\Sigma}_{tt} + \sigma_{\epsilon}^2 \mathbf{I})\]</span></p>
+<p>where <span class="math inline">\(\mathbf{\Sigma}_{tt}\)</span> is the covariance matrix computed using some kernel with parameters <span class="math inline">\(\theta\)</span>. In the case of the RBF kernel, the parameters to estimate are <span class="math inline">\(\theta = (\sigma_f, l)\)</span>. Notice that the noise has been added to the diagonal of the covariance matrix to account noisy training data.</p>
+<p>The corresponding log likelihood function is:</p>
+<section id="todo-check-formula" class="level4">
+<h4 class="anchored" data-anchor-id="todo-check-formula">TODO Check formula</h4>
+<p><span class="math display">\[\log p(\mathbf{y}_t \mid \mathbf{X}_t, \theta) = -\frac{1}{2} \left( \log \det (\mathbf{\Sigma}_{tt} + \sigma_{\epsilon}^2 \mathbf{I}) + \mathbf{y}_t^T (\mathbf{\Sigma}_{tt} + \sigma_{\epsilon}^2 \mathbf{I})^{-1} \mathbf{y}_t + n \log(2\pi) \right)\]</span></p>
+<p>where <span class="math inline">\(n\)</span> is the number of data points.</p>
+<p>The optimal values of the kernel parameters are the values that maximise the log likelihood or, equivalently, minimise the negative log likelihood.</p>
+<p>To implement Gaussian process regression, two components are needed: the likelihood and an optimiser. Here is an implementation of a negative log likelihood function for any kernel</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>nll <span class="ot">&lt;-</span> <span class="cf">function</span>(kernel, X_train, y_train, noise) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(params) {</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="fu">dim</span>(X_train)[[<span class="dv">1</span>]]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    K <span class="ot">&lt;-</span> rlang<span class="sc">::</span><span class="fu">exec</span>(kernel, <span class="at">X1 =</span> X_train, <span class="at">X2 =</span> X_train, <span class="sc">!!!</span>params)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    L <span class="ot">&lt;-</span> <span class="fu">chol</span>(K <span class="sc">+</span> noise<span class="sc">**</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">diag</span>(n))</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    a <span class="ot">&lt;-</span> <span class="fu">backsolve</span>(<span class="at">r =</span> L, <span class="at">x =</span> <span class="fu">forwardsolve</span>(<span class="at">l =</span> <span class="fu">t</span>(L), <span class="at">x =</span> y_train))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    <span class="fl">0.5</span><span class="sc">*</span><span class="fu">t</span>(y_train)<span class="sc">%*%</span>a <span class="sc">+</span> <span class="fu">sum</span>(<span class="fu">log</span>(<span class="fu">diag</span>(L))) <span class="sc">+</span> <span class="fl">0.5</span><span class="sc">*</span>n<span class="sc">*</span><span class="fu">log</span>(<span class="dv">2</span><span class="sc">*</span>pi)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There are many ways to minimise the function. Since there are only two parameters for the RBF kernel, the built in optimiser will do just fine.</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rbf_nll <span class="ot">&lt;-</span> <span class="fu">nll</span>(rbf_kernel, X_train, y_train, <span class="fl">1e-8</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>opt <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">fn =</span> rbf_nll)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The optimised kernel parameters should improve the GP.</p>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">posterior</span>(rbf_kernel, X_predict, X_train, y_train, <span class="at">noise =</span> noise, <span class="at">l =</span> opt<span class="sc">$</span>par[[<span class="dv">1</span>]], <span class="at">sigma_f =</span> opt<span class="sc">$</span>par[[<span class="dv">2</span>]])</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> post<span class="sc">$</span>mu</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> post<span class="sc">$</span>sigma</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>n_samples <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="at">n =</span> n_samples, mu, sigma)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">gpr_plot</span>(samples, mu, sigma, X_predict, X_train, y_train, <span class="at">true_function =</span> ackley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayes-opt_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>With that, all the components for creating a GP surrogate model are in place. For future use, they are collected in a single function that performs GPR.</p>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>gpr <span class="ot">&lt;-</span> <span class="cf">function</span>(kernel, X_train, y_train, <span class="at">noise =</span> <span class="fl">1e-8</span>, ...) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  kernel_nll <span class="ot">&lt;-</span> <span class="fu">nll</span>(kernel, X_train, y_train, noise)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  param <span class="ot">&lt;-</span> <span class="fu">list</span>(...)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  opt <span class="ot">&lt;-</span> <span class="fu">optim</span>(<span class="at">par =</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">length</span>(param)), <span class="at">fn =</span> kernel_nll)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  opt_param <span class="ot">&lt;-</span> opt<span class="sc">$</span>par</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(X_pred) {</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    post <span class="ot">&lt;-</span> rlang<span class="sc">::</span><span class="fu">exec</span>(</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>      posterior,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">kernel =</span> kernel,</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">X_pred =</span> X_pred,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">X_train =</span> X_train,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">y_train =</span> y_train,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">noise =</span> noise,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!!!</span>opt_param</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">list</span>(</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">mu =</span> post<span class="sc">$</span>mu,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">sigma =</span> <span class="fu">diag</span>(post<span class="sc">$</span>sigma),</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">parameters =</span> <span class="fu">set_names</span>(opt_param, <span class="fu">names</span>(param))</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="an-example-in-2d" class="level4">
+<h4 class="anchored" data-anchor-id="an-example-in-2d">An Example in 2D</h4>
+<p>A GP surrogate model is great for problems with many dimensions and relatively few observations. Here is an example in 2D with just 5 training points.</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>noise_2d <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>X_train_2d <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">runif</span>(<span class="dv">20</span>, <span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>), <span class="dv">10</span>, <span class="dv">2</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>y_train_2d <span class="ot">&lt;-</span> <span class="fu">ackley</span>(X_train_2d) <span class="sc">+</span> noise_2d <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="dv">2</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>gpr_2d <span class="ot">&lt;-</span> <span class="fu">gpr</span>(rbf_kernel, X_train_2d, y_train_2d, noise_2d, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">sigma_f =</span> <span class="dv">1</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>X_predict_2d <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>, <span class="at">length.out =</span> <span class="dv">50</span>),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>, <span class="at">length.out =</span> <span class="dv">50</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">gpr_2d</span>(X_predict_2d)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">as_tibble</span>(X_predict_2d, <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">y =</span> post<span class="sc">$</span>mu) <span class="sc">%&gt;%</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> x2)) <span class="sc">+</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_contour_filled</span>(<span class="fu">aes</span>(<span class="at">z =</span> y), <span class="at">bins =</span> <span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(X_train_2d, <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>))) <span class="sc">+</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayes-opt_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Even with just a few training points, some general tendencies of the objective function have been captured and the surrogate model should be useful for Bayesian optimisation.</p>
+</section>
+</section>
+</section>
+<section id="acquisition-function-1" class="level2">
+<h2 class="anchored" data-anchor-id="acquisition-function-1">Acquisition Function</h2>
+<p>An acquisition function is a function used to determine the next point at which to evaluate the objective function. The goal of the acquisition function is to balance exploration, i.e.&nbsp;sampling points in unexplored regions, and exploitation, i.e.&nbsp;sampling points that are likely to be optimal. The acquisition function takes into account the posterior distribution of the surrogate model and provides a quantitative measure of the value of evaluating the objective function at a given point. Some common acquisition functions used in Bayesian optimization include expected improvement, probability of improvement, and upper confidence bound.</p>
+<section id="implementing-expected-improvement" class="level3">
+<h3 class="anchored" data-anchor-id="implementing-expected-improvement">Implementing Expected Improvement</h3>
+<p>The basic idea behind Expected Improvement (EI) is to search for the point in the search space that has the highest probability of improving the current best solution. The expected improvement is defined as the expected value of the improvement over the current best solution, where the improvement is defined as the difference between the function value at the candidate point and the current best value. In other words, EI measures how much better the objective function is expected to be at the candidate point compared to the current best value, weighted by the probability of achieving that improvement.</p>
+<p>Formally, the expected improvement acquisition function for a minimisation problem is defined as: <span class="math display">\[\mathrm{EI}(\mathbf{x}) = \mathbb{E}\left[\max(0, f_{\min} - f(\mathbf{x}))\right]\]</span></p>
+<p>where <span class="math inline">\(\mathbf{x}\)</span> is the candidate point <span class="math inline">\(f_{\min}\)</span> is the current best function value observed so far.</p>
+<p>When using a GP surrogate model in place of <span class="math inline">\(f\)</span>, EI can be calculated using the formula</p>
+<p><span class="math display">\[EI(\mathbf{x}) = (\mu(\mathbf{x}) - y_{best} - \xi) \Phi(Z) + \sigma(\mathbf{x}) \phi(Z)\]</span> with</p>
+<p><span class="math display">\[Z = \frac{\mu(\mathbf{x}) - y_{best} - \xi}{\sigma(\mathbf{x})}\]</span></p>
+<p><span class="math inline">\(\mu(\mathbf{x})\)</span> and <span class="math inline">\(\sigma(\mathbf{x})\)</span> are the mean and standard deviation of the Gaussian process at <span class="math inline">\(\mathbf{x}\)</span>. <span class="math inline">\(\Phi\)</span> and <span class="math inline">\(\phi\)</span> are the standard normal cumulative distribution function and probability density function, respectively, and <span class="math inline">\(\xi\)</span> is a trade-off parameter that balances exploration and exploitation. Higher values of <span class="math inline">\(\xi\)</span> leads to more exploration and smaller values to exploitation. <span class="math inline">\(EI(\mathbf{x}) = 0\)</span> when <span class="math inline">\(\sigma(\mathbf{x}) = 0\)</span>.</p>
+<p>The formulas can be implemented directly.</p>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>expected_improvement <span class="ot">&lt;-</span> <span class="cf">function</span>(gp, X, X_train, <span class="at">xi =</span> <span class="fl">0.01</span>) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  post_pred <span class="ot">&lt;-</span> <span class="fu">gp</span>(X)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  post_train <span class="ot">&lt;-</span> <span class="fu">gp</span>(X_train)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  min_train <span class="ot">&lt;-</span> <span class="fu">min</span>(post_train<span class="sc">$</span>mu)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> <span class="fu">set_dim</span>(post_pred<span class="sc">$</span>sigma, <span class="fu">c</span>(<span class="fu">length</span>(post_pred<span class="sc">$</span>sigma), <span class="dv">1</span>))</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  imp <span class="ot">&lt;-</span> min_train <span class="sc">-</span> post_pred<span class="sc">$</span>mu <span class="sc">-</span> xi</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  Z <span class="ot">&lt;-</span> imp <span class="sc">/</span> sigma</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  ei <span class="ot">&lt;-</span> imp <span class="sc">*</span> <span class="fu">pnorm</span>(Z) <span class="sc">+</span> sigma <span class="sc">*</span> <span class="fu">dnorm</span>(Z)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  ei[sigma <span class="sc">==</span> <span class="fl">0.0</span>] <span class="ot">&lt;-</span> <span class="fl">0.0</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  ei</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When there is only a single input dimension, EI can be plotted next to the GP</p>
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>ei_plot <span class="ot">&lt;-</span> <span class="cf">function</span>(mu, sigma, X_pred, X_train, y_train, ei, <span class="at">true_function =</span> <span class="cn">NULL</span>, <span class="at">title =</span> <span class="st">""</span>) {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  p1 <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu =</span> mu,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">uncertainty =</span> <span class="fl">1.96</span><span class="sc">*</span><span class="fu">sqrt</span>(sigma),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper =</span> mu <span class="sc">+</span> uncertainty,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower =</span> mu <span class="sc">-</span> uncertainty,</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> X_pred,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">f =</span> <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(true_function)) <span class="fu">true_function</span>(X_pred)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> mu, <span class="at">colour =</span> <span class="st">"Mean"</span>)) <span class="sc">+</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper),</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> colour<span class="sc">$</span>azure, <span class="co"># </span><span class="al">TODO</span><span class="co"> colour scheme</span></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha =</span> <span class="fl">0.2</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(<span class="at">x =</span> X_train, <span class="at">y =</span> y_train),</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y, <span class="at">shape =</span> <span class="st">"Training point"</span>),</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">colour =</span> colour<span class="sc">$</span>orange_dark, <span class="co"># </span><span class="al">TODO</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> <span class="dv">4</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_shape_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Training point"</span> <span class="ot">=</span> <span class="st">"+"</span>)) <span class="sc">+</span></span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">shape =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"y"</span>,</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">""</span>,</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">colour =</span> <span class="st">""</span>,</span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> title</span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(), <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(true_function)) {</span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>    p1 <span class="ot">&lt;-</span> p1 <span class="sc">+</span> </span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">y =</span> f, <span class="at">colour =</span> <span class="st">"True function"</span>))</span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a>  p2 <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> X_pred,</span>
+<span id="cb20-39"><a href="#cb20-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">ei =</span> ei</span>
+<span id="cb20-40"><a href="#cb20-40" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb20-41"><a href="#cb20-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb20-42"><a href="#cb20-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> ei, <span class="at">colour =</span> <span class="st">"EI"</span>)) <span class="sc">+</span></span>
+<span id="cb20-43"><a href="#cb20-43" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb20-44"><a href="#cb20-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Expected improvement"</span>, <span class="at">colour =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb20-45"><a href="#cb20-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb20-46"><a href="#cb20-46" aria-hidden="true" tabindex="-1"></a>  aligned_plots <span class="ot">&lt;-</span> cowplot<span class="sc">::</span><span class="fu">align_plots</span>(p2, p1, <span class="at">align =</span> <span class="st">"v"</span>)</span>
+<span id="cb20-47"><a href="#cb20-47" aria-hidden="true" tabindex="-1"></a>  cowplot<span class="sc">::</span><span class="fu">plot_grid</span>(aligned_plots[[<span class="dv">2</span>]], aligned_plots[[<span class="dv">1</span>]], <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb20-48"><a href="#cb20-48" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-49"><a href="#cb20-49" aria-hidden="true" tabindex="-1"></a>mygpr <span class="ot">&lt;-</span> <span class="fu">gpr</span>(rbf_kernel, X_train, y_train, noise, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">sigma_f =</span> <span class="dv">1</span>)</span>
+<span id="cb20-50"><a href="#cb20-50" aria-hidden="true" tabindex="-1"></a>ei <span class="ot">&lt;-</span> <span class="fu">expected_improvement</span>(mygpr, X_predict, X_train, <span class="at">xi =</span> <span class="fl">0.1</span>)</span>
+<span id="cb20-51"><a href="#cb20-51" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">mygpr</span>(X_predict)</span>
+<span id="cb20-52"><a href="#cb20-52" aria-hidden="true" tabindex="-1"></a><span class="fu">ei_plot</span>(post<span class="sc">$</span>mu, post<span class="sc">$</span>sigma, X_predict, X_train, y_train, ei, <span class="at">true_function =</span> ackley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayes-opt_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>In this example, there is some expected improvement near the middle of the input range, but the point expected to bring about the highest improvement is at the right edge of the range.</p>
+</section>
+</section>
+<section id="initial-training-data-1" class="level2">
+<h2 class="anchored" data-anchor-id="initial-training-data-1">Initial Training Data</h2>
+<p>Before applying GPR and EI, a few initial training data are needed. Considering that it is expensive to evaluate the objective function, the number of initial training observations should be limited. However, considering that the GP is not great for extrapolation, the number of initial observation should not be too small either.</p>
+<p>In general, the initial training data should be chosen to provide a good representation of the objective function. This means that the data should be chosen to cover the range of each input dimension. The data should also include inputs that are expected to be both good and bad performers.</p>
+<p>There are a few ways to create a set of initial training inputs. One approach is to use a set of random inputs. This is easy to implement, but it risks testing redundant points and it neglects any prior information of the objective function. In place of a completely random design, Latin Hypercube Sampling (LHS) is often used.</p>
+<p>Another approach is to use domain knowledge to select an initial set of inputs. For example, if the function being optimised is a manufacturing process there might be a fixed range of feasible settings and skilled operators might have good ideas for which settings would perform well.</p>
+<p>For the demonstration of Bayesian optimisation with the Ackley function in just a few dimensions, a few random or linearly spaced points will do fine.</p>
+</section>
+<section id="stopping-criterion-1" class="level2">
+<h2 class="anchored" data-anchor-id="stopping-criterion-1">Stopping Criterion</h2>
+<p>The final component of Bayesian optimisation is a stopping criterion. Depending on the application, a good stopping criterion might be more or less obvious. In settings where a real life process is optimised, time and money are common constraints. In ML or other theoretical applications, a mathematically defined criterion might be preferred.</p>
+<p>Examples of stopping criteria include - Maximum number of objective function evaluations. - When the improvement in objective function value falls below a threshold. - Project time limits or deadlines. - Accuracy of the surrogate model.</p>
+</section>
+<section id="bayesian-optimisation-in-action" class="level2">
+<h2 class="anchored" data-anchor-id="bayesian-optimisation-in-action">Bayesian Optimisation in Action</h2>
+<p>With all the components of Bayesian optimisation in place, a demonstration is due.</p>
+<section id="example-in-1d" class="level3">
+<h3 class="anchored" data-anchor-id="example-in-1d">Example in 1D</h3>
+<p>The initial training data is just two points.</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>n_initial <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>X_initial <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="fl">2.1</span>), n_initial, <span class="dv">1</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>noise <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>y_initial <span class="ot">&lt;-</span> <span class="fu">ackley</span>(X_initial) <span class="sc">+</span> noise <span class="sc">*</span> <span class="fu">rnorm</span>(n_initial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A GP is conditioned on the initial training data and expected improvement is calculated along a grid</p>
+<div class="cell">
+<div class="sourceCode" id="cb22"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>gp <span class="ot">&lt;-</span> <span class="fu">gpr</span>(rbf_kernel, X_initial, y_initial, noise, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">sigma_f =</span> <span class="dv">1</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>X_predict <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">length.out =</span> <span class="dv">100</span>), <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>ei <span class="ot">&lt;-</span> <span class="fu">expected_improvement</span>(gp, X_predict, X_initial, <span class="at">xi =</span> <span class="fl">0.01</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is what it looks like so far</p>
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">gp</span>(X_predict)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ei_plot</span>(post<span class="sc">$</span>mu, post<span class="sc">$</span>sigma, X_predict, X_initial, y_initial, ei, ackley)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayes-opt_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It looks like the point that will yield the most improvement is all the way at the right edge of input space.</p>
+<p>Now this point is added to the training data</p>
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> X_predict[[<span class="fu">which.max</span>(ei)]]</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ackley</span>(x) <span class="sc">+</span> noise <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> <span class="fu">rbind</span>(X_initial, <span class="fu">matrix</span>(x))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> <span class="fu">c</span>(y_initial, <span class="fu">matrix</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now it is time for the optimisation part. The stopping criterion will be five additional evaluations.</p>
+<div class="cell">
+<div class="sourceCode" id="cb25"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>n_rounds <span class="ot">&lt;-</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In each round, the GP is conditioned on the training data, the point that maximises EI is found, and that point is evaluated in the objective function.</p>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(n_rounds), <span class="cf">function</span>(i) {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  gp <span class="ot">&lt;-</span> <span class="fu">gpr</span>(rbf_kernel, X_train, y_train, noise, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">sigma_f =</span> <span class="dv">1</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  ei <span class="ot">&lt;-</span> <span class="fu">expected_improvement</span>(gp, X_predict, X_train, <span class="at">xi =</span> <span class="fl">0.01</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  post <span class="ot">&lt;-</span> <span class="fu">gp</span>(X_predict)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ei_plot</span>(post<span class="sc">$</span>mu, post<span class="sc">$</span>sigma, X_predict, X_train, y_train, ei, ackley, <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Round"</span>, i))</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> X_predict[[<span class="fu">which.max</span>(ei)]]</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">ackley</span>(x) <span class="sc">+</span> noise <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  X_train <span class="ot">&lt;&lt;-</span> <span class="fu">rbind</span>(X_train, <span class="fu">matrix</span>(x))</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  y_train <span class="ot">&lt;&lt;-</span> <span class="fu">c</span>(y_train, <span class="fu">matrix</span>(y))</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  p</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A closer look at each iteration reveals that the global optimum was found in the fourth evaluation of the objective function.</p>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="bayes-opt_files/figure-html/bo_plots-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="bayes-opt_files/figure-html/bo_plots-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="bayes-opt_files/figure-html/bo_plots-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="bayes-opt_files/figure-html/bo_plots-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 100.0%;justify-content: center;">
+<p><img src="bayes-opt_files/figure-html/bo_plots-5.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="example-in-2d" class="level3">
+<h3 class="anchored" data-anchor-id="example-in-2d">Example in 2D</h3>
+<p>With two input dimensions the optimisation is a bit harder.</p>
+<p>The initial training data will be four points.</p>
+<div class="cell">
+<div class="sourceCode" id="cb27"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>n_initial <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>X_initial <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="sc">-</span><span class="dv">5</span>, <span class="fl">2.1</span>, <span class="sc">-</span><span class="fl">2.1</span>, <span class="fl">4.7</span>, <span class="sc">-</span><span class="fl">4.7</span>, <span class="sc">-</span><span class="fl">2.5</span>, <span class="sc">-</span><span class="fl">2.5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(n_initial, <span class="dv">2</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>noise <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>y_initial <span class="ot">&lt;-</span> <span class="fu">ackley</span>(X_initial) <span class="sc">+</span> noise <span class="sc">*</span> <span class="fu">rnorm</span>(n_initial)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A GP is conditioned on the initial training data and expected improvement is calculated along a grid</p>
+<div class="cell">
+<div class="sourceCode" id="cb28"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>gp <span class="ot">&lt;-</span> <span class="fu">gpr</span>(rbf_kernel, X_initial, y_initial, noise, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">sigma_f =</span> <span class="dv">1</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>X_predict <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">length.out =</span> <span class="dv">50</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">expand.grid</span>(.,.) <span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>ei <span class="ot">&lt;-</span> <span class="fu">expected_improvement</span>(gp, X_predict, X_initial, <span class="at">xi =</span> <span class="fl">0.01</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is what it looks like so far</p>
+<div class="cell">
+<div class="sourceCode" id="cb29"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>post <span class="ot">&lt;-</span> <span class="fu">gp</span>(X_predict)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">as_tibble</span>(X_predict, <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">y =</span> post<span class="sc">$</span>mu) <span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> x2)) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_contour_filled</span>(<span class="fu">aes</span>(<span class="at">z =</span> y), <span class="at">bins =</span> <span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(X_initial, <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>))) <span class="sc">+</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(<span class="fu">t</span>(X_predict[<span class="fu">which.max</span>(ei), ]), <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>)), <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">colour =</span> <span class="st">"max EI"</span>)) <span class="sc">+</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">""</span>, <span class="at">colour =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="bayes-opt_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It looks like the point that will yield the most improvement is all the way at the corner of input space.</p>
+<p>Now this point is added to the training data</p>
+<div class="cell">
+<div class="sourceCode" id="cb30"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> X_predict[<span class="fu">which.max</span>(ei), ]</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ackley</span>(x) <span class="sc">+</span> noise <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>X_train <span class="ot">&lt;-</span> <span class="fu">rbind</span>(X_initial, x)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>y_train <span class="ot">&lt;-</span> <span class="fu">c</span>(y_initial, <span class="fu">matrix</span>(y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now it is time for the optimisation part. The stopping criterion will be eigth additional evaluations.</p>
+<div class="cell">
+<div class="sourceCode" id="cb31"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>n_rounds <span class="ot">&lt;-</span> <span class="dv">8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In each round, the GP is conditioned on the training data, the point that maximises EI is found, and that point is evaluated in the objective function.</p>
+<div class="cell">
+<div class="sourceCode" id="cb32"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>plots <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(n_rounds), <span class="cf">function</span>(i) {</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  gp <span class="ot">&lt;-</span> <span class="fu">gpr</span>(rbf_kernel, X_train, y_train, noise, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">sigma_f =</span> <span class="dv">1</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  ei <span class="ot">&lt;-</span> <span class="fu">expected_improvement</span>(gp, X_predict, X_train, <span class="at">xi =</span> <span class="fl">0.01</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  post <span class="ot">&lt;-</span> <span class="fu">gp</span>(X_predict)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> X_predict[<span class="fu">which.max</span>(ei), ]</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(X_predict, <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">y =</span> post<span class="sc">$</span>mu) <span class="sc">%&gt;%</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> x2)) <span class="sc">+</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_contour_filled</span>(<span class="fu">aes</span>(<span class="at">z =</span> y), <span class="at">bins =</span> <span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(X_train, <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>))) <span class="sc">+</span></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>(<span class="at">data =</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(<span class="fu">t</span>(x), <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"x1"</span>, <span class="st">"x2"</span>)), <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">colour =</span> <span class="st">"max EI"</span>)) <span class="sc">+</span></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">""</span>, <span class="at">colour =</span> <span class="st">""</span>, <span class="at">title =</span> <span class="fu">paste</span>(<span class="st">"Round"</span>, i))</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">ackley</span>(x) <span class="sc">+</span> noise <span class="sc">*</span> <span class="fu">rnorm</span>(<span class="dv">1</span>)</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  X_train <span class="ot">&lt;&lt;-</span> <span class="fu">rbind</span>(X_train, x)</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  y_train <span class="ot">&lt;&lt;-</span> <span class="fu">c</span>(y_train, <span class="fu">matrix</span>(y))</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  p</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Looking at the last four iterations reveals that, while close, the global optimum has not been found and that many iterations were spent exploring the edges of input space. A few more iterations might have revealed the global optimum. On the other hand, the small budget did reveal a relatively good set of input parameters.</p>
+<div class="cell quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="bayes-opt_files/figure-html/bo_plots_2d-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="bayes-opt_files/figure-html/bo_plots_2d-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="bayes-opt_files/figure-html/bo_plots_2d-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="cell-output-display quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<p><img src="bayes-opt_files/figure-html/bo_plots_2d-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</main>
+<!-- /main column -->
+</div> <!-- /row -->
+</div> <!-- /container fluid -->
+
+
+</body></html>
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tag/modelling/">Modelling</a>
+  
+  <a class="badge badge-light" href="../../tag/bayesian-statistics/">Bayesian statistics</a>
+  
+  <a class="badge badge-light" href="../../tag/bayesian-optimisation/">Bayesian optimisation</a>
+  
+  <a class="badge badge-light" href="../../tag/r/">R</a>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="../../"><img class="avatar mr-3 avatar-circle" src="../../author/anders-e.-nielsen/avatar_huaf22d72e35256be9d48177f1f21d9377_326351_270x270_fill_q75_lanczos_center.jpg" alt="Anders E. Nielsen"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Anders E. Nielsen</a></h5>
+      <h6 class="card-subtitle">Data Professional &amp; Research Scientist</h6>
+      <p class="card-text">I apply modern data technology to solve real-world problems. My interests include statistics, machine learning, computational biology, and IoT.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:andellegaard@gmail.com" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/anders-ellegaard-nielsen-6a0857125/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/AnHosu" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="../../post/bespoke-biochem-one/">Bespoke Bayesian Model for Biochemical Assays</a></li>
+      
+      <li><a href="../../post/bespoke-biochem-two/">Bespoke Bayesian Model for High Throughput Biochemical Assays</a></li>
+      
+      <li><a href="../../post/bayesian-olympics/">Olympic Athletes over Time - A Tidy Bayesian Data Exploration</a></li>
+      
+      <li><a href="../../project/bayesian-optimisation/">Bayesian Optimisation Tools and Tutorials</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2023 Anders E. Nielsen
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a>, <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>, and <a href="https://github.com/rstudio/blogdown" target="_blank" rel="noopener">R Blogdown</a>.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="../../js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="../../en/js/wowchemy.min.cf8ca859a9b74f8b1cd804621b13e5f1.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>

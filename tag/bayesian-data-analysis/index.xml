@@ -14,11 +14,11 @@
     
     <item>
       <title>Bespoke Bayesian Model for Biochemical Assays</title>
-      <link>/project/bespoke-biochem-one/</link>
+      <link>/post/bespoke-biochem-one/</link>
       <pubDate>Sat, 20 Nov 2021 00:00:00 +0000</pubDate>
-      <guid>/project/bespoke-biochem-one/</guid>
+      <guid>/post/bespoke-biochem-one/</guid>
       <description>
-&lt;script src=&#34;../../project/bespoke-biochem-one/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;../../post/bespoke-biochem-one/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;I am on a quest to improve the model fitting I do on biochemical assays. For some time, I have had this feeling that I should be able to extract more information from the data gathered in biochemical assays, in particular assays with a high throughput. I have been using classical machine learning techniques and generic fitting and optimisation functions to interpret data from such assays. While this approach works, it also neglects much of the available domain expertise. Many of the underlying biochemical mechanisms are known and I would like my models to take that into account so I get results that are more directly interpretable in the context of the hypothesis that required the assay in the first place. In other words, I want a bespoke model.&lt;/p&gt;
@@ -111,7 +111,7 @@ ggplot() +
   scale_colour_manual(values = c(&amp;quot;Tissue response&amp;quot; = colour$azure)) +
   theme_minimal() +
   theme(legend.title = element_blank())&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-one/index_files/figure-html/hill_equation-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-one/index_files/figure-html/hill_equation-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;In the real world, we cannot sample the true tissue response exactly. As a proxy for the tissue response, we employ assays that are performed &lt;em&gt;in vitro&lt;/em&gt;. Such assays are sensitive to environmental conditions and, even in the most strictly controlled settings, yield noisy responses. Baring any systematic bias, the assay response, &lt;span class=&#34;math inline&#34;&gt;\(y_i\)&lt;/span&gt; should average to the true tissue response though.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;assay_response &amp;lt;- function(log_conc, bottom, top, log_IC50, nH, sigma) {
   noise &amp;lt;- rnorm(length(log_conc), 0, sigma)
@@ -138,7 +138,7 @@ ggplot() +
     colour = &amp;quot;&amp;quot;
   ) +
   theme_minimal()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-one/index_files/figure-html/noisy_assay_response-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-one/index_files/figure-html/noisy_assay_response-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;from-domain-expertise-to-probabilistic-model&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;From Domain Expertise to Probabilistic Model&lt;/h2&gt;
@@ -256,7 +256,7 @@ p &amp;lt;- ggplot() +
   theme_minimal() +
   labs(x = &amp;quot;Ligand concentration [M]&amp;quot; , y = &amp;quot;Prior assay response&amp;quot;)
 Reduce(`+`, study_1_prior_pred_samples$tissue_response, init = p)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-one/index_files/figure-html/prior_pred_check_example_1-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-one/index_files/figure-html/prior_pred_check_example_1-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;This looks much like the curves we would expect from a real assay. Extreme concentrations have extreme responses and the s-shaped part of the curve is somewhere in between. In some cases, the noise is extreme but that is probably to be expected from an assay where we have little or no experience.&lt;/p&gt;
 &lt;p&gt;I initially set the prior for &lt;span class=&#34;math inline&#34;&gt;\(n_H\)&lt;/span&gt; way too wide, resulting in many extreme responses. That does not comply with domain knowledge, so I shrunk the prior.&lt;/p&gt;
 &lt;/div&gt;
@@ -376,7 +376,7 @@ posterior_samples %&amp;gt;%
     fill = &amp;quot;&amp;quot;,
     title = &amp;quot;Marginal Posterior and Prior Distributions&amp;quot;
   )&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-one/index_files/figure-html/posterior_marginals_example_1-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-one/index_files/figure-html/posterior_marginals_example_1-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;There are so many exciting things to discuss here. I have opted to plot samples from both the posterior and prior distributions, so we can appreciate how the data worked to update our prior beliefs to posterior distributions.&lt;/p&gt;
 &lt;p&gt;The first thing to notice is that the parameters for which we selected very narrow priors, i.e. &lt;span class=&#34;math inline&#34;&gt;\(top\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(bottom\)&lt;/span&gt;, nothing has changed. The data is not enough to overwhelm the strong priors and the posterior is mostly informed by the prior.&lt;/p&gt;
 &lt;p&gt;On the other hand, the data has provided enough information to concentrate the probability density to a much narrower interval for the three remaining parameters. The posterior median for &lt;span class=&#34;math inline&#34;&gt;\(\log_{10}(IC_{50})\)&lt;/span&gt; is very close to the truth. &lt;span class=&#34;math inline&#34;&gt;\(nH\)&lt;/span&gt; is a bit more uncertain, but most of the probability is concentrated well above one, which correctly suggests cooperatively binding ligands.&lt;/p&gt;
@@ -484,7 +484,7 @@ study_1_post_pred +
     &amp;quot;Observations&amp;quot; = colour$orange_light,
     &amp;quot;True tissue response&amp;quot; = colour$orange_dark
   ))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-one/index_files/figure-html/posterior_predictive_example_1-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-one/index_files/figure-html/posterior_predictive_example_1-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The true tissue response is all contained in the 89% interval for the posterior predicted response, despite noisy observations and despite the fact that 5 out of 6 observations lie outside the s-shaped part of the curve.&lt;/p&gt;
 &lt;p&gt;However, it also seems that we got lucky and had an observation very close to the true &lt;span class=&#34;math inline&#34;&gt;\(\log_{10}(IC_{50})\)&lt;/span&gt;. This point quite clearly provides an anchor for the entire model. We might not always be this lucky. In that case, however, the posterior marginal distributions for the kinetic parameters would just be much more informed by the priors, in turn telling us that we should perform more experiments.&lt;/p&gt;
 &lt;/div&gt;
@@ -592,7 +592,7 @@ p &amp;lt;- ggplot() +
   theme_minimal() +
   labs(x = &amp;quot;Ligand concentration [M]&amp;quot; , y = &amp;quot;Prior assay response&amp;quot;)
 Reduce(`+`, sample_readings, init = p)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-one/index_files/figure-html/prior_2_stan-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-one/index_files/figure-html/prior_2_stan-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;We expect most potential curves to reach 50% of their minimum response well above -7.2, corresponding to lost potency. There is, however, still a small chance of increased potency, i.e. a value smaller than -7.2. Likewise for the minimum response, we find it most likely that a modification will cause the minimum response to be somewhere between 0 and 1, yet there is a chance that the minimum response is less than zero.&lt;/p&gt;
 &lt;p&gt;All in all, these seem like suitable priors, but we also note that the amount of noise could severely impact conclusions.&lt;/p&gt;
 &lt;/div&gt;
@@ -719,7 +719,7 @@ posterior_samples %&amp;gt;%
     fill = &amp;quot;&amp;quot;,
     title = &amp;quot;Marginal Posterior and Prior Distributions&amp;quot;
   )&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-one/index_files/figure-html/posterior_marginals_study_2-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-one/index_files/figure-html/posterior_marginals_study_2-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The first thing to notice here is that the posterior probability mass is more concentrated than the prior. However, the marginal posterior distributions for &lt;span class=&#34;math inline&#34;&gt;\(\log_{10}(IC_{50})\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(bottom\)&lt;/span&gt; are still relatively wide. Recall that a difference of one in &lt;span class=&#34;math inline&#34;&gt;\(\log_{10}(IC_{50})\)&lt;/span&gt; is an order of magnitude in terms of concentration. Small changes in potency matter a lot if we have to manufacture the compound at one point. So our data did not tell us much about the precise potency and efficacy of this modified ligand.&lt;/p&gt;
 &lt;p&gt;On the other hand, the posterior probability mass is mostly at &lt;span class=&#34;math inline&#34;&gt;\(\log_{10}(IC_{50}) &amp;lt; -7.2\)&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\(bottom &amp;gt; 0\)&lt;/span&gt;, i.e. we are quite certain that our modified ligand has higher potency than the endogenous ligand but elicits a smaller response. With well defined priors and a small amount of data, we have a perfectly good screening experiment.&lt;/p&gt;
 &lt;p&gt;If we were interested in gaining a better understanding of the modified ligand, we could perform more experiments and get those posterior probability masses even more concentrated. We also see that the true noise of the assay is quite high; reducing it might help to better learn the underlying tissue response.&lt;/p&gt;
@@ -825,7 +825,7 @@ tibble::as_tibble(post_summaries) %&amp;gt;%
   ) +
   scale_fill_manual(values = c(&amp;quot;89% interval&amp;quot; = colour$azure)) +
   theme_minimal()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-one/index_files/figure-html/posterior_predictive_study_2-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-one/index_files/figure-html/posterior_predictive_study_2-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The true tissue response is all contained in the 89% interval for the posterior predicted response, despite noisy observations and despite the fact that 4 out of 6 observations lie outside the s-shaped part of the curve.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -978,7 +978,7 @@ study_1_post_pred +
     &amp;quot;True tissue response&amp;quot; = colour$orange_dark,
     &amp;quot;NLS fit&amp;quot; = &amp;quot;black&amp;quot;
   ))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-one/index_files/figure-html/posterior_predictive_study_1_improved-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-one/index_files/figure-html/posterior_predictive_study_1_improved-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The NLS fit is obviously close to the true tissue response and it took much less code and time to fit. Compared to our Bayesian model, the NLS fit is not bad. In fact, it will be useful in many cases, but there are a few notable differences.&lt;/p&gt;
 &lt;p&gt;With the Bayesian model, we get an estimate of the amount of noise in the experiment, in addition to the parameters of the Hill equation. Such an estimate can be very useful for understanding and continuous improvement of the biochemical assays.&lt;/p&gt;
 &lt;p&gt;With the Bayesian model, we also get marginal posterior distributions. With a regular fit, we only get a point estimate for each parameter and any uncertainty is lost. We do not always need anything but a point estimate to answer our hypotheses, but the marginal posterior distributions can be useful in future experimental design and as priors for the next experiment.&lt;/p&gt;
@@ -1227,11 +1227,11 @@ post_pred &amp;lt;- tibble::tibble(
     
     <item>
       <title>Bespoke Bayesian Model for High Throughput Biochemical Assays</title>
-      <link>/project/bespoke-biochem-two/</link>
+      <link>/post/bespoke-biochem-two/</link>
       <pubDate>Fri, 23 Apr 2021 00:00:00 +0000</pubDate>
-      <guid>/project/bespoke-biochem-two/</guid>
+      <guid>/post/bespoke-biochem-two/</guid>
       <description>
-&lt;script src=&#34;../../project/bespoke-biochem-two/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;../../post/bespoke-biochem-two/index_files/header-attrs/header-attrs.js&#34;&gt;&lt;/script&gt;
 
 
 &lt;p&gt;I am on a quest to improve the model fitting I do on biochemical assays. For some time, I have had this feeling that I should be able to extract more information from the data gathered in biochemical assays, in particular assays with a high throughput.&lt;/p&gt;
@@ -1305,7 +1305,7 @@ p &amp;lt;- ggplot() +
   )
 
 Reduce(`+`, true_curves[1:10], init = p)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-two/index_files/figure-html/generative_model-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-two/index_files/figure-html/generative_model-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;bespoke-bayesian-model&#34; class=&#34;section level1&#34;&gt;
 &lt;h1&gt;Bespoke Bayesian Model&lt;/h1&gt;
@@ -1399,7 +1399,7 @@ replicate(
     y = &amp;quot;response&amp;quot;,
     title = &amp;quot;Prior Samples&amp;quot;
     )&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-two/index_files/figure-html/prior_predictive_check-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-two/index_files/figure-html/prior_predictive_check-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Our prior understanding of the data generating process predicts a diverse set of curves. One of the things that often surprises me is the large number of seeming outliers, even with conservative estimates for noise. Given variance and enough samples, we are bound to see some weird behaviour.&lt;/p&gt;
 &lt;p&gt;I think that these hypothetical samples seem like a fair representation of the samples I expect to get from the assay. If for some reason we thought that the hypothetical samples looked too extreme or did not represent the full range of possible observations, we would have to go back and adjust our priors.&lt;/p&gt;
 &lt;/div&gt;
@@ -1602,7 +1602,7 @@ tibble::as_tibble(post_summaries) %&amp;gt;%
     x = &amp;quot;Response&amp;quot;,
     title = &amp;quot;Shape Check&amp;quot;
   )&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-two/index_files/figure-html/shape_check-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-two/index_files/figure-html/shape_check-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;It really looks like out model replicates the data quite nicely. Usually the concerns are whether the tails match; if the data has minimum points that are outside what the model yields or if the samples span a much wider range than the data, it might be cause to rethink the model.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
@@ -1673,7 +1673,7 @@ posterior_samples %&amp;gt;%
     fill = &amp;quot;&amp;quot;,
     title = &amp;quot;Marginal Posterior and Prior Distributions&amp;quot;
   )&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-two/index_files/figure-html/posterior_marginals_shared-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-two/index_files/figure-html/posterior_marginals_shared-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;And some summary statistics&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;post_summaries &amp;lt;- rstan::summary(
   post,
@@ -1798,7 +1798,7 @@ lapply(example_compounds, function(i) {
     fill = &amp;quot;&amp;quot;,
     title = &amp;quot;Marginal Posterior and Prior Distributions&amp;quot;
   )&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-two/index_files/figure-html/posterior_marginals_compounds-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-two/index_files/figure-html/posterior_marginals_compounds-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;And some summary statistics&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;post_summaries &amp;lt;- rstan::summary(
   post,
@@ -1990,11 +1990,11 @@ example_curves$post_pred_coloured &amp;lt;- purrr::map(
   }
 )
 example_curves$post_pred_coloured[[1]]&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-two/index_files/figure-html/posterior_predictive-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-two/index_files/figure-html/posterior_predictive-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;Our model is very open about its uncertainty. While the posterior mean is a great compromise between the data points, the model also knows that the assay is noisy, and it has used the pooled estimate of that noise across all curves to give us this nice interval for any point prediction. Not also how the model has confidently ruled out one of the points as an outlier. I think this is a lot of information gained from just a few points of data.&lt;/p&gt;
 &lt;p&gt;Now let’s have a look at a more difficult case&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;example_curves$post_pred_coloured[[2]]&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-two/index_files/figure-html/posterior_predictive_2-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-two/index_files/figure-html/posterior_predictive_2-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;This one is difficult because we did not get any good points on the curved part of the tissue response. This makes the estimate for &lt;span class=&#34;math inline&#34;&gt;\(\log_{10}(IC_{50})\)&lt;/span&gt; very uncertain, resulting in the bulge in the middle. Despite all this, the 89% interval nicely contains the true tissue response.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;model-comparison&#34; class=&#34;section level2&#34;&gt;
@@ -2031,11 +2031,11 @@ example_curves$post_pred_coloured[[1]]&lt;/code&gt;&lt;/pre&gt;
 )
 
 example_curves$model_comp[[1]]&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-two/index_files/figure-html/model_comp-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-two/index_files/figure-html/model_comp-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;The least squares model is almost identical to our posterior mean estimate and both are close to the truth. This is not altogether surprising, as we had great data points to fit the model curve on. However, only the Bayesian model comes with an estimate of the uncertainty. With the least squares model, we could easily grow overconfident in the fitted parameters.&lt;/p&gt;
 &lt;p&gt;Let’s have a look at the more difficult case.&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;example_curves$model_comp[[2]]&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../project/bespoke-biochem-two/index_files/figure-html/model_comp_2-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../post/bespoke-biochem-two/index_files/figure-html/model_comp_2-1.png&#34; width=&#34;90%&#34; /&gt;&lt;/p&gt;
 &lt;p&gt;In this case, the least squares fit was not really able to find a good foothold in the data, yet it confidently reports the fitted parameters. Granted, our Bayesian model had its troubles too, but at least it reports the extreme uncertainty.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
