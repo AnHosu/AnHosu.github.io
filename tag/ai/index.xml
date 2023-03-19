@@ -13,6 +13,25 @@
     </image>
     
     <item>
+      <title>Bayesian Biochemistry</title>
+      <link>/project/bayesian-biochemistry/</link>
+      <pubDate>Wed, 15 Mar 2023 00:00:00 +0000</pubDate>
+      <guid>/project/bayesian-biochemistry/</guid>
+      <description>&lt;p&gt;I am on a quest to improve the model fitting I do on biochemical assays. For some time, I have had this feeling that I should be able to extract more information from the data gathered in biochemical assays, in particular assays with a high throughput. I have been using classical machine learning techniques and generic fitting and optimisation functions to interpret data from such assays. While this approach works, it also neglects much of the available domain expertise. Many of the underlying biochemical mechanisms are known and I would like my models to take that into account so I get results that are more directly interpretable in the context of the hypothesis that required the assay in the first place. In other words, I want a bespoke model.&lt;/p&gt;
+&lt;p&gt;Through three incremental iterations, I have built a bespoke Bayesian Model for biochemical assays that seek to quantify a dose-response. These are common assays in drug development and provide the foundation for screening as well as optimisation experiments.&lt;/p&gt;
+&lt;h2 id=&#34;posts-in-the-series&#34;&gt;Posts in the Series&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../../post/bespoke-biochem-one/&#34;&gt;Bespoke Bayesian Model for Biochemical Assays&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;In this, I build a Bayesian model for a single dose-response curve, representing a single experiment.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../../post/bespoke-biochem-two/&#34;&gt;Bespoke Bayesian Model for High Throughput Biochemical Assays&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;In this, I build a Bayesian model for a screening experiment with multiple variations of a compound.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../../post/bespoke-biochem-three/&#34;&gt;Bespoke Bayesian Model for High Throughput Biochemical Assays with Batch Effects&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Post coming soon. In this, I add upon the screening experiment, by showing how to account for batch effects and include covariates in the Bayesian model.&lt;/p&gt;
+&lt;h2 id=&#34;license&#34;&gt;License&lt;/h2&gt;
+&lt;p&gt;The content of this project itself is licensed under the &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Creative Commons Attribution-ShareAlike 4.0 International license&lt;/a&gt;, and the underlying code is licensed under the &lt;a href=&#34;LICENSE&#34;&gt;GNU General Public License v3.0 license&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Bayesian Optimisation Tools and Tutorials</title>
       <link>/project/bayesian-optimisation/</link>
       <pubDate>Wed, 15 Mar 2023 00:00:00 +0000</pubDate>
