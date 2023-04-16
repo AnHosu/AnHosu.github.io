@@ -36,17 +36,16 @@
       <link>/project/bayesian-optimisation/</link>
       <pubDate>Wed, 15 Mar 2023 00:00:00 +0000</pubDate>
       <guid>/project/bayesian-optimisation/</guid>
-      <description>&lt;p&gt;I often find that the most valuable industrial processes, like manufacturing, drug development, or supply chains, suffer from the same challenge. There is little relevant historical data available and it is extremely expensive to conduct experiments on the processes.
-This is a challenge, if we want to optimise these processes. Yet we absolutely want to optimise those processes.&lt;/p&gt;
+      <description>&lt;p&gt;When trying to optimise valuable industrial processes, like manufacturing, drug development, or supply chains, I often encounter the same challenge. There is little relevant historical data available and it is extremely expensive to conduct experiments on the process.&lt;/p&gt;
 &lt;p&gt;My go-to tool in these cases is Bayesian optimisation.&lt;/p&gt;
-&lt;p&gt;Bayesian optimisation uses a probabilistic model to represent an opaque an complex process. This model is updated with sequential experiments that the model itself helps design. With relatively few experiments, Bayesian optimisation can find good maxima or minima.&lt;/p&gt;
-&lt;p&gt;The probabilistic model allows us to incorporate our prior knowledge about the process at hand and gives us a head start in the optimisation. However, for the same reason, Bayesian optimisation is sensitive to initial assumption, and there are a lot of moving parts.&lt;/p&gt;
-&lt;p&gt;With this project, I aim to introduce and discuss the components of Bayesian optimisation. However, I will focus less on the mathematical intricacies and put more emphasis on the assumptions and implementation of the components.&lt;/p&gt;
+&lt;p&gt;Bayesian optimisation is a powerful tool to perform optimisation of opaque, complex processes. Bayesian optimisation uses a probabilistic model as a surrogate for the opaque process. This model is updated with sequential experiments that the model itself helps design. With relatively few experiments, Bayesian optimisation can find good maxima or minima.&lt;/p&gt;
+&lt;p&gt;The probabilistic model allows us to incorporate our prior knowledge about the process at hand and gives us a head start in the optimisation. However, for the same reason, Bayesian optimisation is sensitive to initial assumptions, and there are a lot of moving parts.&lt;/p&gt;
+&lt;p&gt;With this project, I aim to introduce and discuss the components of Bayesian optimisation. However, I will focus less on the mathematical intricacies and put more emphasis on the assumptions and implementation of each component.&lt;/p&gt;
 &lt;h2 id=&#34;posts-on-bayesian-optimisation&#34;&gt;Posts on Bayesian Optimisation&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://anhosu.com/post/bayesian-opt-r/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Bayesian Optimisation from Scratch in R&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../../post/bayesian-opt-r/&#34;&gt;Bayesian Optimisation from Scratch in R&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;This post introduces and demonstrates all the core components of Bayesian optimisation and implements them from scratch in R. This is a great place to start.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Kernel Functions&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../../post/kernels-r&#34;&gt;Kernel Functions&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post takes an extensive look at kernels and discusses the rationales, utility, and limitations of some popular kernels, focusing primarily on their application in Gaussian processes and Bayesian optimisation. Along with the discussion are implementations of the kernels in base R.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Acquisition Functions&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;This post is coming soon.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Neural Networks as Surrogate Models&lt;/strong&gt;&lt;/p&gt;

@@ -886,9 +886,9 @@
 <p>The kernel function can be applied to the covariates, <span class="math inline">\mathbf{X}</span>, of a set of observed data points to create a covariance matrix, <span class="math inline">\mathbf{\Sigma}</span></p>
 <p><span class="math display">\Sigma_{ij} = k(\mathbf{x}_i, \mathbf{x}_j)</span></p>
 <p>for all combinations of observations <span class="math inline">i</span> and <span class="math inline">j</span>.</p>
-<p>Kernels themselves are an entire subject. For now, know that some examples of kernel functions used in GP include the radial basis function (RBF) kernel, the Matérn kernel, and the linear kernel.</p>
+<p>Kernels themselves are an entire subject, see the <a href="../kernels-r">kernel post</a> for a thorough discussion of kernels for Gaussian processes and Bayesian optimisation.</p>
 <h4 id="implementing-the-rbf-kernel" class="anchored">Implementing the RBF kernel</h4>
-<p>The RBF kernel is defined as</p>
+<p>An example of a commonly used kernel is the Radial Basis Function (RBF) kernel. The RBF kernel is defined as</p>
 <p><span class="math display">k(\mathbf{x}_i, \mathbf{x}_j) = \sigma_f^2 \exp\left(-\frac{1}{2}\frac{\lVert \mathbf{x}_i - \mathbf{x}_j\rVert^2}{l^2}\right)</span></p>
 <p>where <span class="math inline">\sigma_f</span> and <span class="math inline">l</span> are parameters and <span class="math inline">\lVert \rVert</span> is the euclidean distance of the two vectors.</p>
 <p>This implementation can take two vectors or two matrices. For a vector input, it returns the kernel function value. For a matrix inputs, the covariance matrix, <span class="math inline">\mathbf{\Sigma}</span>, is returned.</p>
@@ -1756,6 +1756,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <h3>Related</h3>
     <ul>
       
+      <li><a href="../../post/kernels-r/">Kernels for Gaussian Processes</a></li>
+      
       <li><a href="../../post/bespoke-biochem-three/">Bespoke Bayesian Model for Batch Effects in High Throughput Biochemical Assays</a></li>
       
       <li><a href="../../post/bespoke-biochem-one/">Bespoke Bayesian Model for Biochemical Assays</a></li>
@@ -1763,8 +1765,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       <li><a href="../../post/bespoke-biochem-two/">Bespoke Bayesian Model for High Throughput Biochemical Assays</a></li>
       
       <li><a href="../../post/bayesian-olympics/">Olympic Athletes over Time - A Tidy Bayesian Data Exploration</a></li>
-      
-      <li><a href="../../project/bayesian-biochemistry/">Bayesian Biochemistry</a></li>
       
     </ul>
   </div>

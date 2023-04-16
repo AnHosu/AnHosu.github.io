@@ -1,0 +1,1893 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Anders E. Nielsen" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="A comprehensive overview of kernels, or covariance functions, for Gaussian processes and Bayesian optimisation. Implementation in R." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="../../post/kernels-r/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#023e8a" />
+  
+
+  
+  
+    
+    <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono&display=swap">
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/wowchemy.f7eaf83122b08ab266aaa8a2d08cb1e8.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="../../index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="../../post/kernels-r/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="anders e" />
+  <meta property="og:url" content="/post/kernels-r/" />
+  <meta property="og:title" content="Kernels for Gaussian Processes | anders e" />
+  <meta property="og:description" content="A comprehensive overview of kernels, or covariance functions, for Gaussian processes and Bayesian optimisation. Implementation in R." /><meta property="og:image" content="/post/kernels-r/featured.png" />
+    <meta property="twitter:image" content="/post/kernels-r/featured.png" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2023-04-16T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2023-04-16T10:02:00&#43;01:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/kernels-r/"
+  },
+  "headline": "Kernels for Gaussian Processes",
+  
+  "image": [
+    "/post/kernels-r/featured.png"
+  ],
+  
+  "datePublished": "2023-04-16T00:00:00Z",
+  "dateModified": "2023-04-16T10:02:00+01:00",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Anders E. Nielsen"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "anders e",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "A comprehensive overview of kernels, or covariance functions, for Gaussian processes and Bayesian optimisation. Implementation in R."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Kernels for Gaussian Processes | anders e</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="f54f3ca427ebff5d3ad24ae6312fb420" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="../../js/wowchemy-init.min.a8a181ea67095ef9fbb0e99ffbf585a0.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link  active" href="../../post/"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Kernels for Gaussian Processes</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    2023-04-16
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    32 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.243">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>index</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+   var mathElements = document.getElementsByClassName("math");
+   var macros = [];
+   for (var i = 0; i < mathElements.length; i++) {
+    var texText = mathElements[i].firstChild;
+    if (mathElements[i].tagName == "SPAN") {
+     katex.render(texText.data, mathElements[i], {
+      displayMode: mathElements[i].classList.contains('display'),
+      throwOnError: false,
+      macros: macros,
+      fleqn: false
+     });
+  }}});
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="index_files/libs/clipboard/clipboard.min.js"></script>
+  <script src="index_files/libs/quarto-html/tabby.min.js"></script>
+  <script src="index_files/libs/quarto-html/popper.min.js"></script>
+  <script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="index_files/libs/quarto-html/anchor.min.js"></script>
+  <link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
+  <link href="index_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet">
+  <link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+</head>
+<body>
+<p>This post takes an extensive look at kernels and discusses the rationales, utility, and limitations of some popular kernels, focusing primarily on their application in Gaussian processes and Bayesian optimisation. Along with the discussion are implementations of the kernels in base R.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4444</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Kernels, also known as covariance functions, are central to Gaussian processes and other machine learning methods where they provide the main means of implementing prior knowledge about the modelled process.</p>
+<p>Intuitively, kernels quantify how similar two points are, given just their position in input space. The kernel function determines the smoothness and complexity of the resulting Gaussian process model, and it controls how much weight is given to different regions of the input space. Different types of kernel functions can be used to model different types of data, such as periodic or spatial data.</p>
+<p>Bayesian optimisation extensively employs Gaussian processes, so kernels provide the means to define a bespoke prior distribution over the objective function or process being optimised. There are a plethora of kernels available, and for successful implementations of Bayesian optimisation, selecting the right one is essential but difficult.</p>
+<h2 id="applying-kernels-in-gaussian-processes" class="anchored">Applying Kernels in Gaussian Processes</h2>
+<p>Formally, a kernel function <span class="math inline">k(\mathbf{x},\mathbf{x'})</span> takes two input vectors, <span class="math inline">\mathbf{x}</span> and <span class="math inline">\mathbf{x'}</span>, and returns a real-valued scalar that represents a similarity measure between the inputs.</p>
+<p>A kernel function must be positive semi-definite (PSD). This means that the kernel matrix, <span class="math inline">\mathbf{\Sigma}</span>, constructed from any set of <span class="math inline">n</span> input row vectors <span class="math inline">{\mathbf{x}_1, \ldots, \mathbf{x}_n}</span>, must be PSD. The entries of the kernel matrix are defined as <span class="math inline">\mathbf{\Sigma}_{i,j} = k(\mathbf{x}_i, \mathbf{x}_j)</span>, for all combinations of <span class="math inline">i, j \in (1, \ldots, n)</span>. The PSD property ensures that the kernel matrix can be applied as the covariance matrix in a Gaussian process.</p>
+<p>In the context of a Gaussian process that should approximate an objective function, a good kernel function should be flexible enough to capture the underlying structure of the data, but not so flexible that it overfits the data. The choice of kernel function and its hyperparameters can have a significant impact on the performance of the Gaussian process and its application in Bayesian optimisation, so it is important to choose carefully and experiment with different options.</p>
+<p>However, without knowing the virtues, pitfalls, and assumptions of a kernel, it is difficult to assess its quality for a given problem. In the following sections, a selection of kernels and their virtues are discussed.</p>
+<p>To demonstrate the kernels, two plots are defined. The first plot simply draws the kernel function as a function of Euclidean distance.</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>plot_kernel_value <span class="ot">&lt;-</span> <span class="cf">function</span>(kernel, ...) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">tibble</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">X1 =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="at">by =</span> <span class="fl">0.05</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">X2 =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(X1)),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">kv =</span> purrr<span class="sc">::</span><span class="fu">map2_dbl</span>(X1, X2, kernel, ...)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> X1, <span class="at">y =</span> kv)) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Euclidean distance"</span>, <span class="at">y =</span> <span class="st">"kernel value"</span>) <span class="sc">+</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>()</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The next plot samples from the Gaussian process that uses the kernel function to calculate its covariance matrix. This essentially translates to sampling random functions from the Gaussian process. See the post on <a href="../bayesian-opt-r">Bayesian optimisation</a> for details.</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Random Samples from a Multivariate Gaussian</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#' </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' This implementation is similar to MASS::mvrnorm, but uses chlosky</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' decomposition instead. This should be more stable but is less efficient than</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' the MASS implementation, which recycles the eigen decomposition for the</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' sampling part.</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param n number of samples to sample</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param mu the mean of each input dimension</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma the covariance matrix</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param epsilon numerical tolerance added to the diagonal of the covariance</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#'  matrix. This is necessary for the Cholesky decomposition, in some cases.</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return numerical vector of n samples</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>rmvnorm <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n =</span> <span class="dv">1</span>, mu, sigma, <span class="at">epsilon =</span> <span class="fl">1e-6</span>) {</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> <span class="fu">length</span>(mu)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">all</span>(<span class="fu">dim</span>(sigma) <span class="sc">==</span> <span class="fu">c</span>(p, p))) <span class="fu">stop</span>(<span class="st">"incompatible dimensions of arguments"</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    ev <span class="ot">&lt;-</span> <span class="fu">eigen</span>(sigma, <span class="at">symmetric =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>values</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="sc">!</span><span class="fu">all</span>(ev <span class="sc">&gt;=</span> <span class="sc">-</span>epsilon <span class="sc">*</span> <span class="fu">abs</span>(ev[1L]))) {</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"The covariance matrix (sigma) is not positive definite"</span>)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    cholesky <span class="ot">&lt;-</span> <span class="fu">chol</span>(sigma <span class="sc">+</span> <span class="fu">diag</span>(p) <span class="sc">*</span> epsilon)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    sample <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(p<span class="sc">*</span>n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dim</span>(sample) <span class="ot">&lt;-</span> <span class="fu">c</span>(n, p)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sweep</span>(sample <span class="sc">%*%</span> cholesky, <span class="dv">2</span>, mu, <span class="at">FUN =</span> <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>plot_gp <span class="ot">&lt;-</span> <span class="cf">function</span>(kernel, ...) {</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  n_samples <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  X_predict <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="at">length.out =</span> <span class="dv">100</span>), <span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="at">times =</span> <span class="fu">length</span>(X_predict))</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  sigma <span class="ot">&lt;-</span> rlang<span class="sc">::</span><span class="fu">exec</span>(kernel, <span class="at">X1 =</span> X_predict, <span class="at">X2 =</span> X_predict, ...)</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  samples <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="at">n =</span> n_samples, mu, sigma)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">t</span>(samples),</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">paste</span>(<span class="st">"sample"</span>, <span class="fu">seq</span>(<span class="dv">1</span>, n_samples))</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> X_predict,</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">uncertainty =</span> <span class="fl">1.6</span><span class="sc">*</span><span class="fu">sqrt</span>(<span class="fu">diag</span>(sigma)),</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>    <span class="at">mu =</span> mu,</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower =</span> mu <span class="sc">-</span> uncertainty,</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper =</span> mu <span class="sc">+</span> uncertainty</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x)) <span class="sc">+</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_ribbon</span>(</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>      <span class="fu">aes</span>(<span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper, <span class="at">fill =</span> <span class="st">"89% interval"</span>),</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>      <span class="at">alpha =</span> <span class="fl">0.2</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> mu, <span class="at">colour =</span> <span class="st">"Mean"</span>)) <span class="sc">+</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(</span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"y"</span>,</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>      <span class="at">x =</span> <span class="st">"x"</span>,</span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>      <span class="at">colour =</span> <span class="st">""</span>,</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> <span class="st">""</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Reduce</span>(</span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">+</span><span class="st">`</span>,</span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">init =</span> p,</span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="fu">lapply</span>(<span class="fu">paste</span>(<span class="st">"sample"</span>, <span class="fu">seq</span>(<span class="dv">1</span>, n_samples)), <span class="cf">function</span>(s) {</span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> .data[[s]], <span class="at">colour =</span> s), <span class="at">linetype =</span> <span class="dv">2</span>)</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_colour_brewer</span>(<span class="at">palette =</span> <span class="st">"YlGnBu"</span>) <span class="sc">+</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">list</span>(<span class="st">"89% interval"</span> <span class="ot">=</span> <span class="st">"#219ebc"</span>))</span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<h2 id="stationary-kernels" class="anchored">Stationary Kernels</h2>
+<p>Stationary kernels are a class of kernel functions that are invariant to translations in input space. Mathematically, a kernel function is stationary if it depends only on the difference between its arguments, <span class="math inline">\mathbf{x}-\mathbf{x'}</span>, and not on their absolute values. Formally, a kernel function <span class="math inline">k(\mathbf{x}, \mathbf{x'})</span> is stationary if and only if:</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = k(\mathbf{x} + a, \mathbf{x'} + a)</span></p>
+<p>for all inputs <span class="math inline">\mathbf{x}</span> and <span class="math inline">\mathbf{x'}</span> and all <span class="math inline">a</span>.</p>
+<h3 id="rbf-kernel" class="anchored">RBF Kernel</h3>
+<p>The Radial Basis Function (RBF) kernel is also known as the Squared Exponential kernel or the Gaussian kernel. It is a popular choice in Gaussian processes because of its simplicity and interpretability. The RBF kernel is defined as</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = \sigma^2 \exp\left(-\frac{\lVert \mathbf{x} - \mathbf{x'}\rVert^2}{2l^2}\right)</span></p>
+<p>where <span class="math inline">\lVert \mathbf{x} - \mathbf{x'}\rVert^2</span> is the squared Euclidean distance between the two vectors. <span class="math inline">\sigma^2</span> is a variance parameter that simply scales the kernel. More interestingly, the length scale parameter, <span class="math inline">l</span>, controls the smoothness and the range of influence of the kernel. It determines how quickly the similarity between two input points decreases as their distance increases.</p>
+<p>Intuitively, small length scales mean that two points have to be very close to have any correlation. This results in very flexible functions that do not expect much correlation between data points. For a large length scale, however, points that are far apart are still expected to behave in a similar way. This results in very smooth functions that expect similar output values across the entire feature space.</p>
+<p>The flexibility and interpretability of the length scale parameter makes the RBF kernel a good starting point, when exploring Gaussian processes.</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' RBF Kernel</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Isotropic RBF kernel function generalised to two sets of n and m observations</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' of d features.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma scale parameter, scalar</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param l length scale, scalar</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>rbf_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">sigma =</span> <span class="fl">1.0</span>, <span class="at">l =</span> <span class="fl">1.0</span>) {</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  sqdist <span class="ot">&lt;-</span> (<span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>(X1 <span class="sc">%*%</span> <span class="fu">t</span>(X2))) <span class="sc">%&gt;%</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add</span>(<span class="fu">rowSums</span>(X1<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sweep</span>(<span class="dv">2</span>, <span class="fu">rowSums</span>(X2<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>), <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  sigma<span class="sc">**</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span> <span class="sc">/</span> l<span class="sc">**</span><span class="dv">2</span> <span class="sc">*</span> sqdist)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is an example of how the covariance between two vectors tapers off, as their Euclidean distance increases.</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_kernel_value</span>(rbf_kernel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+</div>
+</div>
+<p>Random functions pulled from a Gaussian process that employs the RBF kernel are quite flexible.</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(rbf_kernel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+</div>
+</div>
+<h4 id="rq-kernel" class="anchored">RQ Kernel</h4>
+<p>The Rational Quadratic (RQ) kernel is a generalisation of the RBF kernel in the sense that it can be interpreted as an infinite sum of RBF kernels with different length scales. The RQ kernel is defined as:</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = \sigma^2\left(1 + \frac{\Vert x - x'\Vert^2}{2\alpha \ell^2}\right)^{-\alpha}</span></p>
+<p>where <span class="math inline">\lVert \mathbf{x} - \mathbf{x'}\rVert^2</span> is the squared Euclidean distance between the two vectors. <span class="math inline">\sigma^2</span> is a variance parameter that simply scales the kernel. The length scale parameter, <span class="math inline">l</span>, determines how quickly the similarity between two input points decreases as their distance increases, just like for the RBF kernel. The mixture parameter, <span class="math inline">\alpha</span>, can be viewed as controlling how much local variation the kernel allows. When drawing functions from a Gaussian process that employs the RQ kernel, small values of <span class="math inline">\alpha</span> will yield functions with more local variation while still displaying the overall length scaling defined by <span class="math inline">l</span>. On the other hand, larger values of <span class="math inline">\alpha</span> will yield functions with less local variation. In fact as <span class="math inline">\alpha \to \infty</span> the RQ kernel converges to the RBF kernel with the same <span class="math inline">l</span>.</p>
+<p>Since the RQ Kernel can model functions with a mixture of different length scales, it is useful for problems where the function may have both local and global variations. However, the RQ kernel needs tuning of two hyperparameters, <span class="math inline">\alpha</span> and <span class="math inline">l</span>, which in turn requires more data. The addition of <span class="math inline">\alpha</span> also arguably decreases the interpretability of <span class="math inline">l</span>.</p>
+<p>The added flexibility compared to the RBF kernel without too much added complexity, makes the RQ kernel a good alternative, when exploring Gaussian processes.</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' RQ Kernel</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Isotropic RQ kernel function generalised to two sets of n and m observations</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' of d features.</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma scale parameter, scalar</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param l length scale, scalar</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param alpha mixture parameter, positive scalar</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>rq_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="dv">1</span>) {</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  sqdist <span class="ot">&lt;-</span> (<span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>(X1 <span class="sc">%*%</span> <span class="fu">t</span>(X2))) <span class="sc">%&gt;%</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add</span>(<span class="fu">rowSums</span>(X1<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sweep</span>(<span class="dv">2</span>, <span class="fu">rowSums</span>(X2<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>), <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">+</span> sqdist <span class="sc">/</span> (<span class="dv">2</span> <span class="sc">*</span> alpha <span class="sc">*</span> l<span class="sc">^</span><span class="dv">2</span>))<span class="sc">^</span>(<span class="sc">-</span>alpha)</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is an example of how the covariance between two vectors tapers off, as their Euclidean distance increases.</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_kernel_value</span>(rq_kernel, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">l =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+</div>
+</div>
+<p>The emphasis on local variation yields functions which are much more flexible.</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(rq_kernel, <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">l =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
+</div>
+</div>
+<h4 id="exponential-kernel" class="anchored">Exponential Kernel</h4>
+<p>The RBF and RQ kernels represent smooth kernels, i.e.&nbsp;kernels that are differentiable and, when applied in Gaussian processes, yield functions that are less prone to abrupt changes. The exponential kernel, on the other hand, is not differentiable. The exponential kernel is defined as</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = \sigma^2 \exp\left(-\frac{\lVert \mathbf{x} - \mathbf{x'}\rVert}{l}\right)</span></p>
+<p>where <span class="math inline">\lVert \mathbf{x} - \mathbf{x'}\rVert</span> is the Euclidean distance between the two vectors. <span class="math inline">\sigma^2</span> is a variance parameter that simply scales the kernel. The length scale parameter, <span class="math inline">l</span>, determines how quickly the similarity between two input points decreases as their distance increases, just like for the RBF kernel.</p>
+<p>When applied in Gaussian processes, the exponential kernel yields functions that are much less smooth compared to the RBF kernel. This is useful when trying to model functions that exhibit abrupt changes.</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Exponential Kernel</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Isotropic exponential kernel function generalised to two sets of n and m</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' observations of d features.</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma scale parameter, scalar</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param l length scale, scalar</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>exponential_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">l =</span> <span class="dv">1</span>) {</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  distance <span class="ot">&lt;-</span> (<span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>(X1 <span class="sc">%*%</span> <span class="fu">t</span>(X2))) <span class="sc">%&gt;%</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add</span>(<span class="fu">rowSums</span>(X1<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sweep</span>(<span class="dv">2</span>, <span class="fu">rowSums</span>(X2<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>), <span class="st">`</span><span class="at">+</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sqrt</span>()</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span>distance <span class="sc">/</span> l)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is an example of of the covariance tapers off between two vectors, as their Euclidean distance increases. Notice the abrupt decline in covariance.</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_kernel_value</span>(exponential_kernel, <span class="at">l =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
+</div>
+</div>
+<p>The Gaussian process yields functions which are prone to abrupt changes and thus look very rough.</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(exponential_kernel, <span class="at">l =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
+</div>
+</div>
+<h4 id="matérn-kernel" class="anchored">Matérn Kernel</h4>
+<p>The Matérn kernel is a flexible and versatile stationary kernel that can model a wide range of functions. The Matérn kernel is given by:</p>
+<p><span class="math display">k(\mathbf{x},\mathbf{x'}) = \sigma^2\frac{2^{1-\nu}}{\Gamma(\nu)}\left(\frac{\sqrt{2\nu}\lVert\mathbf{x}-\mathbf{x'}\rVert}{l}\right)^{\nu} K_{\nu}\left(\frac{\sqrt{2\nu}\lVert\mathbf{x}-\mathbf{x'}\rVert}{l}\right)</span></p>
+<p>where <span class="math inline">\sigma^2</span> is a variance parameter that scales the kernel, <span class="math inline">l</span> is the length scale parameter, <span class="math inline">\nu</span> is the smoothness parameter, <span class="math inline">\lVert\mathbf{x}-\mathbf{x'}\rVert</span> is the Euclidean distance between the two vectors, <span class="math inline">\Gamma(\cdot)</span> is the gamma function, and <span class="math inline">K_{\nu}(\cdot)</span> is a modified Bessel function of the second kind with order <span class="math inline">\nu</span>.</p>
+<p>The RBF kernel yields smooth functions when applied in a Gaussian process, and the exponential kernel yields rugged functions. The Matérn kernel is a generalisation of the RBF kernel, where the parameter <span class="math inline">\nu</span> controls the differentiability, and thus smoothness, of the kernel. In fact, setting <span class="math inline">\nu = 0.5</span> results in the exponential kernel and, as <span class="math inline">\nu \to \infty</span>, the Matérn kernel converges to the RBF kernel.</p>
+<p>The Matérn kernel is a popular choice for Gaussian processes, as it only makes very weak assumptions about the function being modelled. The length scale and smoothness parameters allow for modelling smooth functions with long-range covariance as well as functions with abrupt changes. The downside is that the kernel is very flexible and it takes data and effort to avoid overfitting.</p>
+<p>Base R includes functions for the gamma function as well as a Bessel function of the second kind with given order, so it can be implemented without the need for additional libraries.</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Matérn Kernel</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Isotropic Matérn kernel function generalised to two sets of n and m</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' observations of d features.</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma scale parameter, scalar</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param l length scale, scalar</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param nu smoothness parameter, positive scalar</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>matern_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">nu =</span> <span class="fl">2.5</span>) {</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  distance <span class="ot">&lt;-</span> (<span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>(X1 <span class="sc">%*%</span> <span class="fu">t</span>(X2))) <span class="sc">%&gt;%</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add</span>(<span class="fu">rowSums</span>(X1<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sweep</span>(<span class="dv">2</span>, <span class="fu">rowSums</span>(X2<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>), <span class="st">`</span><span class="at">+</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sqrt</span>()</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  term <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="dv">2</span> <span class="sc">*</span> nu) <span class="sc">*</span> distance <span class="sc">/</span> l</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  K <span class="ot">&lt;-</span> sigma <span class="sc">*</span> (<span class="dv">2</span><span class="sc">^</span>(<span class="dv">1</span> <span class="sc">-</span> nu) <span class="sc">/</span> <span class="fu">gamma</span>(nu)) <span class="sc">*</span> (term<span class="sc">^</span>nu) <span class="sc">*</span> <span class="fu">besselK</span>(term, nu)</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  K[distance <span class="sc">==</span> <span class="dv">0</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  K</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The kernel value looks like the RBF kernel or the exponential kernel, depending on the smoothness parameter</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_kernel_value</span>(matern_kernel, <span class="at">nu =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
+</div>
+</div>
+<p>The Matérn kernel can yield functions that strike a balance between smoothness and flexibility</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(matern_kernel, <span class="at">nu =</span> <span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-14-1.png" width="672"></p>
+</div>
+</div>
+<h2 id="periodic-kernels" class="anchored">Periodic Kernels</h2>
+<p>Periodic kernels are a class of kernel functions that exhibit periodicity. Formally, a periodic kernel function <span class="math inline">k(\mathbf{x}, \mathbf{x'})</span> is periodic if and only if:</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = k(\mathbf{x}, \mathbf{x'}+n\omega)</span></p>
+<p>for all inputs <span class="math inline">\mathbf{x}</span> and <span class="math inline">\mathbf{x'}</span> and all integers <span class="math inline">n</span>, where <span class="math inline">\omega</span> is the period of the kernel.</p>
+<h4 id="the-basic-periodic-kernel" class="anchored">The Basic Periodic Kernel</h4>
+<p>The basic periodic kernel is a simple periodic kernel that can be used to model functions that exhibit periodic behaviour, i.e., functions that repeat their values in regular intervals. This is especially useful when dealing with time series data or spatial data that exhibit cyclical patterns. The kernel is derived from the RBF kernel with a transformation of the input to a periodic domain <span class="citation" data-cites="MacKay:1998">[1]</span>. Consequently, the basic periodic kernel resembles the RBF kernel but with an additional trigonometric term that introduces periodicity. The definition is:</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = \exp \left( -\frac{2 \sin^2\left(\pi \frac{\lVert\mathbf{x}-\mathbf{x'}\rVert}{\omega}\right)}{l^2} \right)</span></p>
+<p>Where <span class="math inline">\lVert\mathbf{x}-\mathbf{x'}\rVert</span> is the Euclidean distance between the two vectors, <span class="math inline">\omega</span> is the period, and <span class="math inline">l</span> is the length scale.</p>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Basic Periodic Kernel</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Isotropic basic periodic kernel function generalised to two sets of n and m</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' observations of d features.</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma scale parameter, scalar</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param l length scale, scalar</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param omega period parameter, scalar</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>periodic_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">omega =</span> <span class="dv">1</span>) {</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  distance <span class="ot">&lt;-</span> (<span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>(X1 <span class="sc">%*%</span> <span class="fu">t</span>(X2))) <span class="sc">%&gt;%</span></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add</span>(<span class="fu">rowSums</span>(X1<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sweep</span>(<span class="dv">2</span>, <span class="fu">rowSums</span>(X2<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>), <span class="st">`</span><span class="at">+</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sqrt</span>()</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  sigma <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">sin</span>(pi <span class="sc">*</span> distance <span class="sc">/</span> omega)<span class="sc">^</span><span class="dv">2</span> <span class="sc">/</span> l<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Plotting the basic periodic kernel function results in a periodic pattern with peaks and valleys, where the peaks occur when the inputs are multiples of the period, <span class="math inline">\omega</span> apart. The covariance between input points is highest when the points are separated by multiples of the period length and decreases as the distance between the points deviates from multiples of the period.</p>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_kernel_value</span>(periodic_kernel, <span class="at">l =</span> <span class="fl">0.5</span>, <span class="at">omega =</span> <span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
+</div>
+</div>
+<p>Sampled functions from a Gaussian process that utilises the basic periodic kernel exhibit periodic behaviour. Such functions, when plotted, appear as smooth, oscillating curves that repeat their patterns over regular intervals.</p>
+<p>The properties of the basic periodic kernel, i.e.&nbsp;the period <span class="math inline">\omega</span> and the length scale <span class="math inline">l</span>, determine the characteristics of the sampled functions.</p>
+<p>The period, <span class="math inline">\omega</span> controls the distance between repetitions of the pattern in the sampled functions. A smaller period length will result in more frequent repetitions, while a larger period length will cause the repetitions to be spaced further apart.</p>
+<p>The length scale, <span class="math inline">l</span>, determines how smooth or wiggly the sampled functions are, just like it does for the RBF kernel. A smaller length scale will produce more wiggly functions, while a larger length scale will yield smoother functions with fewer oscillations within each period.</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(periodic_kernel, <span class="at">l =</span> <span class="dv">1</span>, <span class="at">omega =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-17-1.png" width="672"></p>
+</div>
+</div>
+<p>The basic periodic kernel alone cannot capture trends or non-periodic variations in the data, but can be combined with other kernels to create a very powerful model for objective functions with periodicity.</p>
+<p>However, compared to simpler kernels, the basic periodic kernel has an additional hyperparameter, the period parameter <span class="math inline">\omega</span>, that needs to be tuned. The choice of period can have a significant impact on the model performance, and finding an appropriate value can be challenging. As with any periodic kernel, applying the basic periodic kernel comes with the assumption that the underlying objective function being modelled exhibits periodic behaviour. If the assumption does not hold true, applying this kernel could be detrimental.</p>
+<h4 id="locally-periodic-kernel" class="anchored">Locally Periodic Kernel</h4>
+<p>An example of the basic periodic kernel working in tandem with a non-periodic kernel is the locally periodic kernel, which is the product of the basic periodic kernel and the RBF kernel.</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = \sigma^2\exp \left( -\frac{2 \sin^2\left(\pi \frac{\lVert\mathbf{x}-\mathbf{x'}\rVert}{\omega}\right)}{l_p^2} \right) \exp \left( -\frac{\lVert\mathbf{x}-\mathbf{x'}\rVert^2}{2 l_v^2} \right)</span></p>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Locally Periodic Kernel</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Isotropic locally periodic kernel function generalised to two sets of n and m</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' observations of d features.</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma scale parameter, scalar</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param l_period length scale for periodicity, scalar</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param l_var length scale for stationary variance, scalar</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param omega period parameter, scalar</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>locally_periodic_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1,</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>                                    X2,</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">sigma =</span> <span class="dv">1</span>,</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">l_period =</span> <span class="dv">1</span>,</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">l_var =</span> <span class="dv">1</span>,</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>                                    <span class="at">omega =</span> <span class="dv">1</span>) {</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">periodic_kernel</span>(X1, X2, <span class="at">l =</span> l_period, <span class="at">omega =</span> omega, <span class="at">sigma =</span> sigma) <span class="sc">*</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rbf_kernel</span>(X1, X2, <span class="at">l =</span> l_period, <span class="at">sigma =</span> <span class="dv">1</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Plotting the locally periodic kernel results a series of peaks, reflecting the periodic behaviour captured by the periodic kernel. The peaks are highest when the Euclidean distance between the input vectors is a multiple of the period length. The periodic effect is dampened over longer distances due to the length scaling of the RBF kernel.</p>
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_kernel_value</span>(locally_periodic_kernel, <span class="at">omega =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
+</div>
+</div>
+<p>Sample functions from a Gaussian process that utilises the locally periodic kernel exhibit both periodic behaviour and local variations. The functions appear as smooth, oscillating curves that repeat their patterns over regular intervals, but with varying amplitude and local changes.</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(locally_periodic_kernel, <span class="at">omega =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
+</div>
+</div>
+<p>The locally periodic kernel could be combined with other non-periodic kernels like the Matérn kernel to create even more complex dynamics. However, applying a periodic kernel comes with the assumption that the underlying objective function being modelled exhibits periodic behaviour. If the assumption does not hold true, applying a periodic kernel could be detrimental.</p>
+<h2 id="non-stationary-kernels" class="anchored">Non-stationary Kernels</h2>
+<p>Unlike stationary kernels, non-stationary kernels can depend on the absolute values of their inputs.</p>
+<p>Non-stationary kernels are often used when the underlying function being modelled exhibits varying behaviour or has different characteristics in different regions of feature space. For example, if the function being modelled changes rapidly in some regions and slowly in others, a non-stationary kernel may be more appropriate than a stationary kernel.</p>
+<h3 id="linear-kernel" class="anchored">Linear Kernel</h3>
+<p>The linear kernel, also known as the dot product kernel, is a simple non-stationary kernel function. It is defined as</p>
+<p><span class="math display"> k(\mathbf{x}, \mathbf{x'}) = \mathbf{x}^T \mathbf{x'} + \sigma^2 </span></p>
+<p>Where <span class="math inline">\sigma</span> is a constant. When <span class="math inline">sigma = 0</span> the kernel is called homogeneous and inhomogeneous otherwise.</p>
+<p>The linear kernel can be applied in cases when linear behaviour is expected. If the value of the modelled function is expected to grow as a function of the distance from an origin, a linear kernel might be appropriate.</p>
+<div class="cell">
+<div class="sourceCode" id="cb22"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Linear Kernel</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Linear kernel function generalised to two sets of n and m observations of d</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' features.</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma homogeneity parameter, scalar</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>linear_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">sigma =</span> <span class="dv">0</span>) {</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  sigma<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> X1 <span class="sc">%*%</span> <span class="fu">t</span>(X2)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Sampled functions from a Gaussian process that utilises the linear kernel exhibit linear behaviour. These sampled functions, appear as straight lines with varying slopes and intercepts. Indeed, applying a Gaussian process with a linear kernel to data is equivalent to doing Bayesian linear regression.</p>
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(linear_kernel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-22-1.png" width="672"></p>
+</div>
+</div>
+<p>Since this kernel captures linear patterns in the data, the sampled functions will always be straight lines and will not be able to model other types of variation. However, it can be combined with other kernels to increase its utility.</p>
+<h4 id="polynomial-kernel" class="anchored">Polynomial Kernel</h4>
+<p>The polynomial kernel is a generalisation of the linear kernel and is defined as</p>
+<p><span class="math display"> K(\mathbf{x}, \mathbf{x'}) = (\mathbf{x}^T \mathbf{x'} + \sigma^2)^{\nu} </span></p>
+<p>Where <span class="math inline">\sigma</span> is a constant that determines the shape of the kernel function and <span class="math inline">\nu</span>, a positive integer, is the degree of the polynomial. When <span class="math inline">sigma = 0</span> the kernel is called homogeneous and inhomogeneous otherwise.</p>
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Polynomial Kernel</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Polynomial kernel function generalised to two sets of n and m observations of</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' d features.</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma homogeneity parameter, scalar</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param nu degree parameter, positive integer</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>polynomial_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">sigma =</span> <span class="dv">0</span>, <span class="at">nu =</span> <span class="dv">2</span>) {</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>  (sigma <span class="sc">+</span> X1 <span class="sc">%*%</span> <span class="fu">t</span>(X2))<span class="sc">^</span>nu</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Sampled functions from a Gaussian process that utilises the polynomial kernel will exhibit polynomial behaviour. The functions appear as smooth curves with varying shapes, depending on the degree and the parameters of the polynomial kernel. When <span class="math inline">\nu = 2</span>, the functions are parabolas.</p>
+<div class="cell">
+<div class="sourceCode" id="cb25"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(polynomial_kernel, <span class="at">sigma =</span> <span class="dv">1</span>, <span class="at">nu =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
+</div>
+</div>
+<p>Applying a Gaussian process with the polynomial kernel corresponds to doing Bayesian polynomial regression. This means that the kernel can be applied to model non-linear relationships, but it will also be subject to the same constraints and overfitting challenges of regular polynomial regression.</p>
+<h2 id="other-kernels" class="anchored">Other Kernels</h2>
+<h4 id="constant-kernel" class="anchored">Constant Kernel</h4>
+<p>The constant kernel, also known as the bias kernel, is a simple kernel defined as</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = c</span></p>
+<p>where <span class="math inline">c</span> is a constant value.</p>
+<p>The constant kernel is characterised by its simplicity, as it assumes a constant value, meaning the output is the same for all input points. The constant kernel can be combined with other kernels to model more complex relationships between data points. In Gaussian process regression, this kernel can capture constant offsets in the function being modelled.</p>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Constant Kernel</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' Constant kernel function generalised to two sets of n and m observations of d</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' features.</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param c kernel value, scalar</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>constant_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">c =</span> <span class="dv">1</span>) {</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(c, <span class="fu">dim</span>(X1)[[<span class="dv">1</span>]], <span class="fu">dim</span>(X2)[[<span class="dv">1</span>]])</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The constant kernel function is just a flat, two-dimensional surface parallel to the input space. The height of the surface is equal to the constant value <span class="math inline">c</span>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb27"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_kernel_value</span>(constant_kernel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>
+</div>
+</div>
+<p>Sampled functions from a Gaussian process that utilises the constant kernel are just constant functions. The functions are flat, horizontal lines parallel to the x-axis. There is still variance - each function has a different constant value, determined by the variance specified by the kernel. If the Gaussian process has a zero mean function, the sampled functions will be horizontal lines with y-values centred around zero, and their heights will be determined by the constant kernel value according to <span class="math inline">y = \beta</span> where <span class="math inline">\beta \sim \mathcal{N}(0, c^2)</span>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb28"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(constant_kernel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-27-1.png" width="672"></p>
+</div>
+</div>
+<h4 id="white-noise-kernel" class="anchored">White Noise Kernel</h4>
+<p>The white noise kernel is also known as the Kronecker Delta Kernel because its definition utilises the Kronecker delta function:</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = \sigma^2\delta_{\mathbf{x}, \mathbf{x'}}</span></p>
+<p>In other words, when the input vectors are exactly the same there is noise, <span class="math inline">\sigma</span>, otherwise the kernel is zero.</p>
+<div class="cell">
+<div class="sourceCode" id="cb29"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' White Noise Kernel</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' White noise kernel function generalised to two sets of n and m observations</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' of d features.</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma noise parameter, positive scalar</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return kernel matrix of dimensions (n, m)</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>white_noise_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">sigma =</span> <span class="dv">1</span>) {</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="fu">dim</span>(X1)[[<span class="dv">1</span>]], <span class="fu">dim</span>(X2)[[<span class="dv">1</span>]])</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">diag</span>(k) <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>  k <span class="sc">*</span> sigma<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Samples pulled from a Gaussian processes that utilises just the white noise kernel are nothing but white noise.</p>
+<div class="cell">
+<div class="sourceCode" id="cb30"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_gp</span>(white_noise_kernel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
+</div>
+</div>
+<p>The white noise kernel alone cannot capture the underlying signal of the function being modelled. However, it can be used in combination with other kernels. Specifically, the white noise kernel models the case where observations have white, i.e.&nbsp;Gaussian, noise but the magnitude of the noise is unknown.</p>
+<h2 id="anisotropic-kernels" class="anchored">Anisotropic Kernels</h2>
+<p>Anisotropic kernels allow for different length scales in different dimensions of feature space. This is in opposition to the isotropic kernels described above, with a single length scale across all dimensions. Intuitively, the anisotropic kernel is stretched or compressed in certain directions compared to its isotropic counterpart. This property can be useful when the input variables have different units or scales.</p>
+<p>The anisotropy of a kernel is controlled by several length scale parameters, which specify the length scaling along each dimension in feature space. The use of anisotropic kernels can improve the predictive accuracy of Gaussian process models when the input variables have different levels of variability or when the correlations between variables vary in different directions. However, anisotropic kernels also increase the complexity of the model because of the added parameters.</p>
+<p>Formally, an anisotropic kernel can be constructed from an isotropic stationary kernel by substituting the distance part of the definition, i.e.&nbsp;<span class="math inline">\lVert\mathbf{x}-\mathbf{x'}\rVert^2/l^2</span>, with <span class="math inline">(\mathbf{x}-\mathbf{x'})\mathbf{M}(\mathbf{x}-\mathbf{x'})^T</span> where <span class="math inline">\mathbf{M}</span> is a <span class="math inline">(D×D)</span> matrix. There are different options for constructing <span class="math inline">\mathbf{M}</span>. A diagonal matrix <span class="math inline">\mathbf{M} = l^{-2}\mathbf{I}</span> where <span class="math inline">l</span> is a scalar, would correspond to the isotropic kernel. A diagonal matrix <span class="math inline">\mathbf{M} = \mathrm{diag}(\mathbf{l})^{-2}</span>, where <span class="math inline">\mathbf{l}</span> is a vector of length <span class="math inline">D</span> of length scales, would correspond to different length scales for each dimension. There are other options for <span class="math inline">\mathbf{M}</span> as well. See chapter 5 of <span class="citation" data-cites="Rasmussen:2006">[2]</span>.</p>
+<h4 id="anisotropic-rbf-kernel" class="anchored">Anisotropic RBF Kernel</h4>
+<p>The anisotropic RBF kernel expands the isotropic RBF kernel to allow for individual length scaling of input dimensions. It is defined by</p>
+<p><span class="math display">k(\mathbf{x}, \mathbf{x'}) = \sigma^2 \exp\left(-\frac{1}{2}(\mathbf{x}-\mathbf{x'})\mathbf{M}(\mathbf{x}-\mathbf{x'})^T\right)</span></p>
+<p>Where <span class="math inline">\sigma^2</span> is a variance parameter that simply scales the kernel and <span class="math inline">\mathbf{M}</span> is a <span class="math inline">(D×D)</span> matrix that controls the length scaling of the <span class="math inline">D</span> input dimensions. <span class="math inline">\mathbf{M}</span> is often constructed from a length scale scalar, <span class="math inline">l</span>, or length scale vector <span class="math inline">\mathbf{l}</span>, see examples below.</p>
+<div class="cell">
+<div class="sourceCode" id="cb31"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Anisotropic RBF Kernel</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param sigma scale parameter </span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param l length scale. </span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="co">#' A vector of size 1 yields the isotropic kernel.</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="co">#' A vector of size d yields the anisotropic kernel with individual length</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="co">#' scales for each dimension.</span></span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co">#' A matrix of size (d, d) allows for fine-grained control of length scaling.</span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return matrix of dimensions (n, m)</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>anisotropic_rbf_kernel <span class="ot">&lt;-</span> <span class="cf">function</span>(X1, X2, <span class="at">sigma =</span> <span class="fl">1.0</span>, <span class="at">l =</span> <span class="fl">1.0</span>) {</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X1))) <span class="fu">dim</span>(X1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X1))</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(X2))) <span class="fu">dim</span>(X2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">length</span>(X2))</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">dim</span>(X1)[[<span class="dv">2</span>]]</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(l)) <span class="sc">&amp;&amp;</span> <span class="fu">length</span>(l) <span class="sc">==</span> <span class="dv">1</span>) M <span class="ot">&lt;-</span> <span class="fu">diag</span>(d) <span class="sc">*</span> l<span class="sc">^</span>(<span class="sc">-</span><span class="dv">2</span>)</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(<span class="fu">dim</span>(l)) <span class="sc">&amp;&amp;</span> <span class="fu">length</span>(l) <span class="sc">==</span> d) M <span class="ot">&lt;-</span> <span class="fu">diag</span>(l<span class="sc">^</span>(<span class="sc">-</span><span class="dv">2</span>))</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(<span class="fu">dim</span>(l)) <span class="sc">==</span> <span class="dv">2</span> <span class="sc">&amp;&amp;</span> <span class="fu">dim</span>(l)[[<span class="dv">1</span>]] <span class="sc">==</span> d <span class="sc">&amp;&amp;</span> <span class="fu">dim</span>(l)[[<span class="dv">2</span>]] <span class="sc">==</span> d) M <span class="ot">&lt;-</span> l</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(M)) <span class="fu">stop</span>(<span class="st">"Dimensions of length scale are not compatible."</span>)</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>  lX1 <span class="ot">&lt;-</span> X1 <span class="sc">%*%</span> M</span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>  lX2 <span class="ot">&lt;-</span> X2 <span class="sc">%*%</span> M</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>  sqdist <span class="ot">&lt;-</span> (<span class="sc">-</span> <span class="dv">2</span><span class="sc">*</span>(lX1 <span class="sc">%*%</span> <span class="fu">t</span>(lX2))) <span class="sc">%&gt;%</span></span>
+<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add</span>(<span class="fu">rowSums</span>(lX1<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sweep</span>(<span class="dv">2</span>, <span class="fu">rowSums</span>(lX2<span class="sc">**</span><span class="dv">2</span>, <span class="at">dims =</span> <span class="dv">1</span>), <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
+<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>  sigma<span class="sc">**</span><span class="dv">2</span> <span class="sc">*</span> <span class="fu">exp</span>(<span class="sc">-</span><span class="fl">0.5</span> <span class="sc">*</span> sqdist)</span>
+<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When <span class="math inline">\mathbf{M}</span> is a diagonal matrix</p>
+<p><span class="math display">\mathbf{M} = l^{-2}\mathbf{I}</span></p>
+<p>Where <span class="math inline">l</span> is a length scale scalar, the kernel is isotropic and the kernel response is exactly identical to the one described above for the RBF kernel.</p>
+<div class="cell">
+<div class="sourceCode" id="cb32"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A scalar l actually yields the isotropic RBF kernel</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_kernel_value</span>(anisotropic_rbf_kernel, <span class="at">l =</span> <span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-31-1.png" width="672"></p>
+</div>
+</div>
+<p>The scaling is the same in all dimensions. Here is an example in 2D</p>
+<div class="cell">
+<div class="sourceCode" id="cb33"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare a 2D grid</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(<span class="at">d1 =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="fl">0.1</span>), <span class="at">d2 =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">5</span>, <span class="fl">0.1</span>)))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>X2 <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fu">dim</span>(X1)[[<span class="dv">2</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb34"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">anisotropic_rbf_kernel</span>(X1, X2, <span class="at">l =</span> <span class="fl">1.0</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">as_tibble</span>(X1) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">k =</span> K) <span class="sc">%&gt;%</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_contour_filled</span>(<span class="fu">aes</span>(<span class="at">x =</span> d1, <span class="at">y =</span> d2, <span class="at">z =</span> k), <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Distance in 1st dimension"</span>,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Distance in 2nd dimension"</span>,</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Kernel value"</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-33-1.png" width="672"></p>
+</div>
+</div>
+<p>When <span class="math inline">\mathbf{M}</span> is a diagonal matrix</p>
+<p><span class="math display">\mathbf{M} = \mathrm{diag}(\mathbf{l})^{-2}</span></p>
+<p>where <span class="math inline">\mathbf{l}</span> is a length scale vector, the kernel is anisotropic and has a separate length scale for each dimension. This effectively stretches or compresses each dimension. Here is an example in 2D of differing length scales</p>
+<div class="cell">
+<div class="sourceCode" id="cb35"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">anisotropic_rbf_kernel</span>(X1, X2, <span class="at">l =</span> <span class="fu">c</span>(<span class="fl">2.5</span>, <span class="dv">1</span>))</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">as_tibble</span>(X1) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">k =</span> K) <span class="sc">%&gt;%</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_contour_filled</span>(<span class="fu">aes</span>(<span class="at">x =</span> d1, <span class="at">y =</span> d2, <span class="at">z =</span> k), <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Distance in 1st dimension"</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Distance in 2nd dimension"</span>,</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Kernel value"</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-34-1.png" width="672"></p>
+</div>
+</div>
+<p>Since the first dimension has a larger length scale than the second dimension, the kernel value gets stretched in the first dimension.</p>
+<p>When the length scales of the anisotropic kernel are fitted rather than given, they can sometimes be used for determining feature relevance. An infinitely large length scale corresponds to a dimension with no variation and thus an irrelevant feature. On the other hand, a smaller length scale could indicate a feature with large variation and influence on the model. The inverse of the length scale is thus sometimes used to indicate feature relevance and the process is known as Automatic Relevance Determination (ARD). However, context is important for proper interpretation of fitted length scales. Specifically, the length scales also depend on the unit of each feature and tend to be biased towards non-linear features <span class="citation" data-cites="Piironen:2016">[3]</span>.</p>
+<p>When <span class="math inline">\mathbf{M}</span> has non-zero values outside the diagonal, the kernel is stretched and rotated. Here is an example of a rotated kernel</p>
+<div class="cell">
+<div class="sourceCode" id="cb36"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="fu">anisotropic_rbf_kernel</span>(X1, X2, <span class="at">l =</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>), <span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">as_tibble</span>(X1) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">k =</span> K) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_contour_filled</span>(<span class="fu">aes</span>(<span class="at">x =</span> d1, <span class="at">y =</span> d2, <span class="at">z =</span> k), <span class="at">alpha =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Distance in 1st dimension"</span>,</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Distance in 2nd dimension"</span>,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> <span class="st">"Kernel value"</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-35-1.png" width="672"></p>
+</div>
+</div>
+<p>This property can be used to create a rotation that effectively reduces the dimensionality of the input features.</p>
+<h2 id="combining-kernels" class="anchored">Combining Kernels</h2>
+<p>Kernels can be combined to create new kernels with more flexibility or sophisticated dynamics. The successful application of Gaussian processes relies on choosing a kernel that can model the target function and combining different types of kernels provides a major means of creating a good kernel for the Gaussian process.</p>
+<p>There are two main ways kernels are combined: combining multiple kernels on each feature or using different kernels for different features.</p>
+<h4 id="creating-new-kernels-from-existing-kernels" class="anchored">Creating new kernels from existing kernels</h4>
+<p>A new kernel can be created from existing kernels in multiple ways.</p>
+<h5 id="summation" class="anchored">Summation</h5>
+<p>Two or more kernels can be added together to create a new kernel that captures the features of both. Two kernels <span class="math inline">k_1(\mathbf{x},\mathbf{x'})</span> and <span class="math inline">k_2(\mathbf{x},\mathbf{x'})</span>, can be combined as</p>
+<p><span class="math display">k_{sum}(\mathbf{x},\mathbf{x'}) = k_1(\mathbf{x},\mathbf{x'}) + k_2(\mathbf{x},\mathbf{x'})</span></p>
+<p>The resulting kernel will assign high covariance to pairs of points that are similar in <em>either</em> <span class="math inline">k_1</span> <em>or</em> <span class="math inline">k_2</span>. I.e. the inputs <span class="math inline">\mathbf{x}</span> and <span class="math inline">\mathbf{x'}</span> only need to have a high covariance according to one kernel to return a high covariance for the combined kernel, when the kernels are added together.</p>
+<h5 id="product" class="anchored">Product</h5>
+<p>Two or more kernels can be multiplied together to create a new kernel that captures the features of both. Two kernels <span class="math inline">K_1(\mathbf{x},\mathbf{x'})</span> and <span class="math inline">K_2(\mathbf{x},\mathbf{x'})</span>, can be combined as</p>
+<p><span class="math display">K_{sum}(\mathbf{x},\mathbf{x'}) = K_1(\mathbf{x},\mathbf{x'})K_2(\mathbf{x},\mathbf{x'})</span> The resulting kernel will assign high values to pairs of points that are similar in <em>both</em> <span class="math inline">k_1</span> <em>and</em> <span class="math inline">k_2</span>. I.e. the inputs <span class="math inline">\mathbf{x}</span> and <span class="math inline">\mathbf{x'}</span> need to have a high covariance according to both kernels to return a high covariance for the combined kernel, when the kernels are multiplied. The locally periodic kernel, as described above, is an example of a periodic kernel combined with a stationary kernel by multiplication.</p>
+<p>As a consequence of this rule, any kernel can also be raised to a power of a positive integer and still be a valid kernel. For instance, the polynomial kernel can be viewed as the product of <span class="math inline">\nu</span> linear kernels.</p>
+<h5 id="other-methods" class="anchored">Other Methods</h5>
+<p>The sum and product rules can also be combined. Along with the fact that the constant kernel is a valid kernel, one can effectively create a weighed sum of kernels.</p>
+<p><span class="math display">k_{sum}(\mathbf{x},\mathbf{x'}) = w_1k_1(\mathbf{x},\mathbf{x'}) + w_2k_2(\mathbf{x},\mathbf{x'})</span></p>
+<p>Where <span class="math inline">w_1</span> and <span class="math inline">w_2</span> are weights.</p>
+<p>Two or more kernels can also be combined through convolution and yield a valid kernel <span class="citation" data-cites="Rasmussen:2006">[2]</span>.</p>
+<h4 id="different-kernels-for-different-dimensions" class="anchored">Different Kernels for Different Dimensions</h4>
+<p>Using different kernels across different dimensions is often the right thing to, as it allows for a more accurate representation of prior knowledge of the modelled process.</p>
+<p>Specifically, when the input features have different properties or units, different kernels might be appropriate. For example, a dimension representing time might benefit from a periodic kernel and another another representing temperature might best be represented with a stationary kernel. Using a separate kernel for each dimension can help capture the distinct behaviours and scales of the two features. It is also easy to imagine a real-world problem where the gathered data includes a mix of different data types, such as continuous, discrete, or categorical. By applying the right type of kernel to each type of feature, all features can be included in the same Gaussian process.</p>
+<p>Imagine the situation where there are two different types of features, <span class="math inline">\mathbf{x}_a</span> and <span class="math inline">\mathbf{x}_b</span>. These could be a set of continuous features and a set of categorical features. On the first set of features, one kernel is applied, i.e., <span class="math inline">k_a(\mathbf{x}_a,\mathbf{x'}_a)</span>. On the other set of features another kernel is applied, i.e., <span class="math inline">k_b(\mathbf{x}_b,\mathbf{x'}_b)</span>. The two kernel values can be combined by multiplication</p>
+<p><span class="math display">k(\mathbf{x}_a, \mathbf{x}_b, \mathbf{x'}_a, \mathbf{x'}_b) = k_a(\mathbf{x}_b,\mathbf{x'}_b)k_b(\mathbf{x}_b,\mathbf{x'}_b)</span></p>
+<p>This scales to many feature sets, so it is possible to have a separate kernel for each feature.</p>
+<h1 class="unnumbered" id="references">References</h1>
+<div id="refs" class="references csl-bib-body" role="doc-bibliography">
+<div id="ref-MacKay:1998" class="csl-entry" role="doc-biblioentry">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><span class="smallcaps">MacKay</span>, D. J. C. (1998). Introduction to gaussian processes. Available at <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.81.1927&amp;rep=rep1&amp;type=pdf">http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.81.1927&amp;rep=rep1&amp;type=pdf</a>.</div>
+</div>
+<div id="ref-Rasmussen:2006" class="csl-entry" role="doc-biblioentry">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><span class="smallcaps">Rasmussen</span>, C. E. and <span class="smallcaps">Williams</span>, C. K. I. (2006). <em>Gaussian processes for machine learning, chapters 4 &amp; 5</em>. MIT Press.</div>
+</div>
+<div id="ref-Piironen:2016" class="csl-entry" role="doc-biblioentry">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline"><span class="smallcaps">Piironen</span>, J. and <span class="smallcaps">Vehtari</span>, A. (2016). Projection predictive model selection for gaussian processes. In <em>2016 <span>IEEE</span> 26th international workshop on machine learning for signal processing (<span>MLSP</span>)</em>. <span>IEEE</span> Available at <a href="https://doi.org/10.1109%2Fmlsp.2016.7738829">https://doi.org/10.1109%2Fmlsp.2016.7738829</a>.</div>
+</div>
+</div>
+<h1 id="license">License</h1>
+<p>The content of this project itself is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International license</a>, and the underlying code is licensed under the <a href="https://github.com/AnHosu/bespoke-bayesian-biochem/blob/main/LICENSE">GNU General Public License v3.0 license</a>.</p>
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+</body></html>
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tag/modelling/">Modelling</a>
+  
+  <a class="badge badge-light" href="../../tag/bayesian-statistics/">Bayesian statistics</a>
+  
+  <a class="badge badge-light" href="../../tag/bayesian-optimisation/">Bayesian optimisation</a>
+  
+  <a class="badge badge-light" href="../../tag/r/">R</a>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="../../"><img class="avatar mr-3 avatar-circle" src="../../author/anders-e.-nielsen/avatar_huaf22d72e35256be9d48177f1f21d9377_326351_270x270_fill_q75_lanczos_center.jpg" alt="Anders E. Nielsen"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Anders E. Nielsen</a></h5>
+      <h6 class="card-subtitle">Data Professional &amp; Research Scientist</h6>
+      <p class="card-text">I apply modern data technology to solve real-world problems. My interests include statistics, machine learning, computational biology, and IoT.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:andellegaard@gmail.com" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/anders-ellegaard-nielsen-6a0857125/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/AnHosu" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="../../post/bayesian-opt-r/">Bayesian Optimisation from Scratch in R</a></li>
+      
+      <li><a href="../../post/bespoke-biochem-three/">Bespoke Bayesian Model for Batch Effects in High Throughput Biochemical Assays</a></li>
+      
+      <li><a href="../../post/bespoke-biochem-one/">Bespoke Bayesian Model for Biochemical Assays</a></li>
+      
+      <li><a href="../../post/bespoke-biochem-two/">Bespoke Bayesian Model for High Throughput Biochemical Assays</a></li>
+      
+      <li><a href="../../post/bayesian-olympics/">Olympic Athletes over Time - A Tidy Bayesian Data Exploration</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2023 Anders E. Nielsen
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a>, <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>, and <a href="https://github.com/rstudio/blogdown" target="_blank" rel="noopener">R Blogdown</a>.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="../../js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="../../en/js/wowchemy.min.cf8ca859a9b74f8b1cd804621b13e5f1.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>
