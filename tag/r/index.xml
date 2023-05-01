@@ -5,12 +5,806 @@
     <link>/tag/r/</link>
       <atom:link href="/tag/r/index.xml" rel="self" type="application/rss+xml" />
     <description>R</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2023 Anders E. Nielsen</copyright><lastBuildDate>Sun, 16 Apr 2023 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2023 Anders E. Nielsen</copyright><lastBuildDate>Mon, 01 May 2023 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_512x512_fill_lanczos_center_3.png</url>
       <title>R</title>
       <link>/tag/r/</link>
     </image>
+    
+    <item>
+      <title>Acquisition Functions for Bayesian Optimisation</title>
+      <link>/post/acquisition-functions-r/</link>
+      <pubDate>Mon, 01 May 2023 00:00:00 +0000</pubDate>
+      <guid>/post/acquisition-functions-r/</guid>
+      <description>
+&lt;!DOCTYPE html&gt;
+&lt;html xmlns=&#34;http://www.w3.org/1999/xhtml&#34; lang=&#34;&#34; xml:lang=&#34;&#34;&gt;&lt;head&gt;
+  &lt;meta charset=&#34;utf-8&#34;&gt;
+  &lt;meta name=&#34;generator&#34; content=&#34;quarto-0.2.243&#34;&gt;
+  &lt;meta name=&#34;viewport&#34; content=&#34;width=device-width, initial-scale=1.0, user-scalable=yes&#34;&gt;
+  &lt;title&gt;index&lt;/title&gt;
+  &lt;style&gt;
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre &gt; code.sourceCode { white-space: pre; position: relative; }
+    pre &gt; code.sourceCode &gt; span { display: inline-block; line-height: 1.25; }
+    pre &gt; code.sourceCode &gt; span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode &gt; span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre &gt; code.sourceCode { white-space: pre-wrap; }
+    pre &gt; code.sourceCode &gt; span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code &gt; span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code &gt; span &gt; a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre &gt; code.sourceCode &gt; span &gt; a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  &lt;/style&gt;
+
+  &lt;script src=&#34;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js&#34;&gt;&lt;/script&gt;
+  &lt;script&gt;document.addEventListener(&#34;DOMContentLoaded&#34;, function () {
+   var mathElements = document.getElementsByClassName(&#34;math&#34;);
+   var macros = [];
+   for (var i = 0; i &lt; mathElements.length; i++) {
+    var texText = mathElements[i].firstChild;
+    if (mathElements[i].tagName == &#34;SPAN&#34;) {
+     katex.render(texText.data, mathElements[i], {
+      displayMode: mathElements[i].classList.contains(&#39;display&#39;),
+      throwOnError: false,
+      macros: macros,
+      fleqn: false
+     });
+  }}});
+  &lt;/script&gt;
+  &lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css&#34;&gt;
+  &lt;!--[if lt IE 9]&gt;
+    &lt;script src=&#34;//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js&#34;&gt;&lt;/script&gt;
+  &lt;![endif]--&gt;
+  &lt;script src=&#34;index_files/libs/clipboard/clipboard.min.js&#34;&gt;&lt;/script&gt;
+  &lt;script src=&#34;index_files/libs/quarto-html/tabby.min.js&#34;&gt;&lt;/script&gt;
+  &lt;script src=&#34;index_files/libs/quarto-html/popper.min.js&#34;&gt;&lt;/script&gt;
+  &lt;script src=&#34;index_files/libs/quarto-html/tippy.umd.min.js&#34;&gt;&lt;/script&gt;
+  &lt;script src=&#34;index_files/libs/quarto-html/anchor.min.js&#34;&gt;&lt;/script&gt;
+  &lt;link href=&#34;index_files/libs/quarto-html/tippy.css&#34; rel=&#34;stylesheet&#34;&gt;
+  &lt;link href=&#34;index_files/libs/quarto-html/light-border.css&#34; rel=&#34;stylesheet&#34;&gt;
+  &lt;link href=&#34;index_files/libs/quarto-html/quarto-html.min.css&#34; rel=&#34;stylesheet&#34;&gt;
+  &lt;link href=&#34;index_files/libs/quarto-html/quarto-syntax-highlighting.css&#34; rel=&#34;stylesheet&#34;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;p&gt;&lt;a href=&#34;../bayesian-opt-r/&#34;&gt;Bayesian optimisation&lt;/a&gt; is a powerful optimisation technique for black-box functions and processes with expensive evaluations. It is popular for hyperparameter tuning and model selection in machine learning, but has many real-world applications as well. One of the key components of Bayesian optimisation is the acquisition function, which guides the search process by balancing exploration and exploitation of the search space. In this post, we will dive into the role of acquisition functions in Bayesian optimisation and discuss some popular examples.&lt;/p&gt;
+&lt;p&gt;Along with the discussion are implementations of each acquisition function in R, using only base R and the Tidyverse.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb1&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb1-1&#34;&gt;&lt;a href=&#34;#cb1-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;library&lt;/span&gt;(ggplot2)&lt;/span&gt;
+&lt;span id=&#34;cb1-2&#34;&gt;&lt;a href=&#34;#cb1-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;library&lt;/span&gt;(magrittr)&lt;/span&gt;
+&lt;span id=&#34;cb1-3&#34;&gt;&lt;a href=&#34;#cb1-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;set.seed&lt;/span&gt;(&lt;span class=&#34;dv&#34;&gt;4444&lt;/span&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;acquisition-functions-in-bayesian-optimisation&#34; class=&#34;anchored&#34;&gt;Acquisition Functions in Bayesian Optimisation&lt;/h2&gt;
+&lt;p&gt;Bayesian optimisation is an iterative process. It combines a probabilistic surrogate model, often a Gaussian Process (GP), with an acquisition function to select the next point to evaluate in an expensive objective function or process, &lt;span class=&#34;math inline&#34;&gt;f&lt;/span&gt;. The surrogate model captures our current understanding and uncertainty of the objective function, while the acquisition function helps balance the trade-off between exploring new regions of input space and exploiting regions with high predicted performance.&lt;/p&gt;
+&lt;p&gt;Mathematically, the acquisition function, &lt;span class=&#34;math inline&#34;&gt;a(\mathbf{x})&lt;/span&gt;, assigns a value to each point in the search space &lt;span class=&#34;math inline&#34;&gt;\mathbf{x} \in \mathcal{X}&lt;/span&gt;. The next point to evaluate, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt;, is chosen by maximising or minimising the acquisition function, depending on the optimisation task and acquisition function at hand, i.e.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\mathbf{x}_{t+1} = \arg\min_{\mathbf{x} \in \mathcal{X}} a(\mathbf{x})&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;or&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\mathbf{x}_{t+1} = \arg\max_{\mathbf{x} \in \mathcal{X}} a(\mathbf{x})&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;The acquisition function takes into account both the mean &lt;span class=&#34;math inline&#34;&gt;\mu(\mathbf{x})&lt;/span&gt; and the variance &lt;span class=&#34;math inline&#34;&gt;\sigma^2(\mathbf{x})&lt;/span&gt; of the surrogate model’s prediction, to balance exploration and exploitation. Roughly speaking, areas with extreme values of &lt;span class=&#34;math inline&#34;&gt;\mu(\mathbf{x})&lt;/span&gt; correspond to areas we might exploit to get good performing samples, while areas with high values of &lt;span class=&#34;math inline&#34;&gt;\sigma^2(\mathbf{x})&lt;/span&gt; correspond to with high uncertainty that we might consider for exploration.&lt;/p&gt;
+&lt;h4 id=&#34;notation&#34; class=&#34;anchored&#34;&gt;Notation&lt;/h4&gt;
+&lt;p&gt;The notation used in this post is as follows&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;a(\mathbf{x})&lt;/span&gt; is an acquisition function of a point &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&lt;/span&gt; in the search space &lt;span class=&#34;math inline&#34;&gt;\mathcal{X}&lt;/span&gt;. While the search space often contains multiple feature dimensions &lt;span class=&#34;math inline&#34;&gt;\mathcal{X} \in \mathbb{R}^n&lt;/span&gt;, here the example will be in one dimension.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;f(\mathbf{x})&lt;/span&gt; is the value of true objective function, &lt;span class=&#34;math inline&#34;&gt;f&lt;/span&gt;, at &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&lt;/span&gt;. It is this function that we aim to optimise. However, the function is not directly available and it is expensive to evaluate so we use a surrogate model to approximate it.&lt;/p&gt;
+&lt;p&gt;In most applications, the observations of the objective function are noisy, &lt;span class=&#34;math inline&#34;&gt;y = f(\mathbf{x}) + \epsilon&lt;/span&gt;, where &lt;span class=&#34;math inline&#34;&gt;\epsilon&lt;/span&gt; is Gaussian noise. So we will use &lt;span class=&#34;math inline&#34;&gt;\mathbf{y}&lt;/span&gt; to indicate observations.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;f(\mathbf{x}^+)&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;f_{\min}&lt;/span&gt;, and &lt;span class=&#34;math inline&#34;&gt;f_{\max}&lt;/span&gt; all represent the best observed value of the objective function so far. If the observations are noisy, the corresponding notation is &lt;span class=&#34;math inline&#34;&gt;y^+&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;y_{\min}&lt;/span&gt;, and &lt;span class=&#34;math inline&#34;&gt;y_{\max}&lt;/span&gt;. For most examples of acquisition functions, this post focuses on minimisation problems, where the best observed value is &lt;span class=&#34;math inline&#34;&gt;y_{\min}&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;\mathcal{D}&lt;/span&gt; is a set of training observations &lt;span class=&#34;math inline&#34;&gt;(\mathbf{X}_{train}, \mathbf{y}_{train})&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;\mu(\mathbf{x})&lt;/span&gt; represents the mean prediction of the surrogate model at point &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math inline&#34;&gt;\sigma(\mathbf{x})&lt;/span&gt; represents the standard deviation (uncertainty) of the surrogate model’s prediction at point &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&lt;/span&gt;. For a GP, this is an entry in the diagonal of the posterior covariance matrix.&lt;/p&gt;
+&lt;h4 id=&#34;an-example-problem&#34; class=&#34;anchored&#34;&gt;An Example Problem&lt;/h4&gt;
+&lt;p&gt;For the demonstration of acquisition functions, we need a toy problem. We will use a simple objective function without noise and a single dimension.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb2&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb2-1&#34;&gt;&lt;a href=&#34;#cb2-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;objective_function &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(x) {&lt;/span&gt;
+&lt;span id=&#34;cb2-2&#34;&gt;&lt;a href=&#34;#cb2-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;fu&#34;&gt;sin&lt;/span&gt;(&lt;span class=&#34;dv&#34;&gt;12&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; x) &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; x &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.5&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; x&lt;span class=&#34;sc&#34;&gt;^&lt;/span&gt;&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb2-3&#34;&gt;&lt;a href=&#34;#cb2-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;
+&lt;span id=&#34;cb2-4&#34;&gt;&lt;a href=&#34;#cb2-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;X_pred &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;matrix&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;seq&lt;/span&gt;(&lt;span class=&#34;dv&#34;&gt;0&lt;/span&gt;, &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;length.out =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;100&lt;/span&gt;), &lt;span class=&#34;dv&#34;&gt;100&lt;/span&gt;, &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb2-5&#34;&gt;&lt;a href=&#34;#cb2-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;y_pred &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;objective_function&lt;/span&gt;(X_pred)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;This function has two minima and two maxima in the search space &lt;span class=&#34;math inline&#34;&gt;\mathcal{X} = [0,1]&lt;/span&gt;, so it will not be too easy to maximise or minimise.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;p&gt;&lt;/p&gt;&lt;details&gt;
+&lt;summary&gt;Show the code&lt;/summary&gt;&lt;p&gt;&lt;/p&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb3&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb3-1&#34;&gt;&lt;a href=&#34;#cb3-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;ggplot&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;data =&lt;/span&gt; tibble&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;tibble&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; X_pred, &lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; y_pred)) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb3-2&#34;&gt;&lt;a href=&#34;#cb3-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;fu&#34;&gt;geom_line&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;aes&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; x, &lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; y)) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb3-3&#34;&gt;&lt;a href=&#34;#cb3-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;fu&#34;&gt;theme_minimal&lt;/span&gt;() &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb3-4&#34;&gt;&lt;a href=&#34;#cb3-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;fu&#34;&gt;labs&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;x&#34;&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;f(x)&#34;&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;title =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;Objective Function&#34;&lt;/span&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/details&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-2-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;We will approximate the the objective function with a Gaussian process surrogate model that utilises the RBF kernel. See the &lt;a href=&#34;../bayesian-opt-r/&#34;&gt;Bayesian optimisation post&lt;/a&gt; for details.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;p&gt;&lt;/p&gt;&lt;details&gt;
+&lt;summary&gt;Show the code&lt;/summary&gt;&lt;p&gt;&lt;/p&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb4&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb4-1&#34;&gt;&lt;a href=&#34;#cb4-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; RBF Kernel&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-2&#34;&gt;&lt;a href=&#34;#cb4-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-3&#34;&gt;&lt;a href=&#34;#cb4-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param X1 matrix of dimensions (n, d). Vectors are coerced to (1, d).&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-4&#34;&gt;&lt;a href=&#34;#cb4-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param X2 matrix of dimensions (m, d). Vectors are coerced to (1, d).&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-5&#34;&gt;&lt;a href=&#34;#cb4-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param l length scale&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-6&#34;&gt;&lt;a href=&#34;#cb4-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param sigma_f scale parameter &lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-7&#34;&gt;&lt;a href=&#34;#cb4-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-8&#34;&gt;&lt;a href=&#34;#cb4-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @return matrix of dimensions (n, m)&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-9&#34;&gt;&lt;a href=&#34;#cb4-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;rbf_kernel &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(X1, X2, &lt;span class=&#34;at&#34;&gt;l =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;1.0&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;sigma_f =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;1.0&lt;/span&gt;) {&lt;/span&gt;
+&lt;span id=&#34;cb4-10&#34;&gt;&lt;a href=&#34;#cb4-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (&lt;span class=&#34;fu&#34;&gt;is.null&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X1))) &lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X1) &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(&lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;, &lt;span class=&#34;fu&#34;&gt;length&lt;/span&gt;(X1))&lt;/span&gt;
+&lt;span id=&#34;cb4-11&#34;&gt;&lt;a href=&#34;#cb4-11&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (&lt;span class=&#34;fu&#34;&gt;is.null&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X2))) &lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X2) &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(&lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;, &lt;span class=&#34;fu&#34;&gt;length&lt;/span&gt;(X2))&lt;/span&gt;
+&lt;span id=&#34;cb4-12&#34;&gt;&lt;a href=&#34;#cb4-12&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  sqdist &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; (&lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt;(X1 &lt;span class=&#34;sc&#34;&gt;%*%&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;t&lt;/span&gt;(X2))) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-13&#34;&gt;&lt;a href=&#34;#cb4-13&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;add&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;rowSums&lt;/span&gt;(X1&lt;span class=&#34;sc&#34;&gt;**&lt;/span&gt;&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;dims =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;)) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-14&#34;&gt;&lt;a href=&#34;#cb4-14&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;sweep&lt;/span&gt;(&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;, &lt;span class=&#34;fu&#34;&gt;rowSums&lt;/span&gt;(X2&lt;span class=&#34;sc&#34;&gt;**&lt;/span&gt;&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;dims =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;), &lt;span class=&#34;st&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;at&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;st&#34;&gt;`&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb4-15&#34;&gt;&lt;a href=&#34;#cb4-15&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  sigma_f&lt;span class=&#34;sc&#34;&gt;**&lt;/span&gt;&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;exp&lt;/span&gt;(&lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;fl&#34;&gt;0.5&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;/&lt;/span&gt; l&lt;span class=&#34;sc&#34;&gt;**&lt;/span&gt;&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; sqdist)&lt;/span&gt;
+&lt;span id=&#34;cb4-16&#34;&gt;&lt;a href=&#34;#cb4-16&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;
+&lt;span id=&#34;cb4-17&#34;&gt;&lt;a href=&#34;#cb4-17&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-18&#34;&gt;&lt;a href=&#34;#cb4-18&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Random Samples from a Multivariate Gaussian&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-19&#34;&gt;&lt;a href=&#34;#cb4-19&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; &lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-20&#34;&gt;&lt;a href=&#34;#cb4-20&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; This implementation is similar to MASS::mvrnorm, but uses chlosky&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-21&#34;&gt;&lt;a href=&#34;#cb4-21&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; decomposition instead. This should be more stable but is less efficient than&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-22&#34;&gt;&lt;a href=&#34;#cb4-22&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; the MASS implementation, which recycles the eigen decomposition for the&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-23&#34;&gt;&lt;a href=&#34;#cb4-23&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; sampling part.&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-24&#34;&gt;&lt;a href=&#34;#cb4-24&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-25&#34;&gt;&lt;a href=&#34;#cb4-25&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param n number of samples to sample&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-26&#34;&gt;&lt;a href=&#34;#cb4-26&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param mu the mean of each input dimension&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-27&#34;&gt;&lt;a href=&#34;#cb4-27&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param sigma the covariance matrix&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-28&#34;&gt;&lt;a href=&#34;#cb4-28&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param epsilon numerical tolerance added to the diagonal of the covariance&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-29&#34;&gt;&lt;a href=&#34;#cb4-29&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;  matrix. This is necessary for the Cholesky decomposition, in some cases.&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-30&#34;&gt;&lt;a href=&#34;#cb4-30&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-31&#34;&gt;&lt;a href=&#34;#cb4-31&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @return numerical vector of n samples&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-32&#34;&gt;&lt;a href=&#34;#cb4-32&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;rmvnorm &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;n =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;, mu, sigma, &lt;span class=&#34;at&#34;&gt;epsilon =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;1e-6&lt;/span&gt;) {&lt;/span&gt;
+&lt;span id=&#34;cb4-33&#34;&gt;&lt;a href=&#34;#cb4-33&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    p &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;length&lt;/span&gt;(mu)&lt;/span&gt;
+&lt;span id=&#34;cb4-34&#34;&gt;&lt;a href=&#34;#cb4-34&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt;(&lt;span class=&#34;sc&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;all&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(sigma) &lt;span class=&#34;sc&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(p, p))) &lt;span class=&#34;fu&#34;&gt;stop&lt;/span&gt;(&lt;span class=&#34;st&#34;&gt;&#34;incompatible dimensions of arguments&#34;&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb4-35&#34;&gt;&lt;a href=&#34;#cb4-35&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    ev &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;eigen&lt;/span&gt;(sigma, &lt;span class=&#34;at&#34;&gt;symmetric =&lt;/span&gt; &lt;span class=&#34;cn&#34;&gt;TRUE&lt;/span&gt;)&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;values&lt;/span&gt;
+&lt;span id=&#34;cb4-36&#34;&gt;&lt;a href=&#34;#cb4-36&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt;(&lt;span class=&#34;sc&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;all&lt;/span&gt;(ev &lt;span class=&#34;sc&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt;epsilon&lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;abs&lt;/span&gt;(ev[1L]))) {&lt;/span&gt;
+&lt;span id=&#34;cb4-37&#34;&gt;&lt;a href=&#34;#cb4-37&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;fu&#34;&gt;stop&lt;/span&gt;(&lt;span class=&#34;st&#34;&gt;&#34;The covariance matrix (sigma) is not positive definite&#34;&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb4-38&#34;&gt;&lt;a href=&#34;#cb4-38&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    }&lt;/span&gt;
+&lt;span id=&#34;cb4-39&#34;&gt;&lt;a href=&#34;#cb4-39&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    cholesky &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;chol&lt;/span&gt;(sigma &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;diag&lt;/span&gt;(p)&lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt;epsilon)&lt;/span&gt;
+&lt;span id=&#34;cb4-40&#34;&gt;&lt;a href=&#34;#cb4-40&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    sample &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;rnorm&lt;/span&gt;(p&lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt;n, &lt;span class=&#34;dv&#34;&gt;0&lt;/span&gt;, &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb4-41&#34;&gt;&lt;a href=&#34;#cb4-41&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(sample) &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(n, p)&lt;/span&gt;
+&lt;span id=&#34;cb4-42&#34;&gt;&lt;a href=&#34;#cb4-42&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;sweep&lt;/span&gt;(sample &lt;span class=&#34;sc&#34;&gt;%*%&lt;/span&gt; cholesky, &lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;, mu, &lt;span class=&#34;at&#34;&gt;FUN =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;at&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;st&#34;&gt;`&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb4-43&#34;&gt;&lt;a href=&#34;#cb4-43&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;
+&lt;span id=&#34;cb4-44&#34;&gt;&lt;a href=&#34;#cb4-44&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-45&#34;&gt;&lt;a href=&#34;#cb4-45&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Get Parameters of the Posterior Gaussian Process&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-46&#34;&gt;&lt;a href=&#34;#cb4-46&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-47&#34;&gt;&lt;a href=&#34;#cb4-47&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param kernel kernel function used for the Gaussian process&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-48&#34;&gt;&lt;a href=&#34;#cb4-48&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param X_pred matrix (m, d) of prediction points&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-49&#34;&gt;&lt;a href=&#34;#cb4-49&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param X_train matrix (n, d) of training points&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-50&#34;&gt;&lt;a href=&#34;#cb4-50&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param y_train column vector (n, d) of training observations&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-51&#34;&gt;&lt;a href=&#34;#cb4-51&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param noise scalar of observation noise&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-52&#34;&gt;&lt;a href=&#34;#cb4-52&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param ... named parameters for the kernel function&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-53&#34;&gt;&lt;a href=&#34;#cb4-53&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-54&#34;&gt;&lt;a href=&#34;#cb4-54&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @return list of mean (mu) and covariance (sigma) for the Gaussian&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-55&#34;&gt;&lt;a href=&#34;#cb4-55&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;posterior &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(kernel, X_pred, X_train, y_train, &lt;span class=&#34;at&#34;&gt;noise =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;1e-8&lt;/span&gt;, ...) {&lt;/span&gt;
+&lt;span id=&#34;cb4-56&#34;&gt;&lt;a href=&#34;#cb4-56&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (&lt;span class=&#34;fu&#34;&gt;is.null&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X_pred))) &lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X_pred) &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;length&lt;/span&gt;(X_pred), &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb4-57&#34;&gt;&lt;a href=&#34;#cb4-57&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (&lt;span class=&#34;fu&#34;&gt;is.null&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X_train))) &lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X_train) &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;length&lt;/span&gt;(X_train), &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb4-58&#34;&gt;&lt;a href=&#34;#cb4-58&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (&lt;span class=&#34;fu&#34;&gt;is.null&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(y_train))) &lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(y_train) &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;length&lt;/span&gt;(y_train), &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb4-59&#34;&gt;&lt;a href=&#34;#cb4-59&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  K &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;kernel&lt;/span&gt;(X_train, X_train, ...) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; noise&lt;span class=&#34;sc&#34;&gt;**&lt;/span&gt;&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;diag&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X_train)[[&lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;]])&lt;/span&gt;
+&lt;span id=&#34;cb4-60&#34;&gt;&lt;a href=&#34;#cb4-60&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  K_s &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;kernel&lt;/span&gt;(X_train, X_pred, ...)&lt;/span&gt;
+&lt;span id=&#34;cb4-61&#34;&gt;&lt;a href=&#34;#cb4-61&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  K_ss &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;kernel&lt;/span&gt;(X_pred, X_pred, ...) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;1e-8&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;diag&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X_pred)[[&lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;]])&lt;/span&gt;
+&lt;span id=&#34;cb4-62&#34;&gt;&lt;a href=&#34;#cb4-62&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  K_inv &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;solve&lt;/span&gt;(K)&lt;/span&gt;
+&lt;span id=&#34;cb4-63&#34;&gt;&lt;a href=&#34;#cb4-63&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  mu &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; (&lt;span class=&#34;fu&#34;&gt;t&lt;/span&gt;(K_s) &lt;span class=&#34;sc&#34;&gt;%*%&lt;/span&gt; K_inv) &lt;span class=&#34;sc&#34;&gt;%*%&lt;/span&gt; y_train&lt;/span&gt;
+&lt;span id=&#34;cb4-64&#34;&gt;&lt;a href=&#34;#cb4-64&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  sigma &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; K_ss &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; (&lt;span class=&#34;fu&#34;&gt;t&lt;/span&gt;(K_s) &lt;span class=&#34;sc&#34;&gt;%*%&lt;/span&gt; K_inv) &lt;span class=&#34;sc&#34;&gt;%*%&lt;/span&gt; K_s&lt;/span&gt;
+&lt;span id=&#34;cb4-65&#34;&gt;&lt;a href=&#34;#cb4-65&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;fu&#34;&gt;list&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;mu =&lt;/span&gt; mu, &lt;span class=&#34;at&#34;&gt;sigma =&lt;/span&gt; sigma)&lt;/span&gt;
+&lt;span id=&#34;cb4-66&#34;&gt;&lt;a href=&#34;#cb4-66&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;
+&lt;span id=&#34;cb4-67&#34;&gt;&lt;a href=&#34;#cb4-67&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-68&#34;&gt;&lt;a href=&#34;#cb4-68&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Negative log-Likelihood of a Kernel&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-69&#34;&gt;&lt;a href=&#34;#cb4-69&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-70&#34;&gt;&lt;a href=&#34;#cb4-70&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param kernel kernel function&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-71&#34;&gt;&lt;a href=&#34;#cb4-71&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param X_train matrix (n, d) of training points&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-72&#34;&gt;&lt;a href=&#34;#cb4-72&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param y_train column vector (n, d) of training observations&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-73&#34;&gt;&lt;a href=&#34;#cb4-73&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param noise scalar of observation noise&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-74&#34;&gt;&lt;a href=&#34;#cb4-74&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-75&#34;&gt;&lt;a href=&#34;#cb4-75&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @return function with kernel parameters as input and negative log likelihood&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-76&#34;&gt;&lt;a href=&#34;#cb4-76&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; as output&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-77&#34;&gt;&lt;a href=&#34;#cb4-77&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;nll &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(kernel, X_train, y_train, noise) {&lt;/span&gt;
+&lt;span id=&#34;cb4-78&#34;&gt;&lt;a href=&#34;#cb4-78&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(params) {&lt;/span&gt;
+&lt;span id=&#34;cb4-79&#34;&gt;&lt;a href=&#34;#cb4-79&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    n &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;dim&lt;/span&gt;(X_train)[[&lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;]]&lt;/span&gt;
+&lt;span id=&#34;cb4-80&#34;&gt;&lt;a href=&#34;#cb4-80&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    K &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; rlang&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;exec&lt;/span&gt;(kernel, &lt;span class=&#34;at&#34;&gt;X1 =&lt;/span&gt; X_train, &lt;span class=&#34;at&#34;&gt;X2 =&lt;/span&gt; X_train, &lt;span class=&#34;sc&#34;&gt;!!!&lt;/span&gt;params)&lt;/span&gt;
+&lt;span id=&#34;cb4-81&#34;&gt;&lt;a href=&#34;#cb4-81&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    L &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;chol&lt;/span&gt;(K &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; noise&lt;span class=&#34;sc&#34;&gt;**&lt;/span&gt;&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;diag&lt;/span&gt;(n))&lt;/span&gt;
+&lt;span id=&#34;cb4-82&#34;&gt;&lt;a href=&#34;#cb4-82&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    a &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;backsolve&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;r =&lt;/span&gt; L, &lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;forwardsolve&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;l =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;t&lt;/span&gt;(L), &lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; y_train))&lt;/span&gt;
+&lt;span id=&#34;cb4-83&#34;&gt;&lt;a href=&#34;#cb4-83&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fl&#34;&gt;0.5&lt;/span&gt;&lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;t&lt;/span&gt;(y_train)&lt;span class=&#34;sc&#34;&gt;%*%&lt;/span&gt;a &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;sum&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;log&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;diag&lt;/span&gt;(L))) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.5&lt;/span&gt;&lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt;n&lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;log&lt;/span&gt;(&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt;pi)&lt;/span&gt;
+&lt;span id=&#34;cb4-84&#34;&gt;&lt;a href=&#34;#cb4-84&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  }&lt;/span&gt;
+&lt;span id=&#34;cb4-85&#34;&gt;&lt;a href=&#34;#cb4-85&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;
+&lt;span id=&#34;cb4-86&#34;&gt;&lt;a href=&#34;#cb4-86&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-87&#34;&gt;&lt;a href=&#34;#cb4-87&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Gaussian Process Regression&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-88&#34;&gt;&lt;a href=&#34;#cb4-88&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-89&#34;&gt;&lt;a href=&#34;#cb4-89&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param kernel kernel function&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-90&#34;&gt;&lt;a href=&#34;#cb4-90&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param X_train matrix (n, d) of training points&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-91&#34;&gt;&lt;a href=&#34;#cb4-91&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param y_train column vector (n, d) of training observations&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-92&#34;&gt;&lt;a href=&#34;#cb4-92&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param noise scalar of observation noise&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-93&#34;&gt;&lt;a href=&#34;#cb4-93&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param ... parameters of the kernel function with initial guesses. Due to the&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-94&#34;&gt;&lt;a href=&#34;#cb4-94&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; optimiser used, all parameters must be given and the order unfortunately&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-95&#34;&gt;&lt;a href=&#34;#cb4-95&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; matters&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-96&#34;&gt;&lt;a href=&#34;#cb4-96&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-97&#34;&gt;&lt;a href=&#34;#cb4-97&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @return function that takes a matrix of prediction points as input and&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-98&#34;&gt;&lt;a href=&#34;#cb4-98&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; returns the posterior predictive distribution for the output&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb4-99&#34;&gt;&lt;a href=&#34;#cb4-99&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;gpr &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(kernel, X_train, y_train, &lt;span class=&#34;at&#34;&gt;noise =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;1e-8&lt;/span&gt;, ...) {&lt;/span&gt;
+&lt;span id=&#34;cb4-100&#34;&gt;&lt;a href=&#34;#cb4-100&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  kernel_nll &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;nll&lt;/span&gt;(kernel, X_train, y_train, noise)&lt;/span&gt;
+&lt;span id=&#34;cb4-101&#34;&gt;&lt;a href=&#34;#cb4-101&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  param &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;list&lt;/span&gt;(...)&lt;/span&gt;
+&lt;span id=&#34;cb4-102&#34;&gt;&lt;a href=&#34;#cb4-102&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  opt &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;optim&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;par =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;rep&lt;/span&gt;(&lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;, &lt;span class=&#34;fu&#34;&gt;length&lt;/span&gt;(param)), &lt;span class=&#34;at&#34;&gt;fn =&lt;/span&gt; kernel_nll)&lt;/span&gt;
+&lt;span id=&#34;cb4-103&#34;&gt;&lt;a href=&#34;#cb4-103&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  opt_param &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; opt&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;par&lt;/span&gt;
+&lt;span id=&#34;cb4-104&#34;&gt;&lt;a href=&#34;#cb4-104&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(X_pred) {&lt;/span&gt;
+&lt;span id=&#34;cb4-105&#34;&gt;&lt;a href=&#34;#cb4-105&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    post &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; rlang&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;exec&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb4-106&#34;&gt;&lt;a href=&#34;#cb4-106&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      posterior,&lt;/span&gt;
+&lt;span id=&#34;cb4-107&#34;&gt;&lt;a href=&#34;#cb4-107&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;kernel =&lt;/span&gt; kernel,&lt;/span&gt;
+&lt;span id=&#34;cb4-108&#34;&gt;&lt;a href=&#34;#cb4-108&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;X_pred =&lt;/span&gt; X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb4-109&#34;&gt;&lt;a href=&#34;#cb4-109&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;X_train =&lt;/span&gt; X_train,&lt;/span&gt;
+&lt;span id=&#34;cb4-110&#34;&gt;&lt;a href=&#34;#cb4-110&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;y_train =&lt;/span&gt; y_train,&lt;/span&gt;
+&lt;span id=&#34;cb4-111&#34;&gt;&lt;a href=&#34;#cb4-111&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;noise =&lt;/span&gt; noise,&lt;/span&gt;
+&lt;span id=&#34;cb4-112&#34;&gt;&lt;a href=&#34;#cb4-112&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;sc&#34;&gt;!!!&lt;/span&gt;opt_param&lt;/span&gt;
+&lt;span id=&#34;cb4-113&#34;&gt;&lt;a href=&#34;#cb4-113&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    )&lt;/span&gt;
+&lt;span id=&#34;cb4-114&#34;&gt;&lt;a href=&#34;#cb4-114&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;list&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb4-115&#34;&gt;&lt;a href=&#34;#cb4-115&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;mu =&lt;/span&gt; post&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;mu,&lt;/span&gt;
+&lt;span id=&#34;cb4-116&#34;&gt;&lt;a href=&#34;#cb4-116&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;sigma =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;diag&lt;/span&gt;(post&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;sigma),&lt;/span&gt;
+&lt;span id=&#34;cb4-117&#34;&gt;&lt;a href=&#34;#cb4-117&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;Sigma =&lt;/span&gt; post&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;sigma,&lt;/span&gt;
+&lt;span id=&#34;cb4-118&#34;&gt;&lt;a href=&#34;#cb4-118&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;parameters =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;set_names&lt;/span&gt;(opt_param, &lt;span class=&#34;fu&#34;&gt;names&lt;/span&gt;(param))&lt;/span&gt;
+&lt;span id=&#34;cb4-119&#34;&gt;&lt;a href=&#34;#cb4-119&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    )&lt;/span&gt;
+&lt;span id=&#34;cb4-120&#34;&gt;&lt;a href=&#34;#cb4-120&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  }&lt;/span&gt;
+&lt;span id=&#34;cb4-121&#34;&gt;&lt;a href=&#34;#cb4-121&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;p&gt;The model will receive four training points. We perform Gaussian process regression and condition the Gaussian process on our training data before drawing from the posterior predictive distribution on a grid of &lt;span class=&#34;math inline&#34;&gt;\mathbf{x} \in \mathcal{X}&lt;/span&gt;. The &lt;span class=&#34;math inline&#34;&gt;\mu(\mathbf{x})&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\sigma(\mathbf{x})&lt;/span&gt; of the posterior predictive distribution are needed to calculate some acquisition functions.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb5&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb5-1&#34;&gt;&lt;a href=&#34;#cb5-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;X_train &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;matrix&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(&lt;span class=&#34;fl&#34;&gt;0.1&lt;/span&gt;, &lt;span class=&#34;fl&#34;&gt;0.2&lt;/span&gt;, &lt;span class=&#34;fl&#34;&gt;0.7&lt;/span&gt;, &lt;span class=&#34;fl&#34;&gt;0.75&lt;/span&gt;), &lt;span class=&#34;dv&#34;&gt;4&lt;/span&gt;, &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb5-2&#34;&gt;&lt;a href=&#34;#cb5-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;y_train &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;objective_function&lt;/span&gt;(X_train)&lt;/span&gt;
+&lt;span id=&#34;cb5-3&#34;&gt;&lt;a href=&#34;#cb5-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;gp &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;gpr&lt;/span&gt;(rbf_kernel, X_train, y_train, &lt;span class=&#34;at&#34;&gt;noise =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;1e-8&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;l =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;sigma_f =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb5-4&#34;&gt;&lt;a href=&#34;#cb5-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;y_min &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;min&lt;/span&gt;(y_train)&lt;/span&gt;
+&lt;span id=&#34;cb5-5&#34;&gt;&lt;a href=&#34;#cb5-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;y_max &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;max&lt;/span&gt;(y_train)&lt;/span&gt;
+&lt;span id=&#34;cb5-6&#34;&gt;&lt;a href=&#34;#cb5-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;post_pred &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;gp&lt;/span&gt;(X_pred)&lt;/span&gt;
+&lt;span id=&#34;cb5-7&#34;&gt;&lt;a href=&#34;#cb5-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;mu &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; post_pred&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;mu&lt;/span&gt;
+&lt;span id=&#34;cb5-8&#34;&gt;&lt;a href=&#34;#cb5-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;sigma &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; post_pred&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;sigma&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Here is what the Gaussian process looks like so far.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;p&gt;&lt;/p&gt;&lt;details&gt;
+&lt;summary&gt;Show the code&lt;/summary&gt;&lt;p&gt;&lt;/p&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb6&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb6-1&#34;&gt;&lt;a href=&#34;#cb6-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;gp_plot &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; tibble&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;tibble&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb6-2&#34;&gt;&lt;a href=&#34;#cb6-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;mu =&lt;/span&gt; mu,&lt;/span&gt;
+&lt;span id=&#34;cb6-3&#34;&gt;&lt;a href=&#34;#cb6-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;uncertainty =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;1.96&lt;/span&gt;&lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;sqrt&lt;/span&gt;(sigma),&lt;/span&gt;
+&lt;span id=&#34;cb6-4&#34;&gt;&lt;a href=&#34;#cb6-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;upper =&lt;/span&gt; mu &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; uncertainty,&lt;/span&gt;
+&lt;span id=&#34;cb6-5&#34;&gt;&lt;a href=&#34;#cb6-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;lower =&lt;/span&gt; mu &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; uncertainty,&lt;/span&gt;
+&lt;span id=&#34;cb6-6&#34;&gt;&lt;a href=&#34;#cb6-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb6-7&#34;&gt;&lt;a href=&#34;#cb6-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;f =&lt;/span&gt; y_pred&lt;/span&gt;
+&lt;span id=&#34;cb6-8&#34;&gt;&lt;a href=&#34;#cb6-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-9&#34;&gt;&lt;a href=&#34;#cb6-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;ggplot&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;aes&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; x)) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-10&#34;&gt;&lt;a href=&#34;#cb6-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;geom_line&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;aes&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; mu, &lt;span class=&#34;at&#34;&gt;colour =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;Mean&#34;&lt;/span&gt;)) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-11&#34;&gt;&lt;a href=&#34;#cb6-11&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;geom_ribbon&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb6-12&#34;&gt;&lt;a href=&#34;#cb6-12&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;fu&#34;&gt;aes&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;ymin =&lt;/span&gt; lower, &lt;span class=&#34;at&#34;&gt;ymax =&lt;/span&gt; upper, &lt;span class=&#34;at&#34;&gt;fill =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;89% interval&#34;&lt;/span&gt;),&lt;/span&gt;
+&lt;span id=&#34;cb6-13&#34;&gt;&lt;a href=&#34;#cb6-13&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;alpha =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.2&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-14&#34;&gt;&lt;a href=&#34;#cb6-14&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    ) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-15&#34;&gt;&lt;a href=&#34;#cb6-15&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;geom_point&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb6-16&#34;&gt;&lt;a href=&#34;#cb6-16&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;data =&lt;/span&gt; tibble&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;tibble&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; X_train, &lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; y_train),&lt;/span&gt;
+&lt;span id=&#34;cb6-17&#34;&gt;&lt;a href=&#34;#cb6-17&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;fu&#34;&gt;aes&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; x, &lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; y, &lt;span class=&#34;at&#34;&gt;shape =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;Training point&#34;&lt;/span&gt;),&lt;/span&gt;
+&lt;span id=&#34;cb6-18&#34;&gt;&lt;a href=&#34;#cb6-18&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;colour =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;#fb8500&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb6-19&#34;&gt;&lt;a href=&#34;#cb6-19&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;size =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;4&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-20&#34;&gt;&lt;a href=&#34;#cb6-20&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    ) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-21&#34;&gt;&lt;a href=&#34;#cb6-21&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;geom_line&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;mapping =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;aes&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; f, &lt;span class=&#34;at&#34;&gt;colour =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;True function&#34;&lt;/span&gt;)) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-22&#34;&gt;&lt;a href=&#34;#cb6-22&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;scale_shape_manual&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;values =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(&lt;span class=&#34;st&#34;&gt;&#34;Training point&#34;&lt;/span&gt; &lt;span class=&#34;ot&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;+&#34;&lt;/span&gt;)) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-23&#34;&gt;&lt;a href=&#34;#cb6-23&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;scale_fill_manual&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;values =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;c&lt;/span&gt;(&lt;span class=&#34;st&#34;&gt;&#34;89% interval&#34;&lt;/span&gt; &lt;span class=&#34;ot&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;#219ebc&#34;&lt;/span&gt;)) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-24&#34;&gt;&lt;a href=&#34;#cb6-24&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;labs&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;shape =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;&#34;&lt;/span&gt;) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-25&#34;&gt;&lt;a href=&#34;#cb6-25&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;theme_minimal&lt;/span&gt;() &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-26&#34;&gt;&lt;a href=&#34;#cb6-26&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;labs&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb6-27&#34;&gt;&lt;a href=&#34;#cb6-27&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;y&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb6-28&#34;&gt;&lt;a href=&#34;#cb6-28&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb6-29&#34;&gt;&lt;a href=&#34;#cb6-29&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;colour =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb6-30&#34;&gt;&lt;a href=&#34;#cb6-30&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      &lt;span class=&#34;at&#34;&gt;fill =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-31&#34;&gt;&lt;a href=&#34;#cb6-31&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    ) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb6-32&#34;&gt;&lt;a href=&#34;#cb6-32&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;theme&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;panel.grid =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;element_blank&lt;/span&gt;(), &lt;span class=&#34;at&#34;&gt;axis.text.x =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;element_blank&lt;/span&gt;())&lt;/span&gt;
+&lt;span id=&#34;cb6-33&#34;&gt;&lt;a href=&#34;#cb6-33&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;gp_plot&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/details&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-5-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Before getting started, we also define a plot to visualise the acquisition function along with the GP.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;p&gt;&lt;/p&gt;&lt;details&gt;
+&lt;summary&gt;Show the code&lt;/summary&gt;&lt;p&gt;&lt;/p&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb7&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb7-1&#34;&gt;&lt;a href=&#34;#cb7-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;acquisition_plot &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb7-2&#34;&gt;&lt;a href=&#34;#cb7-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;                             acquisition_function,&lt;/span&gt;
+&lt;span id=&#34;cb7-3&#34;&gt;&lt;a href=&#34;#cb7-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;                             gp_plot,&lt;/span&gt;
+&lt;span id=&#34;cb7-4&#34;&gt;&lt;a href=&#34;#cb7-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;                             xt1,&lt;/span&gt;
+&lt;span id=&#34;cb7-5&#34;&gt;&lt;a href=&#34;#cb7-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;                             &lt;span class=&#34;at&#34;&gt;label =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;EI&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb7-6&#34;&gt;&lt;a href=&#34;#cb7-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;                             &lt;span class=&#34;at&#34;&gt;title =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;&#34;&lt;/span&gt;) {&lt;/span&gt;
+&lt;span id=&#34;cb7-7&#34;&gt;&lt;a href=&#34;#cb7-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  p1 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; tibble&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;tibble&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb7-8&#34;&gt;&lt;a href=&#34;#cb7-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb7-9&#34;&gt;&lt;a href=&#34;#cb7-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;a =&lt;/span&gt; acquisition_function&lt;/span&gt;
+&lt;span id=&#34;cb7-10&#34;&gt;&lt;a href=&#34;#cb7-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb7-11&#34;&gt;&lt;a href=&#34;#cb7-11&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;ggplot&lt;/span&gt;() &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb7-12&#34;&gt;&lt;a href=&#34;#cb7-12&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;geom_line&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;aes&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; x, &lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; a, &lt;span class=&#34;at&#34;&gt;colour =&lt;/span&gt; label)) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb7-13&#34;&gt;&lt;a href=&#34;#cb7-13&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;geom_vline&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;xintercept =&lt;/span&gt; xt1, &lt;span class=&#34;at&#34;&gt;linetype =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb7-14&#34;&gt;&lt;a href=&#34;#cb7-14&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;theme_minimal&lt;/span&gt;() &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb7-15&#34;&gt;&lt;a href=&#34;#cb7-15&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;labs&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;x =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;&#34;&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;y =&lt;/span&gt; label, &lt;span class=&#34;at&#34;&gt;colour =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;&#34;&lt;/span&gt;) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb7-16&#34;&gt;&lt;a href=&#34;#cb7-16&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;theme&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;panel.grid =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;element_blank&lt;/span&gt;())&lt;/span&gt;
+&lt;span id=&#34;cb7-17&#34;&gt;&lt;a href=&#34;#cb7-17&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  p2 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; gp_plot &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb7-18&#34;&gt;&lt;a href=&#34;#cb7-18&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;geom_vline&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;xintercept =&lt;/span&gt; xt1, &lt;span class=&#34;at&#34;&gt;linetype =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb7-19&#34;&gt;&lt;a href=&#34;#cb7-19&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;fu&#34;&gt;labs&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;title =&lt;/span&gt; title)&lt;/span&gt;
+&lt;span id=&#34;cb7-20&#34;&gt;&lt;a href=&#34;#cb7-20&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  aligned_plots &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; cowplot&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;align_plots&lt;/span&gt;(p2, p1 , &lt;span class=&#34;at&#34;&gt;align =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;v&#34;&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb7-21&#34;&gt;&lt;a href=&#34;#cb7-21&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  cowplot&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;plot_grid&lt;/span&gt;(aligned_plots[[&lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;]], aligned_plots[[&lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;]], &lt;span class=&#34;at&#34;&gt;ncol =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb7-22&#34;&gt;&lt;a href=&#34;#cb7-22&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/details&gt;
+&lt;/div&gt;
+&lt;p&gt;Now we are ready to apply different acquisition functions to help recommend the next point to sample.&lt;/p&gt;
+&lt;h2 id=&#34;expected-improvement&#34; class=&#34;anchored&#34;&gt;Expected Improvement&lt;/h2&gt;
+&lt;p&gt;The idea behind Expected Improvement (EI) is to search for the point in the search space that has the highest probability of improving the current best solution. EI is defined as the expected value of the improvement over the current best solution, where the improvement is defined as the difference between the function value at the candidate point and the current best value. In other words, EI measures how much better the objective function is expected to be at the candidate point compared to the current best value, weighted by the probability of achieving that improvement.&lt;/p&gt;
+&lt;p&gt;Formally, the expected improvement acquisition function for a minimisation problem is defined as:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{EI}(\mathbf{x}) = \mathbb{E}\left[\max(0, f_{\min} - f(\mathbf{x}))\right]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&lt;/span&gt; is the candidate point and &lt;span class=&#34;math inline&#34;&gt;f_{\min}&lt;/span&gt; is the current best function value observed so far.&lt;/p&gt;
+&lt;p&gt;When using a GP surrogate model conditioned on noisy observations in place of &lt;span class=&#34;math inline&#34;&gt;f&lt;/span&gt;, EI can be calculated using the following formula &lt;span class=&#34;citation&#34; data-cites=&#34;frazier2018tutorial&#34;&gt;[1]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{EI}(\mathbf{x}) = (y_{min} - \mu(\mathbf{x}) - \xi) \Phi(Z) + \sigma(\mathbf{x}) \phi(Z)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;with&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;Z = \frac{y_{min} - \mu(\mathbf{x}) - \xi}{\sigma(\mathbf{x})}&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\mu(\mathbf{x})&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\sigma(\mathbf{x})&lt;/span&gt; are the mean and standard deviation of the Gaussian process at &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&lt;/span&gt;. &lt;span class=&#34;math inline&#34;&gt;\Phi&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\phi&lt;/span&gt; are the standard normal cumulative distribution function and probability density function, respectively, and &lt;span class=&#34;math inline&#34;&gt;\xi&lt;/span&gt; is a trade-off parameter that balances exploration and exploitation. Higher values of &lt;span class=&#34;math inline&#34;&gt;\xi&lt;/span&gt; lead to more exploration and smaller values to exploitation. &lt;span class=&#34;math inline&#34;&gt;a_{EI}(\mathbf{x}) = 0&lt;/span&gt; when &lt;span class=&#34;math inline&#34;&gt;\sigma(\mathbf{x}) = 0&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;The formulas can be implemented directly.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb8&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb8-1&#34;&gt;&lt;a href=&#34;#cb8-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Expected Improvement Acquisition Function&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-2&#34;&gt;&lt;a href=&#34;#cb8-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; &lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-3&#34;&gt;&lt;a href=&#34;#cb8-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @mu vector of length m. Mean of a Gaussian process at m points.&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-4&#34;&gt;&lt;a href=&#34;#cb8-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @sigma vector of length m. The diagonal of the covariance matrix of a&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-5&#34;&gt;&lt;a href=&#34;#cb8-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Gaussian process evaluated at m points.&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-6&#34;&gt;&lt;a href=&#34;#cb8-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param y_best scalar. Best mean prediction so far on observed points&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-7&#34;&gt;&lt;a href=&#34;#cb8-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param xi scalar, exploration/exploitation trade off&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-8&#34;&gt;&lt;a href=&#34;#cb8-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @task one of &#34;max&#34; or &#34;min&#34;, indicating the optimisation problem&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-9&#34;&gt;&lt;a href=&#34;#cb8-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-10&#34;&gt;&lt;a href=&#34;#cb8-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @return EI, vector of length m&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-11&#34;&gt;&lt;a href=&#34;#cb8-11&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;expected_improvement &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(mu, sigma, y_best, &lt;span class=&#34;at&#34;&gt;xi =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.01&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;task =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;min&#34;&lt;/span&gt;) {&lt;/span&gt;
+&lt;span id=&#34;cb8-12&#34;&gt;&lt;a href=&#34;#cb8-12&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (task &lt;span class=&#34;sc&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;min&#34;&lt;/span&gt;) imp &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; y_best &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; mu &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; xi&lt;/span&gt;
+&lt;span id=&#34;cb8-13&#34;&gt;&lt;a href=&#34;#cb8-13&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (task &lt;span class=&#34;sc&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;max&#34;&lt;/span&gt;) imp &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; mu &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; y_best &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; xi&lt;/span&gt;
+&lt;span id=&#34;cb8-14&#34;&gt;&lt;a href=&#34;#cb8-14&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (&lt;span class=&#34;fu&#34;&gt;is.null&lt;/span&gt;(imp)) &lt;span class=&#34;fu&#34;&gt;stop&lt;/span&gt;(&lt;span class=&#34;st&#34;&gt;&#39;task must be &#34;min&#34; or &#34;max&#34;&#39;&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb8-15&#34;&gt;&lt;a href=&#34;#cb8-15&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  Z &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; imp &lt;span class=&#34;sc&#34;&gt;/&lt;/span&gt; sigma&lt;/span&gt;
+&lt;span id=&#34;cb8-16&#34;&gt;&lt;a href=&#34;#cb8-16&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ei &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; imp &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;pnorm&lt;/span&gt;(Z) &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; sigma &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;dnorm&lt;/span&gt;(Z)&lt;/span&gt;
+&lt;span id=&#34;cb8-17&#34;&gt;&lt;a href=&#34;#cb8-17&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ei[sigma &lt;span class=&#34;sc&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.0&lt;/span&gt;] &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.0&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb8-18&#34;&gt;&lt;a href=&#34;#cb8-18&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ei&lt;/span&gt;
+&lt;span id=&#34;cb8-19&#34;&gt;&lt;a href=&#34;#cb8-19&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Let’s see it in action. We calculate EI along a grid and draw it below the GP.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb9&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb9-1&#34;&gt;&lt;a href=&#34;#cb9-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;ei &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;expected_improvement&lt;/span&gt;(mu, sigma, y_min, &lt;span class=&#34;at&#34;&gt;xi =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.05&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb9-2&#34;&gt;&lt;a href=&#34;#cb9-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;xt1 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; X_pred[&lt;span class=&#34;fu&#34;&gt;which.max&lt;/span&gt;(ei)]&lt;/span&gt;
+&lt;span id=&#34;cb9-3&#34;&gt;&lt;a href=&#34;#cb9-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb9-4&#34;&gt;&lt;a href=&#34;#cb9-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb9-5&#34;&gt;&lt;a href=&#34;#cb9-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ei,&lt;/span&gt;
+&lt;span id=&#34;cb9-6&#34;&gt;&lt;a href=&#34;#cb9-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  gp_plot,&lt;/span&gt;
+&lt;span id=&#34;cb9-7&#34;&gt;&lt;a href=&#34;#cb9-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  xt1,&lt;/span&gt;
+&lt;span id=&#34;cb9-8&#34;&gt;&lt;a href=&#34;#cb9-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;EI&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb9-9&#34;&gt;&lt;a href=&#34;#cb9-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Expected Improvement (Minimisation)&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb9-10&#34;&gt;&lt;a href=&#34;#cb9-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-8-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;The next sampling point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt;, is the one that maximises the acquisition function, here EI. As marked by the dashed line, this point is close to the right edge, where there is a high mean prediction but also high uncertainty, so it satisfies our need for both exploration and exploitation.&lt;/p&gt;
+&lt;p&gt;EI works for maximisation problems as well, by replacing &lt;span class=&#34;math inline&#34;&gt;y_{min} - \mu(\mathbf{x})&lt;/span&gt; with &lt;span class=&#34;math inline&#34;&gt;\mu(\mathbf{x}) - y_{max}&lt;/span&gt; in the expressions above.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb10&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb10-1&#34;&gt;&lt;a href=&#34;#cb10-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;ei &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;expected_improvement&lt;/span&gt;(mu, sigma, y_max, &lt;span class=&#34;at&#34;&gt;xi =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.05&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;task =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;max&#34;&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb10-2&#34;&gt;&lt;a href=&#34;#cb10-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;xt1 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; X_pred[&lt;span class=&#34;fu&#34;&gt;which.max&lt;/span&gt;(ei)]&lt;/span&gt;
+&lt;span id=&#34;cb10-3&#34;&gt;&lt;a href=&#34;#cb10-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb10-4&#34;&gt;&lt;a href=&#34;#cb10-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb10-5&#34;&gt;&lt;a href=&#34;#cb10-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ei,&lt;/span&gt;
+&lt;span id=&#34;cb10-6&#34;&gt;&lt;a href=&#34;#cb10-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  gp_plot,&lt;/span&gt;
+&lt;span id=&#34;cb10-7&#34;&gt;&lt;a href=&#34;#cb10-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  xt1,&lt;/span&gt;
+&lt;span id=&#34;cb10-8&#34;&gt;&lt;a href=&#34;#cb10-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;EI&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb10-9&#34;&gt;&lt;a href=&#34;#cb10-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Expected Improvement (Maximisation)&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb10-10&#34;&gt;&lt;a href=&#34;#cb10-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-9-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;The next sampling point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt;, is still the one that maximises EI. As marked by the dashed line, this point is close to two sampled points, where we are quite certain that there is improvement to be found.&lt;/p&gt;
+&lt;h2 id=&#34;probability-of-improvement&#34; class=&#34;anchored&#34;&gt;Probability of Improvement&lt;/h2&gt;
+&lt;p&gt;Probability of improvement (PI) aims to select the point that has the highest probability of improving the current best solution. Like expected improvement, the PI function balances exploration and exploitation by taking into account both the mean and the variance of the surrogate model. A point with a high mean and low variance is likely to be a good candidate for exploitation, while a point with a high variance but lower mean may be more suitable for exploration.&lt;/p&gt;
+&lt;p&gt;The PI acquisition function is defined as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{PI}(\mathbf{x}) = P(f(\mathbf{x}) \lt f_{\min} + \xi)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;When using a GP surrogate model conditioned on noisy observations in place of &lt;span class=&#34;math inline&#34;&gt;f&lt;/span&gt;, EI can be calculated using the formula&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{\text{PI}}(\mathbf{x}) = \Phi\left(\frac{y_{min} - \mu(\mathbf{x}) - \xi}{\sigma(\mathbf{x})}\right)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\mu(\mathbf{x})&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\sigma(\mathbf{x})&lt;/span&gt; are the mean and standard deviation of the Gaussian process at &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&lt;/span&gt;, &lt;span class=&#34;math inline&#34;&gt;\Phi&lt;/span&gt; is the standard normal cumulative distribution function, and &lt;span class=&#34;math inline&#34;&gt;\xi&lt;/span&gt; is a trade-off parameter that balances exploration and exploitation &lt;span class=&#34;citation&#34; data-cites=&#34;garnett_bayesoptbook_2023&#34;&gt;[2]&lt;/span&gt;. Higher values of &lt;span class=&#34;math inline&#34;&gt;\xi&lt;/span&gt; lead to more exploration and smaller values to exploitation.&lt;/p&gt;
+&lt;p&gt;The formula can be implemented directly&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb11&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb11-1&#34;&gt;&lt;a href=&#34;#cb11-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Probability of Improvement Acquisition Function&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-2&#34;&gt;&lt;a href=&#34;#cb11-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; &lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-3&#34;&gt;&lt;a href=&#34;#cb11-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @mu vector of length m. Mean of a Gaussian process at m points.&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-4&#34;&gt;&lt;a href=&#34;#cb11-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @sigma vector of length m. The diagonal of the covariance matrix of a&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-5&#34;&gt;&lt;a href=&#34;#cb11-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Gaussian process evaluated at m points.&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-6&#34;&gt;&lt;a href=&#34;#cb11-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param y_best scalar. Best mean prediction so far on observed points&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-7&#34;&gt;&lt;a href=&#34;#cb11-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param xi scalar, exploration/exploitation trade off&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-8&#34;&gt;&lt;a href=&#34;#cb11-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @task one of &#34;max&#34; or &#34;min&#34;, indicating the optimisation problem&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-9&#34;&gt;&lt;a href=&#34;#cb11-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-10&#34;&gt;&lt;a href=&#34;#cb11-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @return PI, vector of length m&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb11-11&#34;&gt;&lt;a href=&#34;#cb11-11&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;probability_of_improvement &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(mu,&lt;/span&gt;
+&lt;span id=&#34;cb11-12&#34;&gt;&lt;a href=&#34;#cb11-12&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;                                       sigma,&lt;/span&gt;
+&lt;span id=&#34;cb11-13&#34;&gt;&lt;a href=&#34;#cb11-13&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;                                       y_best,&lt;/span&gt;
+&lt;span id=&#34;cb11-14&#34;&gt;&lt;a href=&#34;#cb11-14&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;                                       &lt;span class=&#34;at&#34;&gt;xi =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.01&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb11-15&#34;&gt;&lt;a href=&#34;#cb11-15&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;                                       &lt;span class=&#34;at&#34;&gt;task =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;min&#34;&lt;/span&gt;) {&lt;/span&gt;
+&lt;span id=&#34;cb11-16&#34;&gt;&lt;a href=&#34;#cb11-16&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (task &lt;span class=&#34;sc&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;min&#34;&lt;/span&gt;) imp &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; y_best &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; mu &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; xi&lt;/span&gt;
+&lt;span id=&#34;cb11-17&#34;&gt;&lt;a href=&#34;#cb11-17&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (task &lt;span class=&#34;sc&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;max&#34;&lt;/span&gt;) imp &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; mu &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; y_best &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; xi&lt;/span&gt;
+&lt;span id=&#34;cb11-18&#34;&gt;&lt;a href=&#34;#cb11-18&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;fu&#34;&gt;pnorm&lt;/span&gt;(imp &lt;span class=&#34;sc&#34;&gt;/&lt;/span&gt; sigma)&lt;/span&gt;
+&lt;span id=&#34;cb11-19&#34;&gt;&lt;a href=&#34;#cb11-19&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Let’s see it in action. We calculate PI along a grid and draw it below the GP.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb12&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb12-1&#34;&gt;&lt;a href=&#34;#cb12-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;pi &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;probability_of_improvement&lt;/span&gt;(mu, sigma, y_min, &lt;span class=&#34;at&#34;&gt;xi =&lt;/span&gt; &lt;span class=&#34;fl&#34;&gt;0.1&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb12-2&#34;&gt;&lt;a href=&#34;#cb12-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;xt1 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; X_pred[&lt;span class=&#34;fu&#34;&gt;which.max&lt;/span&gt;(pi)]&lt;/span&gt;
+&lt;span id=&#34;cb12-3&#34;&gt;&lt;a href=&#34;#cb12-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb12-4&#34;&gt;&lt;a href=&#34;#cb12-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb12-5&#34;&gt;&lt;a href=&#34;#cb12-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  pi,&lt;/span&gt;
+&lt;span id=&#34;cb12-6&#34;&gt;&lt;a href=&#34;#cb12-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  gp_plot,&lt;/span&gt;
+&lt;span id=&#34;cb12-7&#34;&gt;&lt;a href=&#34;#cb12-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  xt1,&lt;/span&gt;
+&lt;span id=&#34;cb12-8&#34;&gt;&lt;a href=&#34;#cb12-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;PI&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb12-9&#34;&gt;&lt;a href=&#34;#cb12-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Probability of Improvement (Minimisation)&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb12-10&#34;&gt;&lt;a href=&#34;#cb12-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-11-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;The next sampling point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt;, is the one that maximises the acquisition function, here PI. As marked by the dashed line, this is close to the right edge, where there is a low mean prediction but also high uncertainty, so it satisfies our need for both exploration and exploitation. There are a few other good contenders in the spaces between training points though.&lt;/p&gt;
+&lt;p&gt;PI works for maximisation problems as well, by replacing &lt;span class=&#34;math inline&#34;&gt;y_{min} - \mu(\mathbf{x})&lt;/span&gt; with &lt;span class=&#34;math inline&#34;&gt;\mu(\mathbf{x}) - y_{max}&lt;/span&gt; in the expression above.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb13&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb13-1&#34;&gt;&lt;a href=&#34;#cb13-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;pi &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;probability_of_improvement&lt;/span&gt;(mu, sigma, y_max, &lt;span class=&#34;at&#34;&gt;xi =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;task =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;max&#34;&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb13-2&#34;&gt;&lt;a href=&#34;#cb13-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;xt1 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; X_pred[&lt;span class=&#34;fu&#34;&gt;which.max&lt;/span&gt;(pi)]&lt;/span&gt;
+&lt;span id=&#34;cb13-3&#34;&gt;&lt;a href=&#34;#cb13-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb13-4&#34;&gt;&lt;a href=&#34;#cb13-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb13-5&#34;&gt;&lt;a href=&#34;#cb13-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  pi,&lt;/span&gt;
+&lt;span id=&#34;cb13-6&#34;&gt;&lt;a href=&#34;#cb13-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  gp_plot,&lt;/span&gt;
+&lt;span id=&#34;cb13-7&#34;&gt;&lt;a href=&#34;#cb13-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  xt1,&lt;/span&gt;
+&lt;span id=&#34;cb13-8&#34;&gt;&lt;a href=&#34;#cb13-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;PI&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb13-9&#34;&gt;&lt;a href=&#34;#cb13-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Probability of Improvement (Maximisation)&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb13-10&#34;&gt;&lt;a href=&#34;#cb13-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-12-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;The next sampling point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt;, is still the one that maximises PI. As marked by the dashed line, this is in an area of high uncertainty.&lt;/p&gt;
+&lt;h2 id=&#34;lower-upper-confidence-bound&#34; class=&#34;anchored&#34;&gt;Lower &amp;amp; Upper Confidence Bound&lt;/h2&gt;
+&lt;p&gt;The Lower Confidence Bound (LCB) and Upper Confidence Bound (UCB) acquisition functions are fairly simple acquisition functions. They balance exploration and exploitation by combining the mean and the weighted standard deviation predictions of the surrogate model. LCB is used for minimisation problems and UCP is applied for maximisation problems.&lt;/p&gt;
+&lt;p&gt;The LCB function is defined as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{LCB}(\mathbf{x}) = \mu(\mathbf{x}) - \kappa \sigma(\mathbf{x})&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;and UCB as&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{UCB}(\mathbf{x}) = \mu(\mathbf{x}) + \kappa \sigma(\mathbf{x})&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\mu(\mathbf{x})&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\sigma(\mathbf{x})&lt;/span&gt; are the mean and standard deviation of the Gaussian process at &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\kappa&lt;/span&gt; is a tunable parameter that controls the balance between exploration and exploitation. Higher values of &lt;span class=&#34;math inline&#34;&gt;\kappa&lt;/span&gt; promote more exploration, while lower values emphasise exploitation.&lt;/p&gt;
+&lt;p&gt;With the mean term explicitly controlling exploitation and the weighed standard deviation term explicitly controlling exploration, UCB and LCB arguably represent the simplest acquisition function one could implement. This does not mean that UCB or LCB are worse than EI or PI, however. When the surrogate model is a GP, this simpler acquisition function might have similar performance to EI, for appropriate choices of &lt;span class=&#34;math inline&#34;&gt;\kappa&lt;/span&gt; &lt;span class=&#34;citation&#34; data-cites=&#34;Srinivas_2012&#34;&gt;[3]&lt;/span&gt; &lt;span class=&#34;citation&#34; data-cites=&#34;garnett_bayesoptbook_2023&#34;&gt;[2]&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;The acquisition functions are straightforward to implement, given &lt;span class=&#34;math inline&#34;&gt;\mu&lt;/span&gt; and &lt;span class=&#34;math inline&#34;&gt;\sigma&lt;/span&gt;:&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb14&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb14-1&#34;&gt;&lt;a href=&#34;#cb14-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Upper and Lower Confidence Bound Acquisition Function&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb14-2&#34;&gt;&lt;a href=&#34;#cb14-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; &lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb14-3&#34;&gt;&lt;a href=&#34;#cb14-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @mu vector of length m. Mean of a Gaussian process at m points.&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb14-4&#34;&gt;&lt;a href=&#34;#cb14-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @sigma vector of length m. The diagonal of the covariance matrix of a&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb14-5&#34;&gt;&lt;a href=&#34;#cb14-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; Gaussian process evaluated at m points.&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb14-6&#34;&gt;&lt;a href=&#34;#cb14-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @param kappa scalar, exploration/exploitation trade off&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb14-7&#34;&gt;&lt;a href=&#34;#cb14-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @task one of &#34;max&#34; or &#34;min&#34;, indicating the optimisation problem&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb14-8&#34;&gt;&lt;a href=&#34;#cb14-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb14-9&#34;&gt;&lt;a href=&#34;#cb14-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;#&#39; @return CB, vector of length m&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb14-10&#34;&gt;&lt;a href=&#34;#cb14-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;confidence_bound &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(mu, sigma, kappa, &lt;span class=&#34;at&#34;&gt;task =&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;min&#34;&lt;/span&gt;) {&lt;/span&gt;
+&lt;span id=&#34;cb14-11&#34;&gt;&lt;a href=&#34;#cb14-11&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (task &lt;span class=&#34;sc&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;min&#34;&lt;/span&gt;) &lt;span class=&#34;fu&#34;&gt;return&lt;/span&gt;(mu &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; kappa &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; sigma)&lt;/span&gt;
+&lt;span id=&#34;cb14-12&#34;&gt;&lt;a href=&#34;#cb14-12&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;cf&#34;&gt;if&lt;/span&gt; (task &lt;span class=&#34;sc&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;st&#34;&gt;&#34;max&#34;&lt;/span&gt;) &lt;span class=&#34;fu&#34;&gt;return&lt;/span&gt;(mu &lt;span class=&#34;sc&#34;&gt;+&lt;/span&gt; kappa &lt;span class=&#34;sc&#34;&gt;*&lt;/span&gt; sigma)&lt;/span&gt;
+&lt;span id=&#34;cb14-13&#34;&gt;&lt;a href=&#34;#cb14-13&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;}&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Let’s see it in action. We calculate LCB along a grid and draw it below the GP.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb15&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb15-1&#34;&gt;&lt;a href=&#34;#cb15-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;lcb &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;confidence_bound&lt;/span&gt;(mu, sigma, &lt;span class=&#34;at&#34;&gt;kappa =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;, &lt;span class=&#34;st&#34;&gt;&#34;min&#34;&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb15-2&#34;&gt;&lt;a href=&#34;#cb15-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;xt1 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; X_pred[&lt;span class=&#34;fu&#34;&gt;which.min&lt;/span&gt;(lcb)]&lt;/span&gt;
+&lt;span id=&#34;cb15-3&#34;&gt;&lt;a href=&#34;#cb15-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(X_pred, lcb, gp_plot, xt1, &lt;span class=&#34;st&#34;&gt;&#34;LCB&#34;&lt;/span&gt;, &lt;span class=&#34;st&#34;&gt;&#34;Lower Confidence Bound&#34;&lt;/span&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-14-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;As marked by the dashed line, LCB tells us that the next point to sample, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt;, is all the way at the right edge of search space.&lt;/p&gt;
+&lt;p&gt;We can do the same for UCB&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb16&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb16-1&#34;&gt;&lt;a href=&#34;#cb16-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;ucb &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;confidence_bound&lt;/span&gt;(mu, sigma, &lt;span class=&#34;at&#34;&gt;kappa =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;2&lt;/span&gt;, &lt;span class=&#34;st&#34;&gt;&#34;max&#34;&lt;/span&gt;)&lt;/span&gt;
+&lt;span id=&#34;cb16-2&#34;&gt;&lt;a href=&#34;#cb16-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;xt1 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; X_pred[&lt;span class=&#34;fu&#34;&gt;which.max&lt;/span&gt;(ucb)]&lt;/span&gt;
+&lt;span id=&#34;cb16-3&#34;&gt;&lt;a href=&#34;#cb16-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(X_pred, ucb, gp_plot, xt1, &lt;span class=&#34;st&#34;&gt;&#34;UCB&#34;&lt;/span&gt;, &lt;span class=&#34;st&#34;&gt;&#34;Upper Confidence Bound&#34;&lt;/span&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-15-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;As marked by the dashed line, UCB tells us that the next point to sample, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt;, is close to two known points, where we are fairly certain that there is improvement to be found.&lt;/p&gt;
+&lt;h2 id=&#34;thompson-sampling&#34; class=&#34;anchored&#34;&gt;Thompson Sampling&lt;/h2&gt;
+&lt;p&gt;A Gaussian process represents a distribution over functions. At this point in Bayesian optimisation, the GP has been conditioned on training data, &lt;span class=&#34;math inline&#34;&gt;\mathcal{D}&lt;/span&gt;, and it acts as a surrogate for the objective function. This means that we have a distribution of functions which summarise our knowledge and uncertainty about the objective function.&lt;/p&gt;
+&lt;p&gt;We can take that a step further and consider the posterior distribution, &lt;span class=&#34;math inline&#34;&gt;p(\mathbf{x}&#39;|\mathcal{D})&lt;/span&gt;, of points, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&#39;&lt;/span&gt;, that optimise the the functions drawn from the GP. A point drawn from that distribution would be a good candidate for our next evaluation of the objective function&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\mathbf{x}_{t+1} \sim p(\mathbf{x}&#39;|\mathcal{D})&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This is the core idea of Thompson Sampling. Thompson sampling addresses the exploration versus exploitation dilemma by directly making use of our posterior beliefs and the fact that the GP is just a distribution of functions &lt;span class=&#34;citation&#34; data-cites=&#34;garnett_bayesoptbook_2023&#34;&gt;[2]&lt;/span&gt;. Notice also that no additional parameters are needed for this method.&lt;/p&gt;
+&lt;p&gt;To do Thompson sampling in practice, we sample a function from the GP&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{ts}(\mathbf{x}) \sim p(y | \mathcal{D})&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This is not an acquisition function in the same way that Expected Improvement or Confidence Bound are, but we can use it in exactly the same way to suggest the next point&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\mathbf{x}_{t+1} \in \arg\min\limits_{\mathbf{x} = \mathcal{X}}(a_{ts}(\mathbf{x}))&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;for a minimisation problem, or&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\mathbf{x}_{t+1} \in \arg\max\limits_{\mathbf{x} = \mathcal{X}}(a_{ts}(\mathbf{x}))&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;for a maximisation problem.&lt;/p&gt;
+&lt;p&gt;Given the posterior predictive distribution, Thompson sampling is straightforward to implement. Let’s see it in action!&lt;/p&gt;
+&lt;p&gt;We draw a random sample function and find its minimum and maximum&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb17&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb17-1&#34;&gt;&lt;a href=&#34;#cb17-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;ts &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;as.vector&lt;/span&gt;(&lt;span class=&#34;fu&#34;&gt;rmvnorm&lt;/span&gt;(&lt;span class=&#34;dv&#34;&gt;1&lt;/span&gt;, post_pred&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;mu, post_pred&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;Sigma))&lt;/span&gt;
+&lt;span id=&#34;cb17-2&#34;&gt;&lt;a href=&#34;#cb17-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;xt1 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; X_pred[&lt;span class=&#34;fu&#34;&gt;which.min&lt;/span&gt;(ts)]&lt;/span&gt;
+&lt;span id=&#34;cb17-3&#34;&gt;&lt;a href=&#34;#cb17-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb17-4&#34;&gt;&lt;a href=&#34;#cb17-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb17-5&#34;&gt;&lt;a href=&#34;#cb17-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ts,&lt;/span&gt;
+&lt;span id=&#34;cb17-6&#34;&gt;&lt;a href=&#34;#cb17-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  gp_plot,&lt;/span&gt;
+&lt;span id=&#34;cb17-7&#34;&gt;&lt;a href=&#34;#cb17-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  xt1,&lt;/span&gt;
+&lt;span id=&#34;cb17-8&#34;&gt;&lt;a href=&#34;#cb17-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Sample&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb17-9&#34;&gt;&lt;a href=&#34;#cb17-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Thompson Sampling (Minimisation)&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb17-10&#34;&gt;&lt;a href=&#34;#cb17-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-16-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb18&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb18-1&#34;&gt;&lt;a href=&#34;#cb18-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;xt1 &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; X_pred[&lt;span class=&#34;fu&#34;&gt;which.max&lt;/span&gt;(ts)]&lt;/span&gt;
+&lt;span id=&#34;cb18-2&#34;&gt;&lt;a href=&#34;#cb18-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb18-3&#34;&gt;&lt;a href=&#34;#cb18-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb18-4&#34;&gt;&lt;a href=&#34;#cb18-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ts,&lt;/span&gt;
+&lt;span id=&#34;cb18-5&#34;&gt;&lt;a href=&#34;#cb18-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  gp_plot,&lt;/span&gt;
+&lt;span id=&#34;cb18-6&#34;&gt;&lt;a href=&#34;#cb18-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  xt1,&lt;/span&gt;
+&lt;span id=&#34;cb18-7&#34;&gt;&lt;a href=&#34;#cb18-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Sample&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb18-8&#34;&gt;&lt;a href=&#34;#cb18-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Thompson Sampling (Maximisation)&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb18-9&#34;&gt;&lt;a href=&#34;#cb18-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-17-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;The dashed line indicates the next sampling point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt;, for a minimisation and maximisation task, respectively. For the minimisation problem, we are suggested a point that corresponds to exploitation and for the maximisation problem we are suggested a point that corresponds to exploration. It is this stochastic behaviour that, over a sequence of experiments, will give us a natural balance between exploration and exploitation.&lt;/p&gt;
+&lt;h2 id=&#34;knowledge-gradient&#34; class=&#34;anchored&#34;&gt;Knowledge Gradient&lt;/h2&gt;
+&lt;p&gt;The Knowledge Gradient (KG) is an acquisition function that makes extensive use of the posterior distribution to suggest a sampling point. KG is simulated rather than calculated and the rationale behind it takes a bit of set up.&lt;/p&gt;
+&lt;p&gt;Imagine that we are at the end of our sequential experimentation. We have collected a set of observations &lt;span class=&#34;math inline&#34;&gt;\mathcal{D} = (\mathbf{X},\mathbf{y})&lt;/span&gt; and we are about to recommend our final set point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}^*&lt;/span&gt;, which hopefully is close the global optimum of the objective function.&lt;/p&gt;
+&lt;p&gt;In most real world cases, we are risk averse and would opt to select a point that we have already tested, i.e.&amp;nbsp;&lt;span class=&#34;math inline&#34;&gt;\mathbf{x}^* \in \mathbf{X}&lt;/span&gt;. Imagine, however, that we were not risk averse and just wanted to report the point in search space with the best expected outcome given the data so far, then we might recommend&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;\mathbf{x}^* = \arg\min\limits_{\mathbf{x} \in \mathcal{X}}\mu(\mathbf{x})&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;We also define &lt;span class=&#34;math inline&#34;&gt;\mu^* = \mu(\mathbf{x}^*)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;At this point, imagine that we are suddenly allowed to test just one more point. Given that we have decided to recommend the point that optimises the posterior mean at the end of our experimental sequence, the next point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt;, we choose to evaluate in the the objective function should be the point that maximises the increase in the optimum posterior mean.&lt;/p&gt;
+&lt;p&gt;Let’s say we pick any point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1} \in \mathcal{X}&lt;/span&gt;, to be our next point. That would result in the observation &lt;span class=&#34;math inline&#34;&gt;y_{t+1}&lt;/span&gt; and eventually a recommended final point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}^*_{t+1}&lt;/span&gt; with mean &lt;span class=&#34;math inline&#34;&gt;\mu^*_{t+1}&lt;/span&gt;. The decrease in posterior mean, &lt;span class=&#34;math inline&#34;&gt;\mu^* - \mu^*_{t+1}&lt;/span&gt;, would be an excellent estimator of improvement in choosing &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{t+1}&lt;/span&gt; as the next sampling point.&lt;/p&gt;
+&lt;p&gt;However, we cannot calculate &lt;span class=&#34;math inline&#34;&gt;\mu^* - \mu^*_{t+1}&lt;/span&gt; without actually collecting the sample &lt;span class=&#34;math inline&#34;&gt;y_{t+1}&lt;/span&gt;. Instead we could estimate the expected value, given just the observations so far:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{KG}(\mathbf{x}) = \mathbb{E}_{p(y|\mathcal{D})}[\mu^* - \mu^*_{t+1}]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;This is the definition of the Knowledge Gradient for a minimisation problem &lt;span class=&#34;citation&#34; data-cites=&#34;frazier2018tutorial&#34;&gt;[1]&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;For a maximisation problem, the definition is&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{KG}(\mathbf{x}) = \mathbb{E}_{p(y|\mathcal{D})}[\mu^*_{t+1} - \mu^*]&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;where &lt;span class=&#34;math inline&#34;&gt;\mu^* = \max(\mu(\mathbf{x}))&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;To calculate KG in practice, we need a way to estimate &lt;span class=&#34;math inline&#34;&gt;\mu^*_{t+1}&lt;/span&gt; as a function of existing observations and we need a way to integrate over &lt;span class=&#34;math inline&#34;&gt;p(y|\mathcal{D})&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;To address the latter for a proposed point, &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}_{sim}&lt;/span&gt;, we take the following steps&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;We draw a sample &lt;span class=&#34;math inline&#34;&gt;y_{sim} \sim p(y|\mathbf{x}_{sim},\mathcal{D})&lt;/span&gt;-&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;We then create an augmented dataset &lt;span class=&#34;math inline&#34;&gt;\mathcal{D}^+ = (\{\mathbf{X},\mathbf{x}_{sim}\}, \{\mathbf{y},y_{sim}\})&lt;/span&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;We condition the surrogate model on the augmented dataset.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Finally, we compute the optimum of the new posterior mean. This is an estimate of &lt;span class=&#34;math inline&#34;&gt;\mu^*_{t+1}&lt;/span&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We cannot integrate this estimate over &lt;span class=&#34;math inline&#34;&gt;p(y_{sim}|\mathcal{D})&lt;/span&gt;, but we can draw &lt;span class=&#34;math inline&#34;&gt;M&lt;/span&gt; samples, compute &lt;span class=&#34;math inline&#34;&gt;\mu^*_{t+1}&lt;/span&gt; for each of them and calculate the mean difference:&lt;/p&gt;
+&lt;p&gt;&lt;span class=&#34;math display&#34;&gt;a_{KG}(\mathbf{x}) \approx \frac{1}{M}\sum_{j=1}^M \mu^* - \mu^*_{t+1,j}&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;As &lt;span class=&#34;math inline&#34;&gt;M&lt;/span&gt; approaches infinity, the estimate should converge to the true KG. Since we need a large amount of samples and need to repeat the process for each candidate &lt;span class=&#34;math inline&#34;&gt;\mathbf{x}&lt;/span&gt;, a good sampler is needed to estimate KG.&lt;/p&gt;
+&lt;p&gt;For our simple one-dimensional example, we can brute force it without worrying too much about optimising the calculation. For an example with more dimensions or for a smoother estimate of KG, a proper MCMC sampling would be needed.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb19&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb19-1&#34;&gt;&lt;a href=&#34;#cb19-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;mu_min &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;min&lt;/span&gt;(mu)&lt;/span&gt;
+&lt;span id=&#34;cb19-2&#34;&gt;&lt;a href=&#34;#cb19-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;mu_max &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;max&lt;/span&gt;(mu)&lt;/span&gt;
+&lt;span id=&#34;cb19-3&#34;&gt;&lt;a href=&#34;#cb19-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;co&#34;&gt;# for each candidate point&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-4&#34;&gt;&lt;a href=&#34;#cb19-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;kg &lt;span class=&#34;ot&#34;&gt;&amp;lt;-&lt;/span&gt; tibble&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;tibble&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;x_sim =&lt;/span&gt; X_pred) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-5&#34;&gt;&lt;a href=&#34;#cb19-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  dplyr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;mutate&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb19-6&#34;&gt;&lt;a href=&#34;#cb19-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;co&#34;&gt;# Calculate the posterior predictive distribution for y at x_sim&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-7&#34;&gt;&lt;a href=&#34;#cb19-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;post =&lt;/span&gt; purrr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;map&lt;/span&gt;(x_sim, gp),&lt;/span&gt;
+&lt;span id=&#34;cb19-8&#34;&gt;&lt;a href=&#34;#cb19-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;co&#34;&gt;# Draw M = 100 samples of y_sim from the posterior predictive distribution&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-9&#34;&gt;&lt;a href=&#34;#cb19-9&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;y_sim =&lt;/span&gt; purrr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;map&lt;/span&gt;(post, &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(p) {&lt;/span&gt;
+&lt;span id=&#34;cb19-10&#34;&gt;&lt;a href=&#34;#cb19-10&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      rlang&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;exec&lt;/span&gt;(rmvnorm, &lt;span class=&#34;at&#34;&gt;n =&lt;/span&gt; &lt;span class=&#34;dv&#34;&gt;100&lt;/span&gt;, &lt;span class=&#34;at&#34;&gt;mu =&lt;/span&gt; p&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;mu, &lt;span class=&#34;at&#34;&gt;sigma =&lt;/span&gt; p&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;Sigma)&lt;/span&gt;
+&lt;span id=&#34;cb19-11&#34;&gt;&lt;a href=&#34;#cb19-11&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    })&lt;/span&gt;
+&lt;span id=&#34;cb19-12&#34;&gt;&lt;a href=&#34;#cb19-12&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-13&#34;&gt;&lt;a href=&#34;#cb19-13&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  tidyr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;unnest_longer&lt;/span&gt;(y_sim) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-14&#34;&gt;&lt;a href=&#34;#cb19-14&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  dplyr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;mutate&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb19-15&#34;&gt;&lt;a href=&#34;#cb19-15&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;co&#34;&gt;# For each pair of (x_sim, y_sim)&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-16&#34;&gt;&lt;a href=&#34;#cb19-16&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;co&#34;&gt;# augment dataset with x_sim, y_sim and get the posterior mean&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-17&#34;&gt;&lt;a href=&#34;#cb19-17&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;mu_sim =&lt;/span&gt; purrr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;map2&lt;/span&gt;(x_sim, y_sim, &lt;span class=&#34;cf&#34;&gt;function&lt;/span&gt;(xs, ys) {&lt;/span&gt;
+&lt;span id=&#34;cb19-18&#34;&gt;&lt;a href=&#34;#cb19-18&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      rlang&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;exec&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb19-19&#34;&gt;&lt;a href=&#34;#cb19-19&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;        posterior,&lt;/span&gt;
+&lt;span id=&#34;cb19-20&#34;&gt;&lt;a href=&#34;#cb19-20&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;        &lt;span class=&#34;at&#34;&gt;kernel =&lt;/span&gt; rbf_kernel,&lt;/span&gt;
+&lt;span id=&#34;cb19-21&#34;&gt;&lt;a href=&#34;#cb19-21&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;        &lt;span class=&#34;at&#34;&gt;X_pred =&lt;/span&gt; X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb19-22&#34;&gt;&lt;a href=&#34;#cb19-22&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;        &lt;span class=&#34;at&#34;&gt;X_train =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;rbind&lt;/span&gt;(X_train, xs),&lt;/span&gt;
+&lt;span id=&#34;cb19-23&#34;&gt;&lt;a href=&#34;#cb19-23&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;        &lt;span class=&#34;at&#34;&gt;y_train =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;rbind&lt;/span&gt;(y_train, ys),&lt;/span&gt;
+&lt;span id=&#34;cb19-24&#34;&gt;&lt;a href=&#34;#cb19-24&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;        &lt;span class=&#34;sc&#34;&gt;!!!&lt;/span&gt;post_pred&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;parameters&lt;/span&gt;
+&lt;span id=&#34;cb19-25&#34;&gt;&lt;a href=&#34;#cb19-25&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;      )&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;mu&lt;/span&gt;
+&lt;span id=&#34;cb19-26&#34;&gt;&lt;a href=&#34;#cb19-26&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    }),&lt;/span&gt;
+&lt;span id=&#34;cb19-27&#34;&gt;&lt;a href=&#34;#cb19-27&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;co&#34;&gt;# Calculate the estimator&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-28&#34;&gt;&lt;a href=&#34;#cb19-28&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;mu_min_sim =&lt;/span&gt; purrr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;map_dbl&lt;/span&gt;(mu_sim, min),&lt;/span&gt;
+&lt;span id=&#34;cb19-29&#34;&gt;&lt;a href=&#34;#cb19-29&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;mu_max_sim =&lt;/span&gt; purrr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;map_dbl&lt;/span&gt;(mu_sim, max),&lt;/span&gt;
+&lt;span id=&#34;cb19-30&#34;&gt;&lt;a href=&#34;#cb19-30&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;mu_diff_min =&lt;/span&gt; mu_min &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; mu_min_sim,&lt;/span&gt;
+&lt;span id=&#34;cb19-31&#34;&gt;&lt;a href=&#34;#cb19-31&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;    &lt;span class=&#34;at&#34;&gt;mu_diff_max =&lt;/span&gt; mu_max_sim &lt;span class=&#34;sc&#34;&gt;-&lt;/span&gt; mu_max&lt;/span&gt;
+&lt;span id=&#34;cb19-32&#34;&gt;&lt;a href=&#34;#cb19-32&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  ) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-33&#34;&gt;&lt;a href=&#34;#cb19-33&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  dplyr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;group_by&lt;/span&gt;(x_sim) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-34&#34;&gt;&lt;a href=&#34;#cb19-34&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  dplyr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;summarise&lt;/span&gt;(&lt;span class=&#34;at&#34;&gt;kg_min =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;mean&lt;/span&gt;(mu_diff_min), &lt;span class=&#34;at&#34;&gt;kg_max =&lt;/span&gt; &lt;span class=&#34;fu&#34;&gt;mean&lt;/span&gt;(mu_diff_max)) &lt;span class=&#34;sc&#34;&gt;%&amp;gt;%&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb19-35&#34;&gt;&lt;a href=&#34;#cb19-35&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  dplyr&lt;span class=&#34;sc&#34;&gt;::&lt;/span&gt;&lt;span class=&#34;fu&#34;&gt;arrange&lt;/span&gt;(x_sim)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Here is KG for the minimisation case. Notice that the estimate is very rough. More samples would have made the estimate smoother. The dashed line shows where we would sample next, according to KG.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb20&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb20-1&#34;&gt;&lt;a href=&#34;#cb20-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb20-2&#34;&gt;&lt;a href=&#34;#cb20-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb20-3&#34;&gt;&lt;a href=&#34;#cb20-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  kg&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;kg_min,&lt;/span&gt;
+&lt;span id=&#34;cb20-4&#34;&gt;&lt;a href=&#34;#cb20-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  gp_plot,&lt;/span&gt;
+&lt;span id=&#34;cb20-5&#34;&gt;&lt;a href=&#34;#cb20-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred[&lt;span class=&#34;fu&#34;&gt;which.max&lt;/span&gt;(kg&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;kg_min)],&lt;/span&gt;
+&lt;span id=&#34;cb20-6&#34;&gt;&lt;a href=&#34;#cb20-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;KG&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb20-7&#34;&gt;&lt;a href=&#34;#cb20-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Knowledge Gradient (minimisation)&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb20-8&#34;&gt;&lt;a href=&#34;#cb20-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-19-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;Here is KG for the maximisation case. Notice that the estimate is very rough. The dashed line shows where we would sample next, according to KG.&lt;/p&gt;
+&lt;div class=&#34;cell&#34;&gt;
+&lt;div class=&#34;sourceCode&#34; id=&#34;cb21&#34;&gt;&lt;pre class=&#34;sourceCode r cell-code code-with-copy&#34;&gt;&lt;code class=&#34;sourceCode r&#34;&gt;&lt;span id=&#34;cb21-1&#34;&gt;&lt;a href=&#34;#cb21-1&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;&lt;span class=&#34;fu&#34;&gt;acquisition_plot&lt;/span&gt;(&lt;/span&gt;
+&lt;span id=&#34;cb21-2&#34;&gt;&lt;a href=&#34;#cb21-2&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred,&lt;/span&gt;
+&lt;span id=&#34;cb21-3&#34;&gt;&lt;a href=&#34;#cb21-3&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  kg&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;kg_max,&lt;/span&gt;
+&lt;span id=&#34;cb21-4&#34;&gt;&lt;a href=&#34;#cb21-4&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  gp_plot,&lt;/span&gt;
+&lt;span id=&#34;cb21-5&#34;&gt;&lt;a href=&#34;#cb21-5&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  X_pred[&lt;span class=&#34;fu&#34;&gt;which.max&lt;/span&gt;(kg&lt;span class=&#34;sc&#34;&gt;$&lt;/span&gt;kg_max)],&lt;/span&gt;
+&lt;span id=&#34;cb21-6&#34;&gt;&lt;a href=&#34;#cb21-6&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;KG&#34;&lt;/span&gt;,&lt;/span&gt;
+&lt;span id=&#34;cb21-7&#34;&gt;&lt;a href=&#34;#cb21-7&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;  &lt;span class=&#34;st&#34;&gt;&#34;Knowledge Gradient (maximisation)&#34;&lt;/span&gt;&lt;/span&gt;
+&lt;span id=&#34;cb21-8&#34;&gt;&lt;a href=&#34;#cb21-8&#34; aria-hidden=&#34;true&#34; tabindex=&#34;-1&#34;&gt;&lt;/a&gt;)&lt;/span&gt;&lt;/code&gt;&lt;button title=&#34;Copy to Clipboard&#34; class=&#34;code-copy-button&#34;&gt;&lt;i class=&#34;bi&#34;&gt;&lt;/i&gt;&lt;/button&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&#34;cell-output-display&#34;&gt;
+&lt;p&gt;&lt;img src=&#34;index_files/figure-html/unnamed-chunk-20-1.png&#34; width=&#34;672&#34;&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h1 class=&#34;unnumbered&#34; id=&#34;references&#34;&gt;References&lt;/h1&gt;
+&lt;div id=&#34;refs&#34; class=&#34;references csl-bib-body&#34; role=&#34;doc-bibliography&#34;&gt;
+&lt;div id=&#34;ref-frazier2018tutorial&#34; class=&#34;csl-entry&#34; role=&#34;doc-biblioentry&#34;&gt;
+&lt;div class=&#34;csl-left-margin&#34;&gt;[1] &lt;/div&gt;&lt;div class=&#34;csl-right-inline&#34;&gt;&lt;span class=&#34;smallcaps&#34;&gt;Frazier&lt;/span&gt;, P. I. (2018). A tutorial on bayesian optimization. Available at &lt;a href=&#34;https://arxiv.org/abs/1807.02811&#34;&gt;https://arxiv.org/abs/1807.02811&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-garnett_bayesoptbook_2023&#34; class=&#34;csl-entry&#34; role=&#34;doc-biblioentry&#34;&gt;
+&lt;div class=&#34;csl-left-margin&#34;&gt;[2] &lt;/div&gt;&lt;div class=&#34;csl-right-inline&#34;&gt;&lt;span class=&#34;smallcaps&#34;&gt;Garnett&lt;/span&gt;, R. (2023). &lt;em&gt;&lt;span&gt;Bayesian Optimization&lt;/span&gt;&lt;/em&gt;. Cambridge University Press.&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;ref-Srinivas_2012&#34; class=&#34;csl-entry&#34; role=&#34;doc-biblioentry&#34;&gt;
+&lt;div class=&#34;csl-left-margin&#34;&gt;[3] &lt;/div&gt;&lt;div class=&#34;csl-right-inline&#34;&gt;&lt;span class=&#34;smallcaps&#34;&gt;Srinivas&lt;/span&gt;, N., &lt;span class=&#34;smallcaps&#34;&gt;Krause&lt;/span&gt;, A., &lt;span class=&#34;smallcaps&#34;&gt;Kakade&lt;/span&gt;, S. M. and &lt;span class=&#34;smallcaps&#34;&gt;Seeger&lt;/span&gt;, M. W. (2012). Information-theoretic regret bounds for gaussian process optimization in the bandit setting. &lt;em&gt;&lt;span&gt;IEEE&lt;/span&gt; Transactions on Information Theory&lt;/em&gt; &lt;strong&gt;58&lt;/strong&gt; 3250–65 Available at &lt;a href=&#34;https://doi.org/10.1109%2Ftit.2011.2182033&#34;&gt;https://doi.org/10.1109%2Ftit.2011.2182033&lt;/a&gt;.&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h1 id=&#34;license&#34;&gt;License&lt;/h1&gt;
+&lt;p&gt;The content of this project itself is licensed under the &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/4.0/&#34;&gt;Creative Commons Attribution-ShareAlike 4.0 International license&lt;/a&gt;, and the underlying code is licensed under the &lt;a href=&#34;https://github.com/AnHosu/bespoke-bayesian-biochem/blob/main/LICENSE&#34;&gt;GNU General Public License v3.0 license&lt;/a&gt;.&lt;/p&gt;
+&lt;script type=&#34;application/javascript&#34;&gt;
+window.document.addEventListener(&#34;DOMContentLoaded&#34;, function (event) {
+  const tabsets =  window.document.querySelectorAll(&#34;.panel-tabset-tabby&#34;)
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby(&#39;#&#39; + tabset.id);
+  });
+  const icon = &#34;&#34;;
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: &#39;right&#39;,
+    icon: icon
+  };
+  anchorJS.add(&#39;.anchored&#39;);
+  const clipboard = new window.ClipboardJS(&#39;.code-copy-button&#39;, {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on(&#39;success&#39;, function(e) {
+    // button target
+    const button = e.trigger;
+    // don&#39;t keep focus
+    button.blur();
+    // flash &#34;checked&#34;
+    button.classList.add(&#39;code-copy-button-checked&#39;);
+    setTimeout(function() {
+      button.classList.remove(&#39;code-copy-button-checked&#39;);
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: &#39;light-border&#39;,
+      placement: &#39;bottom-start&#39;
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll(&#39;a[role=&#34;doc-noteref&#34;]&#39;);
+  for (var i=0; i&lt;noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute(&#39;href&#39;);
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, &#34;&#34;);
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll(&#39;a[role=&#34;doc-biblioref&#34;]&#39;);
+  for (var i=0; i&lt;bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute(&#39;data-cites&#39;).split(&#39; &#39;);
+    tippyHover(ref, function() {
+      var popup = window.document.createElement(&#39;div&#39;);
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement(&#39;div&#39;);
+        citeDiv.classList.add(&#39;hanging-indent&#39;);
+        citeDiv.classList.add(&#39;csl-entry&#39;);
+        var biblioDiv = window.document.getElementById(&#39;ref-&#39; + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+&lt;/script&gt;
+
+
+&lt;/body&gt;&lt;/html&gt;</description>
+    </item>
     
     <item>
       <title>Kernels for Gaussian Processes</title>

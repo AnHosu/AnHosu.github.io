@@ -45,9 +45,9 @@
 &lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../post/bayesian-opt-r/&#34;&gt;Bayesian Optimisation from Scratch in R&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;This post introduces and demonstrates all the core components of Bayesian optimisation and implements them from scratch in R. This is a great place to start.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../post/kernels-r&#34;&gt;Kernel Functions&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;This post takes an extensive look at kernels and discusses the rationales, utility, and limitations of some popular kernels, focusing primarily on their application in Gaussian processes and Bayesian optimisation. Along with the discussion are implementations of the kernels in base R.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Acquisition Functions&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;This post is coming soon.&lt;/p&gt;
+&lt;p&gt;This post contains a comprehensive list and discussion of kernels to use in the Gaussian processes surrogate model, when doing Bayesian optimisation. Accompanying the discussion, are implementations in R. The kernel is the main way to incorporate prior information into a surrogate model, making it an important choice, when setting up Bayesian optimisation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../post/acquisition-functions-r/&#34;&gt;Acquisition Functions&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This post discusses acquisition functions, which are used to recommend the next point to sample in the experiment sequence. Acquisition functions are the main means of balancing exploration and exploitation during optimisation. The post lists a number of acquisition functions and implements them in R.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Neural Networks as Surrogate Models&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;This post is coming soon.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Latin Hypercube Sampling and other Initial Designs for Bayesian Optimisation&lt;/strong&gt;&lt;/p&gt;
