@@ -1,0 +1,17 @@
+---
+title: Initial Designs for Bayesian Optimisation
+author: 'Anders Ellegaard'
+date: '2023-06-16'
+slug: initial-designs-r
+tags:
+- Modelling
+- Bayesian statistics
+- Bayesian optimisation
+- R
+summary: Overview of initial design strategies for Bayesian optimisation. Implementations in R.
+lastmod: '2023-06-16T13:25:39Z'
+image:
+  focal_point: smart
+  preview_only: yes
+projects: [bayesian-optimisation]
+---

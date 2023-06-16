@@ -5,7 +5,7 @@
     <link>/tag/iot/</link>
       <atom:link href="/tag/iot/index.xml" rel="self" type="application/rss+xml" />
     <description>IoT</description>
-    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2022 Anders E. Nielsen</copyright><lastBuildDate>Tue, 16 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2023 Anders E. Nielsen</copyright><lastBuildDate>Tue, 16 Jun 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_512x512_fill_lanczos_center_3.png</url>
       <title>IoT</title>
@@ -14,9 +14,9 @@
     
     <item>
       <title>Build an Edge with Greengrass</title>
-      <link>/project/iot-poc-greengrass/</link>
+      <link>/post/iot-poc-greengrass/</link>
       <pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/project/iot-poc-greengrass/</guid>
+      <guid>/post/iot-poc-greengrass/</guid>
       <description>&lt;p&gt;It is time to create an edge; to take advantage of the compute that is available right where the data is gathered. Even if we use the AWS IoT services, there are several ways and plenty of 3&lt;sup&gt;rd&lt;/sup&gt; party software we could apply for device management and creating an edge. The AWS offering is Greengrass, a piece of software running on our gateway device and an accompanying cloud service. In this demonstration, we introduce key concepts in the context of an IoT edge using Greengrass.&lt;br&gt;
 In this demonstration we will&lt;/p&gt;
 &lt;ul&gt;
@@ -27,16 +27,16 @@ In this demonstration we will&lt;/p&gt;
 &lt;br&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_group_architecture.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_group_architecture.png&#34; alt=&#34;iot setup&#34;&gt;
   This is the architecture we are building in this demonstration.
 &lt;/div&gt;
 &lt;h1 id=&#34;motivation&#34;&gt;Motivation&lt;/h1&gt;
-&lt;p&gt;When we walk through the demonstration, it might seem like a lot of hassle and extra steps to go through before data is flowing and we reach what is essentially the same state as in previous demonstrations, where we just &lt;a href=&#34;../../project/iot-poc-publishing/&#34;&gt;published&lt;/a&gt; readings and &lt;a href=&#34;../../project/iot-poc-pubsub/&#34;&gt;subscribed&lt;/a&gt; directly in the script that also queried our sensor. Indeed, Greengrass is not intended for use with a single sensor. Imagine, however, that we are managing hundreds of sensors on a factory floor. The factory might be far away, or the gowning procedure might prohibit frequent visits, but even if our desk is right next to the manufacturing line, we still do not want to physically go there each time we deploy changes to sensor data streams, restart devices, define new signal processing, or update software. Greengrass allows us to define functionality in the cloud and deploy it to our device with a click.&lt;br&gt;&lt;br&gt;
+&lt;p&gt;When we walk through the demonstration, it might seem like a lot of hassle and extra steps to go through before data is flowing and we reach what is essentially the same state as in previous demonstrations, where we just &lt;a href=&#34;../../post/iot-poc-publishing/&#34;&gt;published&lt;/a&gt; readings and &lt;a href=&#34;../../post/iot-poc-pubsub/&#34;&gt;subscribed&lt;/a&gt; directly in the script that also queried our sensor. Indeed, Greengrass is not intended for use with a single sensor. Imagine, however, that we are managing hundreds of sensors on a factory floor. The factory might be far away, or the gowning procedure might prohibit frequent visits, but even if our desk is right next to the manufacturing line, we still do not want to physically go there each time we deploy changes to sensor data streams, restart devices, define new signal processing, or update software. Greengrass allows us to define functionality in the cloud and deploy it to our device with a click.&lt;br&gt;&lt;br&gt;
 Another important aspect of our IoT application to consider is cost. It is tempting to just send all raw data to storage in the cloud. Cloud storage is indeed inexpensive, but it is not free. What is worse, however, is the cost of compute. Cloud compute offers unprecedented flexibility, but it is expensive, so we generally want to use it to handle loads with varying intensity or low predictability, e.g. for hosting the application that uses data from the IoT setup. As an example of a case where we might quickly incur a large and unnecessary bill, imagine a set of vibration sensors. Vibration sensors are useful for predictive maintenance applications, since the patterns in vibrations from components like bearings and motors might be good predictors for the health of the component. An industrial grade vibration sensor might be able to sample acceleration thousands of times per second. If we were to store the data from just a few vibration sensors, we would quickly fill up enough storage to accomodate years worth of data from other sources like factory floor temperature and humidity. Furthermore, since it is not the acceleration itself but characteristics of the vibrations we are interested in, each time we use the data we would have to do signal processing and recalculate features. If we do that using cloud compute, we will work up quite a bill. The financially and environmentally responsible way to implement vibration sensors is to do the signal processing as close to the sampling point as possible and then only store the calculated features. We still want the flexibility of developing in the cloud and deploying to a remote device, however. While we will not work with signal processing in this demonstration, we will create an example of data transformation and deploy it from the cloud to the Raspberry Pi using Greengrass.&lt;br&gt;&lt;br&gt;
 Conceptually, the setup for this demonstration is a bit different from that of the three previous demonstrations. The hardware is exactly the same but, in previous demonstrations, our Raspberry Pi acted the part of a microcontroller and essentially did not do a lot of work. In this demonstration, we will make use of the compute available on the Raspberry Pi, install Greengrass, and use it to manage the sensor. To demonstrate the concept of edge calculations, we will create a transformation that corrects for the fact that the temperature sensor is right next the CPU of our Pi.&lt;br&gt;&lt;br&gt;
 Let us get started!&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/hardware_setup.jpg&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/hardware_setup.jpg&#34; alt=&#34;iot setup&#34;&gt;
     Notice that the BME680 air quality sensor is right next to the CPU of the Pi, which interferes with the temperature readings. The edge calculation example of this demonstration will attempt to correct the temperature reading from the BME680 by substracting an amount based on the current CPU temperature.
 &lt;/div&gt;
 &lt;h1 id=&#34;install-and-configure-greengrass&#34;&gt;Install and Configure Greengrass&lt;/h1&gt;
@@ -77,9 +77,9 @@ sudo ./greengrassd start
 &lt;h2 id=&#34;associate-a-thing-with-a-greengrass-group&#34;&gt;Associate a Thing with a Greengrass Group&lt;/h2&gt;
 &lt;p&gt;To associate our thing, the sensor, with the core, we follow the &lt;a href=&#34;https://docs.aws.amazon.com/greengrass/latest/developerguide/device-group.html&#34; title=&#34;register a thing in Greengrass&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;guidelines&lt;/a&gt;, and go to AWS IoT &amp;gt; Greengrass &amp;gt; Groups, choose the group we just created, go to Devices, and click &amp;ldquo;Add Device&amp;rdquo;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_device_add.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_device_add.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
-&lt;p&gt;The creation procedure is similar to the procedure for any other Thing registered in AWS IoT. Indeed, after registering the device, we will be able to find it under the AWS IoT &amp;gt; Manage tab and we are even able to associate existing devices with a core. I actually reused the device from the &lt;a href=&#34;../../project/iot-poc-publishing/#registering-the-sensor-in-iot-core&#34;&gt;publishing&lt;/a&gt; demonstration for this demo.&lt;br&gt;
+&lt;p&gt;The creation procedure is similar to the procedure for any other Thing registered in AWS IoT. Indeed, after registering the device, we will be able to find it under the AWS IoT &amp;gt; Manage tab and we are even able to associate existing devices with a core. I actually reused the device from the &lt;a href=&#34;../../post/iot-poc-publishing/#registering-the-sensor-in-iot-core&#34;&gt;publishing&lt;/a&gt; demonstration for this demo.&lt;br&gt;
 Note that before the device is fully associated with the core, the change needs to be deployed. We will go through how to do this after configuring a few more things.&lt;/p&gt;
 &lt;h2 id=&#34;connect-a-device-to-greengrass-core&#34;&gt;Connect a Device to Greengrass Core&lt;/h2&gt;
 &lt;p&gt;In this section, we will setup up a script that connects to the core with the eventual goal of publishing readings from the sensor to a topic. The messages will never reach the cloud, however. Instead, the messages are published into the core device on a topic that only lives within the the Greengrass group. The logic is something along the lines of&lt;/p&gt;
@@ -89,7 +89,7 @@ while true
 	get sensor values
 	publish to local topic
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;This logic is very similar to what we did in the case of simple &lt;a href=&#34;../../project/iot-poc-publishing/&#34;&gt;publishing&lt;/a&gt;, and indeed the two cases are very similar. The main difference is that we will set up and configure a client that connects to the local MQTT broker in Greengrass Core rather than the cloud based broker in IoT Core.&lt;br&gt;&lt;br&gt;
+&lt;p&gt;This logic is very similar to what we did in the case of simple &lt;a href=&#34;../../post/iot-poc-publishing/&#34;&gt;publishing&lt;/a&gt;, and indeed the two cases are very similar. The main difference is that we will set up and configure a client that connects to the local MQTT broker in Greengrass Core rather than the cloud based broker in IoT Core.&lt;br&gt;&lt;br&gt;
 To connect a device/thing to Greengrass core, we use the same MQTT client as always and, as usual, we will need a variety of resources to establish the right connection.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
@@ -230,29 +230,29 @@ def function_handler(event, context):
 &lt;p&gt;To create a Lambda function, we navigate to the AWS Lambda console. Under &amp;lsquo;Functions&amp;rsquo; we click &amp;lsquo;Create Function&amp;rsquo;.&lt;br&gt;
 In the wizard, we choose &amp;lsquo;Author from scratch&amp;rsquo;, give our function a name, and choose our Python runtime. I named mine &amp;lsquo;repub_temp&amp;rsquo; and have been using Python 3.7 for the example. Then we click &amp;lsquo;Create Function&amp;rsquo;. This might take a moment.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/lambda_create.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/lambda_create.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;The next thing we need to do is to prepare our code for the Lambda function. So leave the console for a little while and locate the Python script we just created. Now download the &lt;a href=&#34;https://github.com/aws/aws-greengrass-core-sdk-python/tree/master/greengrasssdk&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Greengrass SDK&lt;/a&gt; folder. We only need the &amp;lsquo;greengrasssdk&amp;rsquo; folder, not the examples, docs, etc. Now package the Greengrass SDK and the Python script into a .zip.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/lambda_package.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/lambda_package.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Now jump back to the console and scroll down to the &amp;lsquo;Function Code&amp;rsquo; window. In the &amp;lsquo;Code entry type&amp;rsquo; dropdown, select the &amp;lsquo;Upload a .zip file&amp;rsquo; option and upload the .zip file we just created. Also make sure to change the Handler to &lt;code&gt;&amp;lt;function file&amp;gt;.&amp;lt;our handler function&amp;gt;&lt;/code&gt;, in the case of this example, it is &lt;code&gt;greengrass_simple_lambda.function_handler&lt;/code&gt;. Click &amp;lsquo;Save&amp;rsquo; to save the changes.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/lambda_function_code.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/lambda_function_code.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Now scroll up and, under the &amp;lsquo;Actions&amp;rsquo; dropdown, select &amp;lsquo;Publish new version&amp;rsquo;. We can optionally provide a version description.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img height=&#34;100&#34; src=&#34;../iot-poc/images/lambda_actions.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img height=&#34;100&#34; src=&#34;../../project/iot-poc/images/lambda_actions.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Now we go to &amp;lsquo;Actions&amp;rsquo; again and select &amp;lsquo;Create alias&amp;rsquo;. We give the alias a name and point it to the version we just created. Greengrass does not support pointers to the &lt;code&gt;$latest&lt;/code&gt; version, so make sure to select a specific version.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/lambda_alias.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/lambda_alias.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Now that our Lambda has been fully defined, we need to associate it with the Greengrass core.&lt;/p&gt;
 &lt;h3 id=&#34;attach-a-lambda-to-greengrass&#34;&gt;Attach a Lambda to Greengrass&lt;/h3&gt;
 &lt;p&gt;Navigate to the Greengrass console. Go to &amp;lsquo;Groups&amp;rsquo; and select the Greengrass group. Then go to the &amp;lsquo;Lambdas&amp;rsquo; menu and click &amp;lsquo;Add Lambda&amp;rsquo;.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_add.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_add.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Choose &amp;lsquo;Use an existing Lambda function&amp;rsquo;. Select the Lambda function we just created and click &amp;lsquo;Next&amp;rsquo;. Select the alias we just created and click &amp;lsquo;Finish&amp;rsquo;.&lt;br&gt;
 That is it for the Lambda. Now the final piece of the puzzle is ensuring that data flows from the sensor to the Lambda function and then from the Lambda function to the cloud. This is done with subscriptions.&lt;/p&gt;
@@ -260,17 +260,17 @@ That is it for the Lambda. Now the final piece of the puzzle is ensuring that da
 &lt;p&gt;Subscriptions are the way to configure where what data goes inside the Greengrass group. They specify the pubsub verticies between the things and Lambdas of the group and offer filtering capabilities.&lt;br&gt;&lt;br&gt;
 To set up a subscription, go to the Greengrass console. Go to &amp;lsquo;Groups&amp;rsquo; and select our Greengrass group. Then go to the &amp;lsquo;Subscriptions&amp;rsquo; menu and click &amp;lsquo;Add Subscription&amp;rsquo;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_subscription_add.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_subscription_add.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;When setting up at subscription we are asked to specify the source and the target. The source and target could be many things, including a specific device/thing, a Lambda function, the cloud, or a Shadow. Subscriptions are one-way, so a two-way communication between two entities within the group would require two subscriptions.&lt;br&gt;
 For this demonstration specifically, we want to set up a subscription from our thing which generates and publishes data locally to the Lambda function we created. The thing can be found under the &amp;lsquo;Devices&amp;rsquo; tab and the function under the &amp;lsquo;Lambdas&amp;rsquo; tab.&lt;br&gt;
 Clicking &amp;lsquo;Next&amp;rsquo; the first time will spawn a topic filter box. This is an optional filter we can specify to make data flows even more dynamic. I have given an example here, but it is not neccessary for the purposes of this demonstration. Click &amp;lsquo;Next&amp;rsquo; again and &amp;lsquo;Finish&amp;rsquo; to create the subscription.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_subscription_tolambda.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_subscription_tolambda.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We need one more subscription, namely the one telling Greengrass that we are publishing data from the Lambda function to the Cloud. We set up another subscription; this time setting the Lambda function as the source and &amp;lsquo;IoT Cloud&amp;rsquo; as the target. Again we can specify an optional filter.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_subscription_fromlambda.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_subscription_fromlambda.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Now all the pieces are in place. We are ready to deploy.&lt;/p&gt;
 &lt;h2 id=&#34;deploy-a-greengrass-group&#34;&gt;Deploy a Greengrass Group&lt;/h2&gt;
@@ -284,7 +284,7 @@ sudo ./greengrassd start
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Now we are ready to deploy. Fortunately it is very simple to deploy everything we have specified. From our group in the Greengrass console, we are always within sight of the &amp;lsquo;Action&amp;rsquo; dropdown menu which has a &amp;lsquo;Deploy&amp;rsquo; option that we will now click on and utilise. If all goes well the status of our device will go from &amp;lsquo;Is pending&amp;rsquo; to &amp;lsquo;In progress&amp;rsquo; to &amp;lsquo;Successfully completed&amp;rsquo;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=150 src=&#34;../iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=150 src=&#34;../../project/iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;h2 id=&#34;put-everything-together&#34;&gt;Put Everything Together&lt;/h2&gt;
 &lt;p&gt;To get the example for this section to work, we need to do a few things in the correct order.&lt;/p&gt;
@@ -301,13 +301,13 @@ sudo ./greengrassd start
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;And let us quickly look at whether it is working by going to the IoT test client. If we have done everythin correctly, we should not see any data published on the local topic from the sensor device. Rather, we should see data from the topic &lt;code&gt;republish/reading&lt;/code&gt; topic that we defined in the Lambda script. Let us see.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_test.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_test.png&#34; alt=&#34;iot setup&#34;&gt;
 	&lt;br&gt;
 &lt;/div&gt;
 &lt;p&gt;It is indeed working!&lt;br&gt;&lt;br&gt;
 Congratulations! You now know how to work with Greengrass and you have all the neccessary components to create your own Greengrass groups and create powerful IoTs with edges. However, if you are interested and want to know why we went through so much trouble to connect our device through Greengrass, I have another small example demonstrating the concept and power of &amp;lsquo;calculations on the edge&amp;rsquo;.&lt;/p&gt;
 &lt;h1 id=&#34;do-calculations-on-the-edge&#34;&gt;Do Calculations on the Edge&lt;/h1&gt;
-&lt;p&gt;Compared to &lt;a href=&#34;../../project/iot-poc-publishing/&#34;&gt;simple publishing&lt;/a&gt;, having a device publish its data through Greengrass might seem like a large unnecessary hassle. Indeed, sometimes it is, but as soon as our IoT starts to grow beyond a few devices, there will be headaches that are much more simple to solve when Greengrass and, in particular, Lambda is there.&lt;br&gt;
+&lt;p&gt;Compared to &lt;a href=&#34;../../post/iot-poc-publishing/&#34;&gt;simple publishing&lt;/a&gt;, having a device publish its data through Greengrass might seem like a large unnecessary hassle. Indeed, sometimes it is, but as soon as our IoT starts to grow beyond a few devices, there will be headaches that are much more simple to solve when Greengrass and, in particular, Lambda is there.&lt;br&gt;
 In this example, we will demonstrate the utility of the setup through a simple example. I placed the BME680 air quality sensor quite close to the CPU of my Pi, meaning that the temperature of the CPU will interfere with what I really want to measure; the temperature of the air. If we were to obtain the temperature of the CPU, we might be able to calcualte a compensated temperature that is more representative of the air temperature. A quick disclaimer before we begin: there are a plethora of ways to avoid or compensate for this particular problem, including extending the sensor away from the Pi or including the compensation logic in the feeder script, but for the sake of this example assume that we have no flexibility in terms of the hardware and are aiming for a high degree of flexibility and maintainability in the software we create.&lt;br&gt;&lt;br&gt;
 Specifically, we will create a Lambda function that performs the compensation for us. We will go for something simple like&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;compensated_temperature = 2 * temperature_reading - average_cpu_temperature
@@ -330,25 +330,25 @@ comp_temp = 2*input_temperature - avg_cpu_temp
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;That is really all there is to it, and this is all we need to add to the previous example. The &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_sys_lambda.py&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;full Lambda function example&lt;/a&gt; has a few extra frills such as error handing and logging. The next step is to define this Lambda function and associate it with the Greengrass group. We could create a new Lambda function, but I opted to update the Lambda function we created in the previous section. To do so, open the function in the Lambda console, insert the &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_sys_lambda.py&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;code&lt;/a&gt; and publish a new version. Then, from the &amp;lsquo;Version&amp;rsquo; dropdown menu, select the alias we created earlier.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img height=170 src=&#34;../iot-poc/images/lambda_new_alias.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img height=170 src=&#34;../../project/iot-poc/images/lambda_new_alias.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Scroll down a bit, find the &amp;lsquo;Alias configuration&amp;rsquo;, and point the alias to the version of the Lambda we just created. Click &amp;lsquo;Save&amp;rsquo; to save changes.&lt;br&gt;&lt;br&gt;
 Before we deploy, the Lambda will need some additional configuring. By default, any Lambda will timeout after 3 seconds, but ours will be running for at least 8 seconds to get an average CPU temperature. Furthermore, Lambda functions running in Greengrass to not have access to local resources under &lt;code&gt;/sys&lt;/code&gt;. We will need to change these defaults.&lt;br&gt;
 Go to the Greengrass console and select the group. Under the Lambda menu, click the three dots in the upper right of the Lambda function, we just modified and select &amp;lsquo;Edit configuration&amp;rsquo;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Set the timeout to 10 seconds and enable access to &lt;code&gt;/sys&lt;/code&gt;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configurations.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configurations.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;All that is left is to deploy the Greengrass group from the Greengrass console. The resulting output to the cloud should look exactly like before. This time around though, the temperature readings should look a bit more realistic.&lt;br&gt;&lt;br&gt;
 Congratulations! You are now doing calculations on the edge. It might not feel like much, but consider how we might have gone about solving the problem in other ways.&lt;br&gt;
 We could have published CPU temperature readings to the cloud and done the calcualtions using Lambda functions, SQL queries, or EC2 compute in the cloud. The cost of the additional storage and the cloud compute would make such a solution several times more expensive that what we just did.&lt;br&gt;
 We could have put the calculations directly in the feeder script. While this would cost slightly less than our solution, it increases the operational burden. Sensors and microcontrollers are generally less accessible, especially in a manufacturing context. With our solution, we can manage the calculations in the cloud from the comfort of our chair or even home. If we wanted to start recording the temperature in Kelvins, all we would have to do is add the calculation to our Lambda function and deploy the changes.&lt;br&gt;&lt;br&gt;
-This was a very simple example of edge calculations managed from the cloud. Greengrass is, however, capable of handling much more complex setups than what we just built. Specifically, it is even possible to deploy machine learning models that are trained in the cloud onto the edge. These advanced features of Greengrass are the subject of the &lt;a href=&#34;../../project/iot-poc-greengrass_ml/&#34; title=&#34;Advanced features of Greengrass demo&#34;&gt;next demonstration&lt;/a&gt;.&lt;/p&gt;
+This was a very simple example of edge calculations managed from the cloud. Greengrass is, however, capable of handling much more complex setups than what we just built. Specifically, it is even possible to deploy machine learning models that are trained in the cloud onto the edge. These advanced features of Greengrass are the subject of the &lt;a href=&#34;../../post/iot-poc-greengrass_ml/&#34; title=&#34;Advanced features of Greengrass demo&#34;&gt;next demonstration&lt;/a&gt;.&lt;/p&gt;
 &lt;h1 id=&#34;in-production&#34;&gt;In Production&lt;/h1&gt;
-&lt;p&gt;This section is not part of the demonstration as such. It is but a short discussion of some of the considerations we have to take when bringing Greengrass to production in a manufacturing environment and how to improve upon the examples to make them production ready. Considerations from &lt;a href=&#34;../../project/iot-poc-publishing/#in-production&#34;&gt;previous demonstrations&lt;/a&gt; still apply.&lt;/p&gt;
+&lt;p&gt;This section is not part of the demonstration as such. It is but a short discussion of some of the considerations we have to take when bringing Greengrass to production in a manufacturing environment and how to improve upon the examples to make them production ready. Considerations from &lt;a href=&#34;../../post/iot-poc-publishing/#in-production&#34;&gt;previous demonstrations&lt;/a&gt; still apply.&lt;/p&gt;
 &lt;h2 id=&#34;default-vs-custom-core-config&#34;&gt;Default vs Custom Core Config&lt;/h2&gt;
 &lt;p&gt;Note that in the demonstration we just went for the default options when setting up the Greengrass core. This creates a new ploicy for the certificate attached to the core. The policy is extremely permissive and, while it works great for demonstration purposes, it might not be what we want in a production setting.&lt;br&gt;
 The great thing about Greengrass is that we can define aggregations and handle the diversity of incoming data at the edge and then only publish to a set of neatly organised topics to the cloud. This means that we can manage a diverse set of topics and devices at the edge but still have a very restrictive policy for communication with the cloud.&lt;/p&gt;
@@ -456,7 +456,7 @@ In IoT terms the sensor is the &amp;lsquo;Thing&amp;rsquo; or &amp;lsquo;Device&
 &lt;h2 id=&#34;1-publish-industrial-data-with-aws-iot&#34;&gt;1) Publish Industrial Data with AWS IoT&lt;/h2&gt;
 &lt;p&gt;The simplest way to do IoT with AWS. We will register our sensor as a thing in AWS IoT Core and will be using the AWS IoT Python SDK to publish sensor readings to a topic. We go through concepts such as things, topics, MQTT, and more.&lt;br&gt;
 In this case, the Raspberry Pi is simply simulating a microcontroller that will query the sensor and publish the result.&lt;br&gt;&lt;br&gt;
-&lt;a href=&#34;../../project/iot-poc-publishing/&#34; title=&#34;simple publishing case&#34;&gt;Get started here&lt;/a&gt;.
+&lt;a href=&#34;../../post/iot-poc-publishing/&#34; title=&#34;simple publishing case&#34;&gt;Get started here&lt;/a&gt;.
 Here is the full &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_publishing.py&#34; title=&#34;simple publishing example&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example script&lt;/a&gt;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
 	&lt;img width=&#34;500&#34; src=&#34;images/publishing_architecture.png&#34; alt=&#34;IoT overview&#34;&gt;
@@ -466,7 +466,7 @@ Here is the full &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/e
 &lt;h2 id=&#34;2-publish-and-subscribe&#34;&gt;2) Publish and Subscribe&lt;/h2&gt;
 &lt;p&gt;In this case, we build upon the previous case and will construct a setup where our device will not just send data but also respond to messages sent to it.&lt;br&gt;
 The Raspberry Pi is still just simulating a microcontroller, but we start to see how having compute at the edge is useful and can be managed with AWS IoT.&lt;br&gt;&lt;br&gt;
-&lt;a href=&#34;pubsub&#34; title=&#34;simple pub/sub case&#34;&gt;Get started here&lt;/a&gt;. Here is the full &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_pubsub.py&#34; title=&#34;simple pubsub example&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example script&lt;/a&gt;.&lt;/p&gt;
+&lt;a href=&#34;../../post/iot-poc-pubsub&#34; title=&#34;simple pub/sub case&#34;&gt;Get started here&lt;/a&gt;. Here is the full &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_pubsub.py&#34; title=&#34;simple pubsub example&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example script&lt;/a&gt;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
 	&lt;img width=&#34;500&#34; src=&#34;images/pubsub_architecture.png&#34; alt=&#34;pubsub overview&#34;&gt;
   &lt;br&gt;
@@ -475,7 +475,7 @@ The Raspberry Pi is still just simulating a microcontroller, but we start to see
 &lt;h2 id=&#34;3-utilise-thing-shadows&#34;&gt;3) Utilise Thing Shadows&lt;/h2&gt;
 &lt;p&gt;Using the Thing Shadow feature of AWS IoT, we will create a twin/shadow of our device in the cloud and update it whenever a new reading is available. We could use this cool feature to build a digital twin of our process.&lt;br&gt;
 The Raspberry Pi is still simulating a microcontroller that will query the sensor, but instead of just publishing the result, it will update the Shadow document of the thing, our sensor.&lt;br&gt;&lt;br&gt;
-&lt;a href=&#34;../../project/iot-poc/shadow/&#34; title=&#34;Shadow case&#34;&gt;Get started here&lt;/a&gt;. Here is the full &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/shadow.py&#34; title=&#34;shadow example&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example script&lt;/a&gt;.&lt;/p&gt;
+&lt;a href=&#34;../../post/iot-poc-shadow/&#34; title=&#34;Shadow case&#34;&gt;Get started here&lt;/a&gt;. Here is the full &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/shadow.py&#34; title=&#34;shadow example&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example script&lt;/a&gt;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
 	&lt;img width=500 src=&#34;images/shadow_architecture.png&#34; alt=&#34;iot setup&#34;&gt;
 	&lt;br&gt;
@@ -483,7 +483,7 @@ The Raspberry Pi is still simulating a microcontroller that will query the senso
 &lt;/div&gt;
 &lt;h2 id=&#34;4-build-an-edge-with-greengrass&#34;&gt;4) Build an Edge with Greengrass&lt;/h2&gt;
 &lt;p&gt;Now our Pi will act the part of gateway device. The gateway device effectively represents an edge that is manageable from the cloud and where data transformations or calculations can happen. This could be signal processing, edge analytics, or even machine learning models. Greengrass is the AWS software offering for gateway devices. In this demonstration, we will set up Greengrass on the Pi, connect a thing, our sensor, to Greengrass, and deploy a calculation from the cloud to the edge using a Lambda function.&lt;br&gt;&lt;br&gt;
-&lt;a href=&#34;greengrass&#34; title=&#34;Greengrass case&#34;&gt;Get started here&lt;/a&gt;. Here is the full &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py&#34; title=&#34;Example of Thing for Greengrass&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example script for a local device&lt;/a&gt; and the &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_sys_lambda.py&#34; title=&#34;Lambda example&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Lambda function&lt;/a&gt; we will deploy into Greengrass Core.&lt;/p&gt;
+&lt;a href=&#34;../../post/iot-poc-greengrass&#34; title=&#34;Greengrass case&#34;&gt;Get started here&lt;/a&gt;. Here is the full &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py&#34; title=&#34;Example of Thing for Greengrass&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example script for a local device&lt;/a&gt; and the &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_sys_lambda.py&#34; title=&#34;Lambda example&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Lambda function&lt;/a&gt; we will deploy into Greengrass Core.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
 	&lt;img width=500 src=&#34;images/greengrass_group_architecture.png&#34; alt=&#34;iot setup&#34;&gt;
     &lt;br&gt;
@@ -492,7 +492,7 @@ The Raspberry Pi is still simulating a microcontroller that will query the senso
 &lt;/div&gt;
 &lt;h2 id=&#34;5-advanced-greengrass-features&#34;&gt;5) Advanced Greengrass Features&lt;/h2&gt;
 &lt;p&gt;In this final demonstration, we will combine everything from the previous demonstrations to deploy a machine learning model from the cloud into Greengrass and do inference at the edge. This requires us to explore additional advanced features and configurations of Greengrass, but shows how, with a few means and a bit of engineering, we can achieve quite complex functionality.&lt;br&gt;&lt;br&gt;
-&lt;a href=&#34;greengrass_ml&#34; title=&#34;Advanced Greengrass case&#34;&gt;Get started here&lt;/a&gt;. This demonstration uses the same &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py&#34; title=&#34;Example of Thing for Greengrass&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example script for a local device&lt;/a&gt; as the previous but has two new examples of Lambda functions, &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/ml_inference_lambda.py&#34; title=&#34;ML inference Lambda&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;including one&lt;/a&gt; doing machine learning inference.&lt;/p&gt;
+&lt;a href=&#34;../../post/iot-poc-greengrass-ml&#34; title=&#34;Advanced Greengrass case&#34;&gt;Get started here&lt;/a&gt;. This demonstration uses the same &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py&#34; title=&#34;Example of Thing for Greengrass&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;example script for a local device&lt;/a&gt; as the previous but has two new examples of Lambda functions, &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/ml_inference_lambda.py&#34; title=&#34;ML inference Lambda&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;including one&lt;/a&gt; doing machine learning inference.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
 	&lt;img width=500 src=&#34;images/greengrass_ml_architecture.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
 	&lt;br&gt;
@@ -552,9 +552,9 @@ The topic system is quite flexible and we will have to rely on our own rigid nam
     
     <item>
       <title>Machine Learning at the Edge and other Advanced Features of Greengrass</title>
-      <link>/project/iot-poc-greengrass-ml/</link>
+      <link>/post/iot-poc-greengrass-ml/</link>
       <pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/project/iot-poc-greengrass-ml/</guid>
+      <guid>/post/iot-poc-greengrass-ml/</guid>
       <description>&lt;p&gt;We are about to build something really cool. Machine learning inference managed from the cloud but performed at the edge might sound like a sequence of flimsy business colloquialisms and to some extent they might be. In this demonstration, however, we will dive into the actual technical substance behind these terms.&lt;br&gt;
 Specifically, we will discuss and apply advanced features of AWS Greengrass, including&lt;/p&gt;
 &lt;ul&gt;
@@ -567,24 +567,24 @@ Specifically, we will discuss and apply advanced features of AWS Greengrass, inc
 &lt;li&gt;The Greengrass service role&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;The target of the demonstration is to build a small IoT application that predicts whether it is raining or not, given the current temperature, relative humidity, and pressure. The weather data comes from our BME680 air quality sensor, and our Raspberry Pi 3B+ will play the role of gateway device but also runs the code querying the sensor.&lt;br&gt;
-We will be utilising expertise from the previous demonstrations of &lt;a href=&#34;../../project/iot-poc-publishing/&#34;&gt;publishing&lt;/a&gt;, &lt;a href=&#34;../../project/iot-poc-pubsub/&#34;&gt;subscribing&lt;/a&gt;, &lt;a href=&#34;../../project/iot-poc-shadow/&#34;&gt;Shadows&lt;/a&gt;, and &lt;a href=&#34;../../project/iot-poc-greengrass/&#34;&gt;general Greengrass features&lt;/a&gt;.&lt;br&gt;&lt;/p&gt;
+We will be utilising expertise from the previous demonstrations of &lt;a href=&#34;../../post/iot-poc-publishing/&#34;&gt;publishing&lt;/a&gt;, &lt;a href=&#34;../../post/iot-poc-pubsub/&#34;&gt;subscribing&lt;/a&gt;, &lt;a href=&#34;../../post/iot-poc-shadow/&#34;&gt;Shadows&lt;/a&gt;, and &lt;a href=&#34;../../post/iot-poc-greengrass/&#34;&gt;general Greengrass features&lt;/a&gt;.&lt;br&gt;&lt;/p&gt;
 &lt;h1 id=&#34;set-up&#34;&gt;Set Up&lt;/h1&gt;
 &lt;p&gt;To build the target demonstration, we will walk through three parts. First we will set up a local Shadow within our Greengrass group and use obtained sensor values to contiuously update the Shadow. Then we will enable synchronisation between the local Shadow and a cloud copy of the Shadow. Last, but not least, we will set up inference with a Tensorflow2 machine learning model.&lt;br&gt;
-We will not cover installing and setting up Greengrass Group with a device, as this was covered in the &lt;a href=&#34;../../project/iot-poc-greengrass/#install-and-configure-greengrass&#34;&gt;general introduction to Greengrass&lt;/a&gt;. Be sure to refer to previous demonstrations when in doubt.&lt;br&gt;&lt;/p&gt;
+We will not cover installing and setting up Greengrass Group with a device, as this was covered in the &lt;a href=&#34;../../post/iot-poc-greengrass/#install-and-configure-greengrass&#34;&gt;general introduction to Greengrass&lt;/a&gt;. Be sure to refer to previous demonstrations when in doubt.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_architecture.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_architecture.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
     This is the overall architechture of the application we will build in this demonstration.
 &lt;/div&gt;
 &lt;p&gt;Let us get started!&lt;/p&gt;
 &lt;h1 id=&#34;publish-to-local-shadow&#34;&gt;Publish to Local Shadow&lt;/h1&gt;
 &lt;p&gt;In this section, we will set up a local Shadow and build a Lambda function that takes values published by our sensor and updates the Shadow.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_architecture_repub.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_architecture_repub.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
 	&lt;br&gt;
     This is the part of the architecture we will build in this section.
 &lt;/div&gt;
 &lt;h2 id=&#34;prepare-the-thing&#34;&gt;Prepare the Thing&lt;/h2&gt;
-&lt;p&gt;We &lt;a href=&#34;../../project/iot-poc-greengrass/#associate-a-thing-with-a-greengrass-group&#34;&gt;register and add&lt;/a&gt; our Thing, the sensor, to our Greengrass group.&lt;br&gt;
+&lt;p&gt;We &lt;a href=&#34;../../post/iot-poc-greengrass/#associate-a-thing-with-a-greengrass-group&#34;&gt;register and add&lt;/a&gt; our Thing, the sensor, to our Greengrass group.&lt;br&gt;
 We already have a &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_thing.py&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;script&lt;/a&gt; that connects our Thing and publishes readings to our Greengrass Group on a local topic. There is no need to modify it in any way. We will just leave it running, continuously publishing values to a local topic. I went with the topic &lt;code&gt;bme680/readings&lt;/code&gt; but any topic goes.&lt;/p&gt;
 &lt;h2 id=&#34;the-local-shadow-service&#34;&gt;The Local Shadow Service&lt;/h2&gt;
 &lt;p&gt;Any Thing we include in our Greengrass Group lives only inside the Group and only connects to the cloud when first discovering the Group. This is great for reducing the number of devices connected to the cloud, but it also means that we cannot directly take advantage of the Shadow that is in the cloud.&lt;br&gt;
@@ -602,9 +602,9 @@ message[&amp;quot;state&amp;quot;] = { &amp;quot;reported&amp;quot; : {&amp;quot
 client.publish(&#39;$aws/things/my_sensor/shadow/update&#39;, json.dumps(message))
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The message goes to whichever MQTT server the client is connected to. Since we are connected to Greengrass Core and not AWS IoT, the message never reaches the cloud. So even though the topic is exactly the same as if we were updating the cloud based Shadow, the cloud based Shadow is not updated.&lt;br&gt;
-As a matter of fact, the message also does not reach the local Shadow. At least not yet. Since we are working with local topics, we need to &lt;a href=&#34;../../project/iot-poc-greengrass/#configure-subscriptions-in-greengrass&#34;&gt;set up subscriptions&lt;/a&gt; and deploy them to the Group before any messages are relayed.&lt;/p&gt;
+As a matter of fact, the message also does not reach the local Shadow. At least not yet. Since we are working with local topics, we need to &lt;a href=&#34;../../post/iot-poc-greengrass/#configure-subscriptions-in-greengrass&#34;&gt;set up subscriptions&lt;/a&gt; and deploy them to the Group before any messages are relayed.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_subscription_toshadow.png&#34; alt=&#34;Subscription with local Shadow&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_subscription_toshadow.png&#34; alt=&#34;Subscription with local Shadow&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;This is how it could look, but since there is a much easier way, this is not how we will do it.&lt;/p&gt;
 &lt;h2 id=&#34;republish-to-shadow&#34;&gt;Republish to Shadow&lt;/h2&gt;
@@ -638,12 +638,12 @@ THING_NAME = os.environ(&#39;THING_NAME&#39;)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The last step we need is to actually provide the environment variable to the instance of our Lambda function in the Greengrass Group. We do this by locating our Greengrass Group in the console and configure the Lambda in question.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;Configure Greengrass Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;Configure Greengrass Lambda&#34;&gt;
 	Note that the name of your Greengrass Group and Lambdas may be different
 &lt;/div&gt;
 &lt;p&gt;At the bottom of the configuration options, we find a set of fields where we can provide key value pairs, and we just go ahead and provide ours.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_environment_variable.png&#34; alt=&#34;Environment variable&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_environment_variable.png&#34; alt=&#34;Environment variable&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Now, when we deploy the Lambda function, the environment variable will be available for use. This means that if we have multiple sensors we we can use the same Lambda Alias to create multiple Lambda functions deployed to the Greengrass Group serving their exact device. Less code and less work for us.&lt;/p&gt;
 &lt;h3 id=&#34;build-the-republishing-lambda-function&#34;&gt;Build the republishing Lambda function&lt;/h3&gt;
@@ -709,58 +709,58 @@ def function_handler(event, context):
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The full example script can also be found &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/greengrass_repub_lambda.py&#34; title=&#34;Lambda for publishing to Shadow&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;. We now need to pack this script in a zip file along with the Greengrass SDK, so we can create a Lambda function. We create the Lambda function and upload the zip file&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/lambda_repub.png&#34; alt=&#34;Repub Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/lambda_repub.png&#34; alt=&#34;Repub Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We then create an alias, navigate to the Greengrass console and associate the Lambda function with our Greengrass Group using the alias.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_add.png&#34; alt=&#34;Repub Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_add.png&#34; alt=&#34;Repub Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_add_existing.png&#34; alt=&#34;Repub Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_add_existing.png&#34; alt=&#34;Repub Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We then cofigure the Lambda function. We need to increase the timeout limit to at least 10 seconds, we need to enable access to &lt;code&gt;/sys&lt;/code&gt; so it can get the CPU temperature of the Pi, and we should provide the environment variable as discussed above.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;Configure Greengrass Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configure.png&#34; alt=&#34;Configure Greengrass Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configurations_repub.png&#34; alt=&#34;Configure repub Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configurations_repub.png&#34; alt=&#34;Configure repub Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;That is it for the Lambda function.&lt;/p&gt;
 &lt;h2 id=&#34;subscriptions&#34;&gt;Subscriptions&lt;/h2&gt;
 &lt;p&gt;We only need one subsription, one going from our device to the Lambda we just created.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_subscription_repub_shadow.png&#34; alt=&#34;Repub to Shadow subscription&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_subscription_repub_shadow.png&#34; alt=&#34;Repub to Shadow subscription&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;That is it for the first part. Once we deploy, We have a Thing publishing sensor readings, they are transformed and used to update the local Shadow. Right now there is not much to see though, as we have done nothing to make use of or even visualise the local Shadow. We will get there soon though.&lt;/p&gt;
 &lt;h1 id=&#34;setup-shadow-synchronisation&#34;&gt;Setup Shadow Synchronisation&lt;/h1&gt;
 &lt;p&gt;In this section, we will set up Shadow synchronisation between the local Shadow and the Shadow of our device in the cloud.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_architecture_sync.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_architecture_sync.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
     This is the part of the architecture we will build in this section.
 &lt;/div&gt;
 &lt;p&gt;Synchronising the Shadow just means that the local Shadow service will send regular updates to the cloud based Shadow such that the status quo is reflected there as well. We would usually do this to support an application running in the cloud, but in this case we are doing it mostly for show.&lt;br&gt;
 It is important to note that the synchronisation works both ways. Updates that are done to the local Shadow will eventually be reflected in the cloud based Shadow and vice versa. We will not have anything directly updating the cloud Shadow in this case, however.&lt;br&gt;
 Setting up synchronisation is actually fairly straight forward. We navigate to our Greengrass group and find the Device page. Next to the Device we added earlier it should be saing &amp;lsquo;Local Shadow Only&amp;rsquo;. All we have to do is to expand the options for that Device by clicking the three dots and selecting Enable Shadow Synchronisation.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_sync_enable.png&#34; alt=&#34;Local to Cloud Shadow Sync&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_sync_enable.png&#34; alt=&#34;Local to Cloud Shadow Sync&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Now we deploy the change.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img src=&#34;../iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img src=&#34;../../project/iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We can test whether it works by navigating to the page of the particular Device and going to its Shadow tab. If everything we did in the previous section works and the Shadow synchronisation works, we should see that the Shadow gets updated.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_sync_working.png&#34; alt=&#34;Shadow sync working&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_sync_working.png&#34; alt=&#34;Shadow sync working&#34;&gt;
 &lt;/div&gt;
 &lt;h1 id=&#34;machine-learning-inference-at-the-edge&#34;&gt;Machine Learning Inference at the Edge&lt;/h1&gt;
 &lt;p&gt;In this section, we will deploy a machine learning model into the Greengrass group and have it do inference based on the data coming from our Device.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_architecture_inference.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_architecture_inference.png&#34; alt=&#34;Greengrass ML Demo Architechture&#34;&gt;
     This is the part of the architecture we will build in this section.
 &lt;/div&gt;
 &lt;p&gt;Specifically, we are going to create a Lambda function that loads a machine learning pipeline consisting of a model that transforms the data into features that are then evaluted in a neural network based model. We will get the data from the local Shadow such that the inference does not rely on live data and inference is effectively decoupled from the data stream.&lt;/p&gt;
 &lt;h2 id=&#34;prepare-the-gateway-device&#34;&gt;Prepare the Gateway Device&lt;/h2&gt;
-&lt;p&gt;In order for Greengrass Core to run Lambda functions it needs access to runtimes on the Gateway Device where it runs. When we set up Greengrass Core, we &lt;a href=&#34;../../project/iot-poc-greengrass/#install-and-configure-greengrass&#34;&gt;verified&lt;/a&gt; that our desired runtime, Python 3.7, was indeed present on the Device, our Pi, and accessible to Greengrass Core. Our approach to the use of additional libraries has been to include them in the Lambda deployment package. For instance, we included the Greengrass SDK with the Lambda function we created above.&lt;br&gt;
+&lt;p&gt;In order for Greengrass Core to run Lambda functions it needs access to runtimes on the Gateway Device where it runs. When we set up Greengrass Core, we &lt;a href=&#34;../../post/iot-poc-greengrass/#install-and-configure-greengrass&#34;&gt;verified&lt;/a&gt; that our desired runtime, Python 3.7, was indeed present on the Device, our Pi, and accessible to Greengrass Core. Our approach to the use of additional libraries has been to include them in the Lambda deployment package. For instance, we included the Greengrass SDK with the Lambda function we created above.&lt;br&gt;
 Machine learning frameworks like Tensorflow or MXNET are not just libraries but rely on their own runtimes. This means that using such frameworks with Greengrass is slightly more complicated, as we cannot just include the library with the Lambda. Lambdas running in a Greengrass Group can, however, utilise machine learning runtimes if they are installed and available. In fact any library can be used in a Lambda function without including it in the deployment package, as long as it is installed in a shared location on the device.&lt;br&gt;
 For this case we are going to use Tensorflow2 to do inference, but Greengrass does support &lt;a href=&#34;https://docs.aws.amazon.com/greengrass/latest/developerguide/ml-inference.html&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;other options&lt;/a&gt;.&lt;/p&gt;
 &lt;h3 id=&#34;install-tensorflow&#34;&gt;Install Tensorflow&lt;/h3&gt;
@@ -782,7 +782,7 @@ We will use these two models as examples of doing machine learning inference.&lt
 However, Greengrass is a seperate service and needs permission to access other services. We already had Greengrass access Lambda to fetch deployment packages and that worked smoothly, but we will have to understand why before we can ensure the same for S3.&lt;br&gt;&lt;br&gt;
 Greengrass has a service role that determines what other services and actions it has permissions to use. The service role can be found in the AWS IoT console under the Settings tab where we also find our custom endpoint. Somewhere in the list of settings is the Greengrass service role.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_iot_settings_greengrassrole.png&#34; alt=&#34;Greengrass service role&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_iot_settings_greengrassrole.png&#34; alt=&#34;Greengrass service role&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Per default, the policy attached to Greengrass is the managed policy &lt;code&gt;AWSGreengrassResourceAccessRolePolicy&lt;/code&gt;. At the time of writing, &lt;a href=&#34;https://console.aws.amazon.com/iam/home?region=eu-west-1#/policies/arn:aws:iam::aws:policy/service-role/AWSGreengrassResourceAccessRolePolicy&#34; title=&#34;GG Service managed policy&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;the policy&lt;/a&gt; is at version 5 and, among other things, it contains these actions:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
@@ -828,19 +828,19 @@ Greengrass has a service role that determines what other services and actions it
 This gives us a choice when storing our machine learning resources: we can either create a new service policy that allows Greengrass to access S3 objects in a format we specify, or we can comply with the constraints of the default policy and name our resources accordingly. The former might not be a good idea because replacing the policy with one we specify means forgoing the benefits of using a managed policy. So we will do the latter and create a bucket with a name containing the string &lt;code&gt;greengrass&lt;/code&gt; and put our machine learning resources in there.&lt;br&gt;&lt;br&gt;
 A machine learning resource must be zipped, so we will zip the contents of the two SavedModel folders and put them in the S3 bucket. I have &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/ml_resources/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;included&lt;/a&gt; the zipped models in the project repo as well.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_s3_resource.png&#34; alt=&#34;ML Resources in a bucket&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_s3_resource.png&#34; alt=&#34;ML Resources in a bucket&#34;&gt;
 	Machine learning resources in an S3 bucket.
 &lt;/div&gt;
 &lt;p&gt;Greengrass will unzip the contents when deploying into the Group. Now we just need to tell Greengrass where the resources are and where to put them.&lt;/p&gt;
 &lt;h3 id=&#34;create-machine-learning-resources-in-greengrass&#34;&gt;Create machine learning resources in Greengrass&lt;/h3&gt;
 &lt;p&gt;Now we are ready to configure machine learning resources in Greengrass. To do so, we locate our Greengrass Group in the console and navigate to the Resources page and the Machine Learning tab. We click the &amp;lsquo;Add machine learning resource&amp;rsquo; button.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_add_resource.png&#34; alt=&#34;Add ML Resource&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_add_resource.png&#34; alt=&#34;Add ML Resource&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Let us start by creating a resource for the standardiser model. First we will give the resouce a name. I went for &lt;code&gt;standardiser&lt;/code&gt; but anything goes. Next, we will need to point to the resource in our S3 bucket. Under &amp;lsquo;Model source&amp;rsquo; we choose &amp;lsquo;Upload a model in S3&amp;rsquo;, select the bucket we just created, and then select the zipped standardiser model. Finally, we will specify a local path on which to keep the unzipped model. Greengrass will create this path on our Core Device and it will be available to the Lambda functions that this machine learning resource is attached to. Any path works, but remember it, as we will need it when we create the inference Lambda function. I went with &lt;code&gt;/ggml/tensorflow/standardiser&lt;/code&gt;.&lt;br&gt;
 We have not created the Lambda function yet, so we cannot attach the resource just yet. We Will have a chance to do so later, though. Click Save to create the resource.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_ml_create_resource.png&#34; alt=&#34;Add ML Resource&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_ml_create_resource.png&#34; alt=&#34;Add ML Resource&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;This created the ML resource for the standardiser. We will need to repeat the process to create a resource for the neural network model, which I named &lt;code&gt;rain_predictor&lt;/code&gt; and stored at &lt;code&gt;/ggml/tensorflow/rain_predictor&lt;/code&gt;.&lt;/p&gt;
 &lt;h2 id=&#34;inference-lambda&#34;&gt;Inference Lambda&lt;/h2&gt;
@@ -978,21 +978,21 @@ def function_handler(event, context):
 &lt;p&gt;The script can also be found &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/ml_inference_lambda.py&#34; title=&#34;Inference Lambda script&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;.&lt;br&gt;&lt;br&gt;
 We zip this script along with the Greengrass SDK and create a deployment package.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/lambda_ggml_inference.png&#34; alt=&#34;Inference Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/lambda_ggml_inference.png&#34; alt=&#34;Inference Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We then create an alias, go to the Greengrass console, and add the Lambda function to our Group.&lt;/p&gt;
 &lt;h3 id=&#34;attach-machine-learning-resources&#34;&gt;Attach machine learning resources&lt;/h3&gt;
 &lt;p&gt;Now we can finally attach the machine learning resources to our Lambda function. We navigate to our Greengrass Group and under the Lambdas tab select our inference Lambda. Under the Resources tab, we select the option to &amp;lsquo;Add machine learning resource&amp;rsquo;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_resources_add.png&#34; alt=&#34;Attach ML resources&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_resources_add.png&#34; alt=&#34;Attach ML resources&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Since we have already created the resources, we select the option to &amp;lsquo;Attach an existing machine learning resource&amp;rsquo;.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_resources_existing.png&#34; alt=&#34;Attach ML resources&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_resources_existing.png&#34; alt=&#34;Attach ML resources&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We select either of the two resources, click &amp;lsquo;Save&amp;rsquo;, and repeat the the process for the other resource.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_resources.png&#34; alt=&#34;Attach ML resources&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_resources.png&#34; alt=&#34;Attach ML resources&#34;&gt;
 &lt;/div&gt;
 &lt;h3 id=&#34;configure-the-lambda&#34;&gt;Configure the Lambda&lt;/h3&gt;
 &lt;p&gt;Our inference Lambda is almost done, we just need to configure it properly. All Lambda functions we have used with Greengrass so far have been on-demand functions that were spawned in response to an MQTT message. This inference Lambda is a bit different. Instead of waiting to process an input on-demand, we want this function run on on a fixed schedule, which we implemented by having the inference code repeat every 10 seconds. In fact, we do not want the Lambda to respnd to any events at all and consequently left the &lt;code&gt;function_handler&lt;/code&gt; empty.&lt;/p&gt;
@@ -1003,7 +1003,7 @@ def function_handler(event, context):
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Once the Lambda is deployed to our Greengrass Group, we just want it to run forever in the infinite loop we created. This is called a long-lived Lambda, and we can choose this option on the configuration page of the Lambda in the Greengrass Group. While we are in there, we will also give the Lambda a longer timeout and some more memory. Our ML model is small, but ML models are often large and require much more memory.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/greengrass_lambda_configurations_longlived.png&#34; alt=&#34;Config long-lived Lambda&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/greengrass_lambda_configurations_longlived.png&#34; alt=&#34;Config long-lived Lambda&#34;&gt;
 &lt;/div&gt;
 &lt;h1 id=&#34;deploy-and-verify&#34;&gt;Deploy and Verify&lt;/h1&gt;
 &lt;p&gt;That is it; everything is in place for doing machine learning inference at the edge.&lt;br&gt;
@@ -1012,12 +1012,12 @@ First let us ensure that Greengrass is running using:&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Then we deploy everything we have created.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img src=&#34;../iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img src=&#34;../../project/iot-poc/images/greengrass_deploy.png&#34; alt=&#34;iot setup&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Finally, we make sure that the Thing is online and is publishing values from our sensor.&lt;br&gt;&lt;br&gt;
 Now, if everything works is right, we should be doing inference at the edge. We should be predicting whether it is raining or not and publishing the result to the local Shadow. Since the local Shadow is being synchronised with the cloud based Shadow, we should be able to see the predictions if we go to the Shadow page of our Thing.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_mlpred.png&#34; alt=&#34;Shadow with prediction&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_mlpred.png&#34; alt=&#34;Shadow with prediction&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;And there it is! It is a sunny day, so the prediction was right this time, but do not expect it to be very precise. Instead bask in the glory of accomplishment and enjoy the fact that you now know how to manage machine learning models in the cloud and do inference on the edge. Congratulations!&lt;/p&gt;
 &lt;h1 id=&#34;in-production&#34;&gt;In Production&lt;/h1&gt;
@@ -1056,10 +1056,10 @@ The point is that, even though AWS IoT prices are reasonable and transparent, th
     
     <item>
       <title>Publishing and Subscribing with AWS IoT</title>
-      <link>/project/iot-poc-pubsub/</link>
+      <link>/post/iot-poc-pubsub/</link>
       <pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/project/iot-poc-pubsub/</guid>
-      <description>&lt;p&gt;In this demonstration, we will add upon the &lt;a href=&#34;../../project/iot-poc-publishing/&#34; title=&#34;simple publishing&#34;&gt;previous&lt;/a&gt;, by having our gateway device, the Raspberry Pi, subscribe to messages on a topic.&lt;br&gt;&lt;br&gt;
+      <guid>/post/iot-poc-pubsub/</guid>
+      <description>&lt;p&gt;In this demonstration, we will add upon the &lt;a href=&#34;../../post/iot-poc-publishing/&#34; title=&#34;simple publishing&#34;&gt;previous&lt;/a&gt;, by having our gateway device, the Raspberry Pi, subscribe to messages on a topic.&lt;br&gt;&lt;br&gt;
 With publishing, the information flow is from the device to AWS IoT, but with subscribing, the flow is reversed to be from AWS IoT to the client we configure for our device. Applications are obvious candidates for subscribers to messages but, as we will see, the ability to subscribe is extremely useful for structuring and managing devices remotely.&lt;br&gt;&lt;br&gt;
 In general terms, we want our device to do the following&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;prepare the sensor
@@ -1074,14 +1074,14 @@ while true
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;For the demonstration, are once again using the Bosch BME680 air quality sensor connected to a Raspberry Pi 3 model B+. The BME680 does four different measurements, and we will utilise the temperature, pressure, and humidity sensing capabilities. The Pi is just there to query the sensor and run the AWS IoT SDK. It essentially plays the part of a microcontroller, and so anything we accomplish here can be done with a microcontroller or any other compute device. In the final section of this demonstration, we will discuss some of the additional considerations for a similar setup in an actual industrial setting.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=&#34;500&#34; src=&#34;../iot-poc/images/pubsub_architecture.png&#34; alt=&#34;pubsub overview&#34;&gt;
+	&lt;img width=&#34;500&#34; src=&#34;../../project/iot-poc/images/pubsub_architecture.png&#34; alt=&#34;pubsub overview&#34;&gt;
   &lt;br&gt;
   Schematic of the architecture we are building in this demonstration. Note the two-way communication between IoT Core and our thing.
 &lt;/div&gt;
 &lt;br&gt;
-&lt;p&gt;Connecting to AWS IoT and publishing messages were covered in the &lt;a href=&#34;../../project/iot-poc-publishing/&#34;&gt;previous&lt;/a&gt; demonstration. In this demonstration, we focus on subscribing to messages and combining publishing and subscribing within one client.&lt;/p&gt;
+&lt;p&gt;Connecting to AWS IoT and publishing messages were covered in the &lt;a href=&#34;../../post/iot-poc-publishing/&#34;&gt;previous&lt;/a&gt; demonstration. In this demonstration, we focus on subscribing to messages and combining publishing and subscribing within one client.&lt;/p&gt;
 &lt;h1 id=&#34;registering-the-sensor-in-iot-core&#34;&gt;Registering the Sensor in IoT Core&lt;/h1&gt;
-&lt;p&gt;Just as it is the case with publishing, we need to register the device that will subscribe to messages. We can use the same thing and certificate as in the &lt;a href=&#34;../../project/iot-poc-publishing/#registering-the-sensor-in-iot-core&#34;&gt;previous demonstration&lt;/a&gt;, but we need to change the policy to allow subscription through using that certificate.
+&lt;p&gt;Just as it is the case with publishing, we need to register the device that will subscribe to messages. We can use the same thing and certificate as in the &lt;a href=&#34;../../post/iot-poc-publishing/#registering-the-sensor-in-iot-core&#34;&gt;previous demonstration&lt;/a&gt;, but we need to change the policy to allow subscription through using that certificate.
 For subscription to work, we need to add two additional statements to the policy. We need to allow &lt;code&gt;iot:Subscribe&lt;/code&gt; to a topic filter and allow &lt;code&gt;iot:Receive&lt;/code&gt; for a specific topic. The distinction between topic and topic filter can seem nebulous, but imagine a manufacturing line with hundreds of sensors publishing to topics with the prefix &lt;code&gt;factoryA/line22&lt;/code&gt;. Then we might create a policy that allows subscription to all the topics &lt;code&gt;factoryA/line22/*&lt;/code&gt;, where the asterisk is a wildcard, and policies that allow receiving of messages to specific topics such as &lt;code&gt;factoryA/line22/milling/torque&lt;/code&gt;.
 Here is an example of such a policy document that allows subscription and receiving to a single topic.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
@@ -1135,7 +1135,7 @@ Here is an example of such a policy document that allows subscription and receiv
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;AWSIoTMQTTClient.subscribe(topic, 1, callback_function)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The first argument is the topic to listen to. Note that the certificate provided to the client must have a policy that allows subscription to that specific topic.&lt;br&gt;
-The second argument is the Quality of Service, &lt;a href=&#34;../../project/iot-poc-publishing/#quality-of-service-qos&#34;&gt;just as for publishing&lt;/a&gt;, 0 means that the message is delivered at most once and 1 means at least once. Remember that now the roles are reversed, and the client we are configuring is the one that will receive the message have to send a confirmation of a message received. Fortunately that is all taken care of behind the scenes in the client we are configuring.&lt;br&gt;
+The second argument is the Quality of Service, &lt;a href=&#34;../../post/iot-poc-publishing/#quality-of-service-qos&#34;&gt;just as for publishing&lt;/a&gt;, 0 means that the message is delivered at most once and 1 means at least once. Remember that now the roles are reversed, and the client we are configuring is the one that will receive the message have to send a confirmation of a message received. Fortunately that is all taken care of behind the scenes in the client we are configuring.&lt;br&gt;
 The third argument is a custom function that is called whenever a message is received on the topic. This function should follow the pattern &lt;code&gt;callback_function(client, userdata, message)&lt;/code&gt;. &lt;code&gt;message&lt;/code&gt; will then be an object containing the topic, &lt;code&gt;message.topic&lt;/code&gt;, and the body, &lt;code&gt;message.payload&lt;/code&gt;, of the message. The two variables &lt;code&gt;client&lt;/code&gt; and &lt;code&gt;userdata&lt;/code&gt; are there for compatibility of the callback stack; they are flagged for deprecation, and it is not recommended to rely on them. The simplest thing to do when receiving a message, save for doing nothing at all, would be to print the message. Such a function might look like this&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def callback_function(client, userdata, message):
     print(&amp;quot;Received a new message:\n{0}&amp;quot;.format(message.payload))
@@ -1173,7 +1173,7 @@ while True:
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Nothing happens before we start publishing messages to our topic of choice. I ran the example on my Pi, using the topic &lt;code&gt;/bme680/actions&lt;/code&gt;. I then moved to the test suite at AWS IoT Core &amp;gt; Test, and published a message to that topic.&lt;br&gt;&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_iot_test_simple_subscribe.PNG&#34; alt=&#34;simple subscribe&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_iot_test_simple_subscribe.PNG&#34; alt=&#34;simple subscribe&#34;&gt;
   &lt;br&gt;
 &lt;/div&gt;
 &lt;p&gt;The console output on the Pi then looks like this:&lt;/p&gt;
@@ -1260,7 +1260,7 @@ def callback_function(client, userdata, message):
 &lt;p&gt;The whole script is &lt;a href=&#34;https://github.com/AnHosu/iot_poc/blob/master/example_scripts/simple_pubsub.py&#34; title=&#34;simple pubsub example&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;here&lt;/a&gt;. When run, it will start to listen to the topic subscibed to. Once it receives a message with instructions it will start querying the sensor as instructed and publish. This way we can toggle between different sensors and even shut off messages when we do not need them and thus save money.&lt;br&gt;
 This might not be exactly the thing that you want your device to do, but now you have the building blocks to create whatever response you want. As a challenge, why not try to set up a topic that controls how often values are published from the device? With such functionality, you could adjust the tradeoff between storage cost and data granularity over time.&lt;/p&gt;
 &lt;h1 id=&#34;in-production&#34;&gt;In Production&lt;/h1&gt;
-&lt;p&gt;Besides the considerations mentioned in the &lt;a href=&#34;../../project/iot-poc-publishing/#in-production&#34;&gt;previous demonstration&lt;/a&gt;, a few additional considerations apply now that we are able to establish two way communication with our devices in the IoT.&lt;/p&gt;
+&lt;p&gt;Besides the considerations mentioned in the &lt;a href=&#34;../../post/iot-poc-publishing/#in-production&#34;&gt;previous demonstration&lt;/a&gt;, a few additional considerations apply now that we are able to establish two way communication with our devices in the IoT.&lt;/p&gt;
 &lt;h2 id=&#34;applications&#34;&gt;Applications&lt;/h2&gt;
 &lt;p&gt;First the fun part. What might we actually do with this added capability?&lt;/p&gt;
 &lt;h3 id=&#34;alternate-data-frequency&#34;&gt;Alternate data frequency&lt;/h3&gt;
@@ -1279,7 +1279,7 @@ For one of my first setups, I made my device run any bash command sent from the 
 &lt;h3 id=&#34;topic-management&#34;&gt;Topic management&lt;/h3&gt;
 &lt;p&gt;One thing, I have found useful is to use seperate topic hierarchies for topics that are intended for publishing data and topics that are intended for triggering work or actions.&lt;br&gt;
 We have &lt;a href=&#34;project/iot-poc-publishing/#topics&#34;&gt;previously&lt;/a&gt; discussed using hierarchies of topics to structure data published from a manufacturing site. If we have a topic hierarchy like &lt;code&gt;factoryA/line22/milling/torque&lt;/code&gt;, it might be tempting to make the action topic something like &lt;code&gt;factoryA/line22/milling/action&lt;/code&gt;. This could be a bad idea, since it is easy to create a policy like &lt;code&gt;factoryA/line22/*&lt;/code&gt; that allows access to publishing and action topics. If instead we make topics like &lt;code&gt;action/factoryA/line22/milling&lt;/code&gt; then at least it is more difficult to make policy mistakes while still keeping some of the hierarchical structure.&lt;br&gt;
-Even without considering mistakes, poor topic management can quickly create a weak spot for our IoT both in terms of security and developer friendliness. AWS does not manage our topics, so we need to do it. That being said, the AWS Device Shadow functionality might just be what we need to make this much simpler. Fortunately, Shadows are the subject of the &lt;a href=&#34;../../project/iot-poc-shadow/&#34;&gt;next demonstration&lt;/a&gt;.&lt;/p&gt;
+Even without considering mistakes, poor topic management can quickly create a weak spot for our IoT both in terms of security and developer friendliness. AWS does not manage our topics, so we need to do it. That being said, the AWS Device Shadow functionality might just be what we need to make this much simpler. Fortunately, Shadows are the subject of the &lt;a href=&#34;../../post/iot-poc-shadow/&#34;&gt;next demonstration&lt;/a&gt;.&lt;/p&gt;
 &lt;h3 id=&#34;read-about-security-best-practices&#34;&gt;Read about security best practices&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.aws.amazon.com/iot/latest/developerguide/security.html&#34; title=&#34;AWS IoT Security Docs&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;AWS documentation&lt;/a&gt; is quite extensive and has better explanations and recommendations for security than I could ever conceive. Make sure to stay on top of current security best practices.&lt;/p&gt;
 </description>
@@ -1287,9 +1287,9 @@ Even without considering mistakes, poor topic management can quickly create a we
     
     <item>
       <title>Publishing Industrial Data with AWS IoT</title>
-      <link>/project/iot-poc-publishing/</link>
+      <link>/post/iot-poc-publishing/</link>
       <pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/project/iot-poc-publishing/</guid>
+      <guid>/post/iot-poc-publishing/</guid>
       <description>&lt;p&gt;In this tutorial, we will obtain a value from a sensor and publish it to a topic on AWS. No added shenanigans; this is as simple as it gets.&lt;br&gt;&lt;br&gt;
 At the core of it, we want to grab a reading from the sensor, wrap it in a message with some useful metadata, and publish that to AWS IoT. We will program all the logic into a Python script that runs continuosly on a loop. Our script should end up being structured somewhat like this:&lt;br&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Prepare the sensor
@@ -1301,8 +1301,8 @@ while true
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;For the demonstration we will be using the Bosch BME680 air quality sensor connected to a Raspberry Pi 3 model B+. The BME680 does four different measurements, but for this case we will only be measuring and publishing the temperature. The Pi is just there to query the sensor and run Python script with the AWS IoT SDK. It essentially plays the part of a microcontroller, and so anything we accomplish here can be done with a microcontroller or any other compute device. In the final section of this demonstration we will discuss some of the additional considerations for a similar setup in an actual industrial setting.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img height=&#34;200&#34; src=&#34;../iot-poc/images/publishing_architecture.png&#34; alt=&#34;IoT overview&#34;&gt;
-	&lt;img height=&#34;200&#34; src=&#34;../iot-poc/images/hardware_setup.jpg&#34; alt=&#34;Hardware setup&#34;&gt;
+	&lt;img height=&#34;200&#34; src=&#34;../../project/iot-poc/images/publishing_architecture.png&#34; alt=&#34;IoT overview&#34;&gt;
+	&lt;img height=&#34;200&#34; src=&#34;../../project/iot-poc/images/hardware_setup.jpg&#34; alt=&#34;Hardware setup&#34;&gt;
   &lt;br&gt;
   Schematic of the architecture we are building in this demonstration and a picture of the actual hardware I used for developing.
 &lt;/div&gt;
@@ -1460,12 +1460,12 @@ Published topic bme680/temperature: {&amp;quot;status&amp;quot;: &amp;quot;succe
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;But the most interesting part, of course, is whether the data gets to AWS. Let us say that we published to the topic &lt;code&gt;BME680/temperature&lt;/code&gt;. We can open the AWS Console, go to IoT Core, and find the Test tab. Here we can subscribe to a topic. When we type in the topic &lt;code&gt;BME680/temperature&lt;/code&gt;,&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_iot_test_simple_publish.PNG&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_iot_test_simple_publish.PNG&#34; alt=&#34;iot setup&#34;&gt;
 	&lt;br&gt;
 &lt;/div&gt;
 &lt;p&gt;We get the messages sent from the Pi.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_iot_message_simple_publish.PNG&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_iot_message_simple_publish.PNG&#34; alt=&#34;iot setup&#34;&gt;
 	&lt;br&gt;
 &lt;/div&gt;
 &lt;p&gt;Congratulations, you are now publishing to AWS IoT! From here the messages can be redirected to whereever you want using AWS SQS, SNS, or Kinesis.&lt;br&gt;&lt;/p&gt;
@@ -1490,10 +1490,10 @@ logger.addHandler(streamHandler)
 &lt;h3 id=&#34;error-handling&#34;&gt;Error Handling&lt;/h3&gt;
 &lt;p&gt;Besides logging loggging unexpected events, we might also want to automatically handle some of them and avoid crashes that need manual attention. In the example we created above, two parts in particular are susceptible to errors; connecting the MQTT client to AWS and querying the sensor.&lt;br&gt;
 The connection might fail for several reasons, but a common one is that multiple devices try to reconnect at the same time after a restart of the process they are monitoring. In this case, nothing is wrong as such, and we can just have the devices retry the connection. We will want to introduce a bit of randomness into that process to avoid creating another bottleneck. An elegant way to implement such retrying is with progressive backoff logic, and the AWS IoT SDK actually includes a module to do just that.&lt;br&gt;
-In the example script, whenever we fail to retrieve a value from my BME680 air quality sensor, we just generate a message with a None value. Depending on the specific application, we might want to do something different. In another demonstration, we will have a look at &lt;a href=&#34;../../project/iot-poc-shadow&#34; title=&#34;Shadow demonstration&#34;&gt;implementing a Shadow&lt;/a&gt; for our device. The Shadow can act as an intermediary between the data feed and an application, ensuring that simulations and machine learning models always have the latest readings, while the live data feed contains the full diversity of values and failed readings.&lt;/p&gt;
+In the example script, whenever we fail to retrieve a value from my BME680 air quality sensor, we just generate a message with a None value. Depending on the specific application, we might want to do something different. In another demonstration, we will have a look at &lt;a href=&#34;../../post/iot-poc-shadow&#34; title=&#34;Shadow demonstration&#34;&gt;implementing a Shadow&lt;/a&gt; for our device. The Shadow can act as an intermediary between the data feed and an application, ensuring that simulations and machine learning models always have the latest readings, while the live data feed contains the full diversity of values and failed readings.&lt;/p&gt;
 &lt;h3 id=&#34;remote-configuration&#34;&gt;Remote Configuration&lt;/h3&gt;
 &lt;p&gt;One challenge we face when creating new data streams is specifying what data we need and how often we want to sample it. The dilemma is that we do not want to store too much data that will not be used but, on the other hand, to create good simulations or models, we need a good bit of historical data. What strategy to pursue is a business question but it behooves us as developers to allow for flexibility and build dials that allow us to adjust the tradeoff between cost and data quality/quantity. So let us think of an example of this.&lt;br&gt;
-At the end of the publishing loop, we tacitly added a line, &lt;code&gt;time.sleep(5)&lt;/code&gt;, that ultimately determines how often we query our sensor and publish the data. If we double that time, we halve the amount of data and potentially also halve our expenses for data storage on this variable. Before the applications are in place, however, it is not really clear how often we would like to sample. We can make an educated guess to get it started but, at the end of the day, we want to be able to change it. So it seems a poor idea to hardcode it like we did for this example. Indeed, for the &lt;a href=&#34;../../project/iot-poc-pubsub&#34; title=&#34;Pulish and subscribe demo&#34;&gt;next demonstration&lt;/a&gt; we will explore how to develop a dynamic device that can be configured remotely.&lt;/p&gt;
+At the end of the publishing loop, we tacitly added a line, &lt;code&gt;time.sleep(5)&lt;/code&gt;, that ultimately determines how often we query our sensor and publish the data. If we double that time, we halve the amount of data and potentially also halve our expenses for data storage on this variable. Before the applications are in place, however, it is not really clear how often we would like to sample. We can make an educated guess to get it started but, at the end of the day, we want to be able to change it. So it seems a poor idea to hardcode it like we did for this example. Indeed, for the &lt;a href=&#34;../../post/iot-poc-pubsub&#34; title=&#34;Pulish and subscribe demo&#34;&gt;next demonstration&lt;/a&gt; we will explore how to develop a dynamic device that can be configured remotely.&lt;/p&gt;
 &lt;h2 id=&#34;device-lifecycle&#34;&gt;Device Lifecycle&lt;/h2&gt;
 &lt;p&gt;During the demonstration, we manually provisioned certificates for our device and started the script from the command line. For production purposes, especially if we have hundreds of devices, we might want to have a more rigid device lifecycle.&lt;/p&gt;
 &lt;h3 id=&#34;start-up-and-restarts&#34;&gt;Start up and restarts&lt;/h3&gt;
@@ -1506,12 +1506,12 @@ Even when securely provisioned and deployed, it is still important to consider t
     
     <item>
       <title>Thing Shadows with AWS IoT</title>
-      <link>/project/iot-poc-shadow/</link>
+      <link>/post/iot-poc-shadow/</link>
       <pubDate>Tue, 16 Jun 2020 00:00:00 +0000</pubDate>
-      <guid>/project/iot-poc-shadow/</guid>
+      <guid>/post/iot-poc-shadow/</guid>
       <description>&lt;p&gt;On its own, a Thing Shadow might not look like much or even that useful. It certainly is an extra layer of complexity on top of publishing and subscribing. Shadows are, however, the foundation on which we can build Digital Twins and are an almost neccessity for applications that run machine learning models on IoT data.&lt;br&gt;&lt;br&gt;
 So what exactly is the Shadow of a thing? In a moment we will dive into the technical details, but we can think of a Shadow as an entity that has the same abilities as a thing, it can send and receive messages, except that it is always an exact copy of the latest state of the thing. If the thing goes offline, the Shadow will still be there reporting the latest state. A Shadow is purely a software construct, there is no hardware, but it can live in the cloud, on the edge, or both.&lt;br&gt;&lt;br&gt;
-Before we get started, it should be said that the &lt;a href=&#34;https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html&#34; title=&#34;AWS thing shadow docs&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;documentation&lt;/a&gt; for Shadows is quite good and definitely worth a read. Instead of repeating the documentation, we will expand on the previous demonstrations of &lt;a href=&#34;../../project/iot-poc-publishing/&#34; title=&#34;Publishing demonstration&#34;&gt;publishing&lt;/a&gt; and &lt;a href=&#34;../../project/iot-poc-pubsub/&#34; title=&#34;pub/sub demonstration&#34;&gt;subscribing&lt;/a&gt; with AWS IoT and MQTT messages, to include a cloud based Shadow of our thing, the BME680 sensor. That is, we will not exemplify all of the Shadow functionality, rather we will get started using Shadows with an example that is as simple in functionality as possible. Once we are done with this case, we will have come far enough to start understanding how advanced functions and applications work.&lt;br&gt;&lt;br&gt;
+Before we get started, it should be said that the &lt;a href=&#34;https://docs.aws.amazon.com/iot/latest/developerguide/iot-device-shadows.html&#34; title=&#34;AWS thing shadow docs&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;documentation&lt;/a&gt; for Shadows is quite good and definitely worth a read. Instead of repeating the documentation, we will expand on the previous demonstrations of &lt;a href=&#34;../../post/iot-poc-publishing/&#34; title=&#34;Publishing demonstration&#34;&gt;publishing&lt;/a&gt; and &lt;a href=&#34;../../post/iot-poc-pubsub/&#34; title=&#34;pub/sub demonstration&#34;&gt;subscribing&lt;/a&gt; with AWS IoT and MQTT messages, to include a cloud based Shadow of our thing, the BME680 sensor. That is, we will not exemplify all of the Shadow functionality, rather we will get started using Shadows with an example that is as simple in functionality as possible. Once we are done with this case, we will have come far enough to start understanding how advanced functions and applications work.&lt;br&gt;&lt;br&gt;
 We will try to do build a thing that does something along the lines of&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;Prepare the sensor
 Set up connection to AWS
@@ -1523,7 +1523,7 @@ while true
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We will then look at the Shadow document using the AWS IoT test functionality.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/shadow_architecture.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/shadow_architecture.png&#34; alt=&#34;iot setup&#34;&gt;
   Schematic of the architecture we are building in this demonstration.
 &lt;/div&gt;
 &lt;h1 id=&#34;basics-of-device-shadows&#34;&gt;Basics of Device Shadows&lt;/h1&gt;
@@ -1585,7 +1585,7 @@ The update message might look something like this&lt;/p&gt;
     }
 } 
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Coding such a flow is quite similar to what we did for &lt;a href=&#34;../../project/iot-poc-publishing/&#34; title=&#34;publishing case&#34;&gt;publishing&lt;/a&gt;, except the topic is a bit more elaborate. Assuming that the client ID is the same as the device name, we can configure a connection and start updating the Shadow like this:&lt;/p&gt;
+&lt;p&gt;Coding such a flow is quite similar to what we did for &lt;a href=&#34;../../post/iot-poc-publishing/&#34; title=&#34;publishing case&#34;&gt;publishing&lt;/a&gt;, except the topic is a bit more elaborate. Assuming that the client ID is the same as the device name, we can configure a connection and start updating the Shadow like this:&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;# Define neccessary topics
 topic_update = &amp;quot;$aws/things/&amp;quot; + clientId + &amp;quot;/shadow/update&amp;quot;
 
@@ -1785,25 +1785,25 @@ b&#39;{&amp;quot;state&amp;quot;:{&amp;quot;reported&amp;quot;:{&amp;quot;temper
 &lt;p&gt;If our application just listens to the &lt;code&gt;/update/accepted&lt;/code&gt; we will have achieved nothing more by going through the Shadow compared to just plain publishing. The real power of Shadows is in always having the latest reading from our device available, while decoupling the device and the application.&lt;br&gt;
 Now that we are having the device update its Shadow each time a new reading is available, we can start having our application access that Shadow document whenever it needs it. We can always view the Shadow document of our thing by going to AWS IoT &amp;gt; Manage &amp;gt; Things, then selecting our device and go to the &amp;lsquo;Shadow&amp;rsquo; tab&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_document.png&#34; alt=&#34;Shadow document&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_document.png&#34; alt=&#34;Shadow document&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;This is nice for demonstration and debugging purposes, but our application needs to access the document programatically. The MQTT protocol does not do requests, and operates using the publish and subscribe model only. So the way for our application to request the Shadow document on demand is to publish a request to a specific topic and subscribe to a response topic. Note that there is an alternative based on a REST API, which we will discuss in a &lt;a href=&#34;shadow.md#in-production&#34;&gt;section&lt;/a&gt; below, but for now we will stick to the MQTT way.
 By sending an empty request, &lt;code&gt;{}&lt;/code&gt;, to the topic &lt;code&gt;$aws/things/yourDevice/shadow/get&lt;/code&gt; our application can trigger the Shadow to publish a copy of the current Shadow document to the subject &lt;code&gt;$aws/things/yourDevice/shadow/get/accepted&lt;/code&gt;. The easiest way to see it in action is by subscribing to the &lt;code&gt;$aws/things/yourDevice/shadow/get/#&lt;/code&gt; topicfilter in the test console and then publish an empty message to &lt;code&gt;/get&lt;/code&gt;. I gave it a try here&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_get.png&#34; alt=&#34;Shadow get&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_get.png&#34; alt=&#34;Shadow get&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;This is also an excellent opportunity to explore what happens, when we do something unexpected. Here I published a string instead of a JSON, for instance:&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_get_rejected.png&#34; alt=&#34;Shadow get&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_get_rejected.png&#34; alt=&#34;Shadow get&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;The &lt;code&gt;/get&lt;/code&gt; topic also has a &lt;code&gt;/rejected&lt;/code&gt; subtopic that gives helpful error messages when requests are rejected.&lt;/p&gt;
 &lt;h2 id=&#34;delete-the-shadow&#34;&gt;Delete the Shadow&lt;/h2&gt;
 &lt;p&gt;We now know how to update and get the Shadow document. Now we just need to know how to delete it. By publishing an empty message to the topic &lt;code&gt;$aws/things/yourDevice/shadow/delete&lt;/code&gt; we delete the Shadow document for &lt;code&gt;yourDevice&lt;/code&gt;. On successful deletion, a confirmation is published to &lt;code&gt;/delete/accepted&lt;/code&gt; and a message is published to &lt;code&gt;/delete/rejected&lt;/code&gt; otherwise. Let us try to delete the Shadow, then try to get it, and see what happens:&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_delete.png&#34; alt=&#34;shadow delete&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_delete.png&#34; alt=&#34;shadow delete&#34;&gt;
 &lt;/div&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/aws_shadow_delete_get.png&#34; alt=&#34;shadow delete get&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/aws_shadow_delete_get.png&#34; alt=&#34;shadow delete get&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;We get an error message because there is no Shadow document to get.&lt;/p&gt;
 &lt;h2 id=&#34;shadow-mqtt-topics-summary&#34;&gt;Shadow MQTT Topics Summary&lt;/h2&gt;
@@ -1851,11 +1851,11 @@ def shadow_callback_update(payload, responseStatus, token):
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This will send an update to the reported temperature state of the Shadow document. The handler will time out after six seconds, as specified in the third argument. The handler will then wait for the response and invoke the callback function once a response is received.&lt;/p&gt;
 &lt;h1 id=&#34;in-production&#34;&gt;In Production&lt;/h1&gt;
-&lt;p&gt;This section is not part of the demonstration as such. It is but a short discussion of some of the considerations we might take when bringing the Shadow feature into production. There are not many addtional considerations besides those discussed for &lt;a href=&#34;../../project/iot-poc-publishing/#in-production&#34;&gt;publishing&lt;/a&gt; and &lt;a href=&#34;../../project/iot-poc-pubsub/#in-production&#34;&gt;subscribing&lt;/a&gt;, but here are some of them.&lt;/p&gt;
+&lt;p&gt;This section is not part of the demonstration as such. It is but a short discussion of some of the considerations we might take when bringing the Shadow feature into production. There are not many addtional considerations besides those discussed for &lt;a href=&#34;../../post/iot-poc-publishing/#in-production&#34;&gt;publishing&lt;/a&gt; and &lt;a href=&#34;../../post/iot-poc-pubsub/#in-production&#34;&gt;subscribing&lt;/a&gt;, but here are some of them.&lt;/p&gt;
 &lt;h2 id=&#34;decouple-application-and-data-stream&#34;&gt;Decouple Application and Data Stream&lt;/h2&gt;
 &lt;p&gt;In order for Shadows to be a boon and not just an added operational burden, it is important that we develop applications that utilise it properly. An example of an application that might benefit greatly from using Shadows is one that relies on machine learning models to predict outcomes for displaying or acting on. A machine learning algorithm needs all its features at the same time to produce a prediction, whereas the physical reality of our sensing equipment is that different features are reported at differing times and at different frequencies. Instead of having a large layer of business logic in front of the machine learning algorithm, the application could just serve the latest values as stored in the Shadow. This effectively decouples the data stream and the machine learning model, ensuring that our application can keep running even if a device is broken.&lt;/p&gt;
 &lt;div align=&#34;center&#34;&gt;
-	&lt;img width=500 src=&#34;../iot-poc/images/shadow_flow.png&#34; alt=&#34;iot setup&#34;&gt;
+	&lt;img width=500 src=&#34;../../project/iot-poc/images/shadow_flow.png&#34; alt=&#34;iot setup&#34;&gt;
   This is a general view of how a Shadow could fit into the larger IoT.
 &lt;/div&gt;
 &lt;h2 id=&#34;shadow-http-interactions&#34;&gt;Shadow HTTP Interactions&lt;/h2&gt;

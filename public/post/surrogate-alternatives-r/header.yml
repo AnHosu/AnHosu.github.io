@@ -1,0 +1,17 @@
+---
+title: Alternative Surrogate Models for Bayesian Optimisation
+author: 'Anders Ellegaard'
+date: '2023-06-15'
+slug: surrogate-alternatives-r
+tags:
+- Modelling
+- Bayesian statistics
+- Bayesian optimisation
+- R
+summary: Surrogate model alternatives to Gaussian processes for Bayesian optimisation. Implementations in R.
+lastmod: '2023-06-15T21:23:39Z'
+image:
+  focal_point: smart
+  preview_only: yes
+projects: [bayesian-optimisation]
+---

@@ -1,0 +1,20 @@
+---
+title: Benchmarking and Testing Bayesian Optimisation
+author: 'Anders Ellegaard'
+date: '2023-06-05'
+slug: surrogate-alternatives-r
+tags:
+- Modelling
+- Bayesian statistics
+- Bayesian optimisation
+- R
+summary: Functions to benchmark and test Bayesian optimisation. Implementations in R.
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2023-06-05T19:07:39Z'
+image:
+  focal_point: smart
+  preview_only: yes
+projects: [bayesian-optimisation]
+---

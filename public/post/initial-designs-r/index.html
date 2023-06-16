@@ -1,0 +1,1598 @@
+<!DOCTYPE html><html lang="en-us" >
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  
+  
+  
+    <meta name="generator" content="Wowchemy 5.1.0 for Hugo" />
+  
+
+  
+
+  
+  
+  
+  
+  
+    
+    
+    
+  
+  
+
+  <meta name="author" content="Anders E. Nielsen" />
+
+  
+  
+  
+    
+  
+  <meta name="description" content="Overview of initial design strategies for Bayesian optimisation. Implementations in R." />
+
+  
+  <link rel="alternate" hreflang="en-us" href="../../post/initial-designs-r/" />
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  
+
+  
+  
+  
+    <meta name="theme-color" content="#023e8a" />
+  
+
+  
+  
+    
+    <script src="../../js/mathjax-config.js"></script>
+  
+
+  
+  
+  
+  
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha256-FMvZuGapsJLjouA6k7Eo2lusoAX9i0ShlWFG6qt7SLc=" crossorigin="anonymous">
+
+    
+    
+
+    
+    
+    
+      
+    
+    
+      
+      
+        
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/github.min.css" crossorigin="anonymous" title="hl-light" media="print" onload="this.media='all'">
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/styles/dracula.min.css" crossorigin="anonymous" title="hl-dark" media="print" onload="this.media='all'" disabled>
+        
+      
+    
+
+    
+    
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.css" integrity="sha512-1xoFisiGdy9nvho8EgXuXvnpR5GAMSjFwp40gSRE3NwdUdIMIKuPa7bqoUhLD0O/5tPNhteAsE5XyyMi5reQVA==" crossorigin="anonymous" media="print" onload="this.media='all'">
+    
+
+    
+
+    
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" integrity="" crossorigin="anonymous" async></script>
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+      
+      
+
+      
+      
+
+      
+    
+  
+
+  
+  
+  
+    
+      
+      
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono&display=swap">
+      
+    
+  
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="../../css/wowchemy.f7eaf83122b08ab266aaa8a2d08cb1e8.css" />
+
+  
+
+
+
+  
+
+  
+
+  
+
+
+
+
+  
+  
+  
+
+  
+
+  
+    <link rel="manifest" href="../../index.webmanifest" />
+  
+
+  <link rel="icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_32x32_fill_lanczos_center_3.png" />
+  <link rel="apple-touch-icon" type="image/png" href="../../media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_180x180_fill_lanczos_center_3.png" />
+
+  <link rel="canonical" href="../../post/initial-designs-r/" />
+
+  
+  
+  
+  
+  
+  
+  
+  
+    
+  
+  
+  <meta property="twitter:card" content="summary_large_image" />
+  
+  <meta property="og:site_name" content="anders e" />
+  <meta property="og:url" content="/post/initial-designs-r/" />
+  <meta property="og:title" content="Initial Designs for Bayesian Optimisation | anders e" />
+  <meta property="og:description" content="Overview of initial design strategies for Bayesian optimisation. Implementations in R." /><meta property="og:image" content="/post/initial-designs-r/featured.jpg" />
+    <meta property="twitter:image" content="/post/initial-designs-r/featured.jpg" /><meta property="og:locale" content="en-us" />
+  
+    
+      <meta
+        property="article:published_time"
+        content="2023-06-16T00:00:00&#43;00:00"
+      />
+    
+    <meta property="article:modified_time" content="2023-06-16T13:25:39&#43;00:00">
+  
+
+  
+
+
+    
+
+
+
+
+
+
+  
+
+
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/post/initial-designs-r/"
+  },
+  "headline": "Initial Designs for Bayesian Optimisation",
+  
+  "image": [
+    "/post/initial-designs-r/featured.jpg"
+  ],
+  
+  "datePublished": "2023-06-16T00:00:00Z",
+  "dateModified": "2023-06-16T13:25:39Z",
+  
+  "author": {
+    "@type": "Person",
+    "name": "Anders E. Nielsen"
+  },
+  
+  "publisher": {
+    "@type": "Organization",
+    "name": "anders e",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/media/icon_hu0b500a15011e1e483635372eebf6e1df_24681_192x192_fill_lanczos_center_3.png"
+    }
+  },
+  "description": "Overview of initial design strategies for Bayesian optimisation. Implementations in R."
+}
+</script>
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+  <title>Initial Designs for Bayesian Optimisation | anders e</title>
+</head>
+
+
+<body id="top" data-spy="scroll" data-offset="70" data-target="#TableOfContents" class="page-wrapper   " data-wc-page-id="b082ce62b9c1420bf7f8fa1b55680fa2" >
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <script src="../../js/wowchemy-init.min.a8a181ea67095ef9fbb0e99ffbf585a0.js"></script>
+
+  
+
+
+<aside class="search-modal" id="search">
+  <div class="container">
+    <section class="search-header">
+
+      <div class="row no-gutters justify-content-between mb-3">
+        <div class="col-6">
+          <h1>Search</h1>
+        </div>
+        <div class="col-6 col-search-close">
+          <a class="js-search" href="#" aria-label="Close"><i class="fas fa-times-circle text-muted" aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div id="search-box">
+        
+        <input name="q" id="search-query" placeholder="Search..." autocapitalize="off"
+        autocomplete="off" autocorrect="off" spellcheck="false" type="search" class="form-control"
+        aria-label="Search...">
+        
+      </div>
+
+      
+      
+
+      
+
+    </section>
+    <section class="section-search-results">
+
+      <div id="search-hits">
+        
+      </div>
+
+    </section>
+  </div>
+</aside>
+
+
+
+  <div class="page-header">
+    
+
+
+
+
+
+
+
+
+
+
+
+
+<nav class="navbar navbar-expand-lg navbar-light compensate-for-scrollbar" id="navbar-main">
+  <div class="container-xl">
+
+    
+    <div class="d-none d-lg-inline-flex">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    <button type="button" class="navbar-toggler" data-toggle="collapse"
+            data-target="#navbar-content" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span><i class="fas fa-bars"></i></span>
+    </button>
+    
+
+    
+    <div class="navbar-brand-mobile-wrapper d-inline-flex d-lg-none">
+      <a class="navbar-brand" href="../../">anders e</a>
+    </div>
+    
+
+    
+    
+    <div class="navbar-collapse main-menu-item collapse justify-content-start" id="navbar-content">
+
+      
+      <ul class="navbar-nav d-md-inline-flex">
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+            
+            
+            
+              
+            
+            
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../#projects"><span>Projects</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link  active" href="../../post/"><span>Posts</span></a>
+        </li>
+
+        
+        
+
+        
+
+        
+        
+        
+          
+        
+
+        
+
+        
+        
+        
+        
+
+        
+          
+            
+            
+          
+          
+        
+
+        <li class="nav-item">
+          <a class="nav-link " href="../../about/"><span>About</span></a>
+        </li>
+
+        
+        
+
+      
+
+        
+      </ul>
+    </div>
+
+    <ul class="nav-icons navbar-nav flex-row ml-auto d-flex pl-md-2">
+
+      
+      
+        
+      
+
+      
+      
+      <li class="nav-item">
+        <a class="nav-link js-search" href="#" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></a>
+      </li>
+      
+
+      
+      
+      <li class="nav-item dropdown theme-dropdown">
+        <a href="#" class="nav-link" data-toggle="dropdown" aria-haspopup="true" aria-label="Display preferences">
+          <i class="fas fa-moon" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu">
+          <a href="#" class="dropdown-item js-set-theme-light">
+            <span>Light</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-dark">
+            <span>Dark</span>
+          </a>
+          <a href="#" class="dropdown-item js-set-theme-auto">
+            <span>Automatic</span>
+          </a>
+        </div>
+      </li>
+      
+
+      
+      
+
+    </ul>
+
+  </div>
+</nav>
+
+
+  </div>
+
+  <div class="page-body">
+    <article class="article">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+  
+  
+<div class="article-container pt-3">
+  <h1>Initial Designs for Bayesian Optimisation</h1>
+
+  
+
+  
+    
+
+
+<div class="article-metadata">
+
+  
+  
+
+  
+  <span class="article-date">
+    
+    
+      
+          Last updated on
+      
+    
+    2023-06-16
+  </span>
+  
+
+  
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    16 min read
+  </span>
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+  
+
+</div>
+
+    
+
+
+
+
+<div class="btn-links mb-3">
+  
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+  
+  <a class="btn btn-outline-primary btn-page-header" href="../../project/bayesian-optimisation/">
+    Project
+  </a>
+  
+
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+  
+</div>
+
+
+
+  <div class="article-container">
+
+    <div class="article-style">
+      <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.243">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>index</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+   var mathElements = document.getElementsByClassName("math");
+   var macros = [];
+   for (var i = 0; i < mathElements.length; i++) {
+    var texText = mathElements[i].firstChild;
+    if (mathElements[i].tagName == "SPAN") {
+     katex.render(texText.data, mathElements[i], {
+      displayMode: mathElements[i].classList.contains('display'),
+      throwOnError: false,
+      macros: macros,
+      fleqn: false
+     });
+  }}});
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.11.1/katex.min.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="index_files/libs/clipboard/clipboard.min.js"></script>
+  <script src="index_files/libs/quarto-html/tabby.min.js"></script>
+  <script src="index_files/libs/quarto-html/popper.min.js"></script>
+  <script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="index_files/libs/quarto-html/anchor.min.js"></script>
+  <link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="index_files/libs/quarto-html/light-border.css" rel="stylesheet">
+  <link href="index_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet">
+  <link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+</head>
+<body>
+<p><a href="../bayes-opt-r">Bayesian optimisation</a> is a powerful optimisation technique for black-box functions and processes with expensive evaluations. It is popular for hyperparameter tuning in machine learning, but has many real-world applications as well.</p>
+<p>One of the key components of Bayesian optimisation is the initial experiment design, which forms the foundation for the first fit of the surrogate model. In this post, we will discuss the importance of initial experiment designs in Bayesian optimisation and dive into a few different ways to sample such initial designs.</p>
+<p>Along with the discussion are example implementations in R.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">4444</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<h2 id="initial-experiment-designs" class="anchored">Initial Experiment Designs</h2>
+<p>Bayesian optimisation works by constructing a surrogate probabilistic model, typically a Gaussian process, of the objective function. The surrogate model is then used to guide the search for an optimum through sequential experimentation. The initial experiment design influences this process in two major ways: it provides initial data points for fitting the surrogate model and it is the initial trade off between exploration and exploitation.</p>
+<p>In the initial design, we decide on a set of <span class="math inline">n</span> samples <span class="math inline">\mathbf{X} = \{\mathbf{x}_1, \dots, \mathbf{x}_n\}</span>. Each point, <span class="math inline">\mathbf{x}</span>, is somewhere in the search space, <span class="math inline">\mathcal{X} \in \mathbb{R}^d</span>, with dimensionality <span class="math inline">d</span>. Ideally, we want to restrict the optimisation to a subset of <span class="math inline">\mathbb{R}^d</span> and the initial design can help achieve that by keeping the samples within a realistic range. For the base designs discussed here, the search space <span class="math inline">\mathcal{X} = [0,1]^d</span> is assumed. It is a good idea to normalise the input dimensions, but when normalised inputs are not an option, the range <span class="math inline">[0,1]</span> can easily be scaled to a broader range, as discussed later.</p>
+<p>Considering that the experimental budget is limited and that it is expensive to evaluate the objective function, the number of initial training samples should be limited. However, considering that the surrogate models generally are not great for extrapolation, the number of initial samples should not be too small either.</p>
+<p>In general, the initial training data should be chosen to provide a good representation of the objective function. This means that the data should be chosen to cover the range of each input dimension. The data should also include inputs that are expected to be both good and bad performers.</p>
+<p>An initial design might not always be necessary. If the Gaussian process was defined with a very strong prior, then it could be applied to generate experiments right away. For some processes, historical data might be available to get the experimentation started. Previous experience, experiments, or datasets might also be useful for initialising Bayesian optimisation <span class="citation" data-cites="Feurer2015">[1]</span>.</p>
+<p>Most often though, we do not really know where to start. At best, we might have a vague idea of the general effect of our input features on the measured output. In these cases, we can apply a design, so let’s look at some examples.</p>
+<h4 id="an-example-case" class="anchored">An Example Case</h4>
+<p>To demonstrate each design, we imagine a situation where we are doing Bayesian optimisation on an objective process with two input dimensions. We have decided that we want to take 10 initial samples.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2D design with 10 samples</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We also define a simple plot to visualise the design.</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>plot_design <span class="ot">&lt;-</span> <span class="cf">function</span>(samples, <span class="at">title =</span> <span class="st">""</span>) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(samples) <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> title,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Dimension 1"</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Dimension 2"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we are ready to look at our first design.</p>
+<h2 id="random-sampling" class="anchored">Random Sampling</h2>
+<p>The first, and arguably most simple, example of an initial design is Random Sampling. As the name suggests this design is completely random. Each dimension for each point is simply sampled from the uniform distribution <span class="citation" data-cites="McKay1979">[2]</span></p>
+<p><span class="math display">\mathbf{x} \sim \text{Unif}(0, 1)</span> The implementation is just a single line:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>random_sampling <span class="ot">&lt;-</span> <span class="cf">function</span>(n, d) <span class="fu">matrix</span>(<span class="fu">runif</span>(n <span class="sc">*</span> d), n, d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Random sampling represents a focus on exploration in the face of uncertainty. The main advantage of the random design is its ease of implementation, but it is also important to note that it is trivial to add additional samples to this design. The main drawback is that it is not guaranteed to efficiently sample the search space - there is a chance of points with close proximity, which is a waste we usually cannot afford in Bayesian optimisation. A Latin Hypercube Design can remedy this drawback.</p>
+<h4 id="random-sampling-in-2d" class="anchored">Random Sampling in 2D</h4>
+<p>Here is a random sampling design for our imagined case.</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">random_sampling</span>(n, d)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(samples, <span class="st">"Random Sampling"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/random_sampling-1.png" width="576"></p>
+</div>
+</div>
+<p>The main thing to notice is the clusters of points and large swaths of empty space. This seems a bit wasteful, when each evaluation of the objective function is expensive.</p>
+<h2 id="latin-hypercube-sampling" class="anchored">Latin Hypercube Sampling</h2>
+<p>Latin Hypercube Sampling (LHS) is a stratified sampling technique that ensures a balanced distribution of samples across the search space. The key idea behind LHS is to divide each dimension of the search space into equally sized intervals and randomly sample one point from each interval. LHS still samples each point from a uniform distribution, but restricts the intervals for each point <span class="citation" data-cites="McKay1979">[2]</span>.</p>
+<p>Given a search space with <span class="math inline">d</span> dimensions or features, we want to sample <span class="math inline">n</span> points, such that they satisfy a Latin Hypercube of evenly spaced intervals.</p>
+<p>We do this by dividing each dimension into <span class="math inline">n</span> equally spaced intervals. Then, for each dimension, we sample a random permutation of the numbers <span class="math inline">1, ..., n</span> and the resulting sequence determines which interval of that dimension is sampled for each of the <span class="math inline">n</span> samples. This ensures that each interval in each dimension is sampled exactly once. Finally a sample is drawn from each of the chosen intervals.</p>
+<p>Let <span class="math inline">x_{j,i}</span>, <span class="math inline">j = 1, ..., n</span>, <span class="math inline">i = 1, ..., d</span> be the <span class="math inline">i^{\text{th}}</span> dimension of the <span class="math inline">j^{\text{th}}</span> sample. Let <span class="math inline">\mathbf{\pi}_i</span>, <span class="math inline">i = 1, ..., d</span> be <span class="math inline">d</span> independent random permutations of the numbers <span class="math inline">\{1,...,n\}</span>, then</p>
+<p><span class="math display">\mathbf{x}_{i,:} = \frac{\mathbf{\pi}_i - 1 + \mathbf{\nu}_i}{n}</span></p>
+<p>Where <span class="math inline">\mathbf{x}_{i,:}</span> is the <span class="math inline">i^{\text{th}}</span> dimension of all samples, and</p>
+<p><span class="math display">\mathbf{\nu}_i \sim \text{Unif}(0, 1)</span></p>
+<p>Here is an implementation of LHS:</p>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#' Latin Hypercube Sampling</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param n &lt;int&gt; number of samples</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#' @param d &lt;int&gt; number of features</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#' @return matrix of shape (n,d)</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>latin_hypercube_sampling <span class="ot">&lt;-</span> <span class="cf">function</span>(n, d) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  samples <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">nrow =</span> n, <span class="at">ncol =</span> d)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>d) samples[, i] <span class="ot">&lt;-</span> <span class="fu">sample</span>(n) <span class="sc">+</span> <span class="fu">runif</span>(n)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  (samples <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> n</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>LHS ensures a uniform coverage of the search space, which is great for efficient exploration. Furthermore, it is relatively simple to implement, so it is an easy place to start.</p>
+<p>A large drawback of LHS is that additional points cannot be sampled after the design is complete. Imagine a scenario where we are about to do Bayesian optimisation, but we chose an initial number of samples, <span class="math inline">n</span>, that was too small, so we are unable to fit a useful surrogate model. We have already done the <span class="math inline">n</span> samples and they are good, but we would like to add just a few more, <span class="math inline">m</span>, initial samples before starting optimisation in earnest. Unfortunately, we cannot add the <span class="math inline">m</span> points to the original LHS. Neither is the LHS of size <span class="math inline">n</span> a subset of the LHS of size <span class="math inline">n + m</span>. To get a LHS of size <span class="math inline">n + m</span>, we would have to create an entirely new design. The intuition for this is that, as part of the design, we split each dimension into <span class="math inline">n</span> equally spaced intervals, so we cannot retroactively split them into <span class="math inline">n + m</span>, once the <span class="math inline">n</span> samples are done. Another way to think about it is that the design is generated in a for loop over each dimension, so the total number of samples must be known from the beginning. In practice, we could use some space-filling criterion or just random sampling to generate the <span class="math inline">m</span> points, but they would not fit in the Latin Hypercube.</p>
+<h4 id="lhs-in-2d" class="anchored">LHS in 2D</h4>
+<p>Here is LHS applied to our running example:</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> <span class="fu">latin_hypercube_sampling</span>(n, d)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(samples, <span class="st">"Latin Hypercube Sampling"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/lhs-1.png" width="576"></p>
+</div>
+</div>
+<p>The main thing to notice in this design is the neat stratification of each dimension.</p>
+<h2 id="quasi-random-design" class="anchored">Quasi-Random Design</h2>
+<p>The pure random sampling design struggled to provide an efficient exploration of the search space. The LHS design had guaranteed space filling but had the drawback of not being expandable. What we might want is a space filling design that we can keep adding points to if necessary.</p>
+<p>To create such a design, we turn to quasi random numbers. Quasi random numbers are deterministic sequences of numbers that uniformly fill a space. A quasi random number generator will sequentially generate a set of numbers in such a way that the unit cube is filled evenly. Unless randomness is added, the generator will produce the same sequence when restarted. Even if the generator was stopped, we can start it from where it left off and continue generating points that are compatible with the initially generated sequence.</p>
+<h4 id="example-sobol-sequence-in-2d" class="anchored">Example: Sobol Sequence in 2D</h4>
+<p>Several quasi random number generators exist. One example is a Sobol sequence, which is demonstrated here for our running example.</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>samples <span class="ot">&lt;-</span> randtoolbox<span class="sc">::</span><span class="fu">sobol</span>(n, d)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(samples, <span class="st">"Quasi-Random Design"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/sobol-1.png" width="576"></p>
+</div>
+</div>
+<p>The main thing to notice in this design is the neat stratification of each dimension, just like we had for LHS.</p>
+<p>In case we had to expand the initial design, we can just resume the generator and get additional points that fit with the ones previously generated.</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>samples_next <span class="ot">&lt;-</span> randtoolbox<span class="sc">::</span><span class="fu">sobol</span>(<span class="dv">8</span>, d, <span class="at">init =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(samples, <span class="st">"Quasi-Random Design with Additional Samples"</span>) <span class="sc">+</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> <span class="fu">data.frame</span>(samples_next),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">x =</span> X1, <span class="at">y =</span> X2, <span class="at">color =</span> <span class="st">"additional samples"</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">3</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">colour =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/sobol_extended-1.png" width="672"></p>
+</div>
+</div>
+<p>The additional samples fit snugly in the unoccupied spaces between the first batch of samples.</p>
+<h2 id="improving-initial-designs" class="anchored">Improving Initial Designs</h2>
+<p>In their pure, unmodified form, random sampling, LHS, and quasi random sequences all represent designs that efficiently explore the unit cube in the face of complete uncertainty. That works well if we have normalised inputs with no prior intuition for which part of the range might be optimal. If, however, we have prior intuition, we should try to incorporate it in the initial design.</p>
+<p>Imagine for instance that we are trying to optimise the settings on a piece of manufacturing equipment. Cranking all the dials and levers to their maximum position is a valid setting, but it would very likely result in very poor performance, so we should probably try to include more points closer to the median settings and fewer points at the extremes, in our initial design.</p>
+<p>To incorporate such prior knowledge or intuition we can scale or transform the unit cube design.</p>
+<h4 id="scaling-feature-bounds" class="anchored">Scaling feature bounds</h4>
+<p>Imagine that we have a design for two input dimensions:</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">latin_hypercube_sampling</span>(<span class="dv">20</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We are happy with the first dimension, but we would like to have the second dimension range from -2 to 4.</p>
+<p>To linearly scale a feature from the unit range <span class="math inline">\mathbf{x} \in [0,1]</span> to a different range <span class="math inline">\mathbf{x}_{scaled} \in [a,b]</span>, we simply apply the transformation</p>
+<p><span class="math display">\mathbf{x}_{scaled} = \mathbf{x}(b - a) + a</span></p>
+<p>In the case of our example</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>design_transformed <span class="ot">&lt;-</span> <span class="fu">cbind</span>(design[, <span class="dv">1</span>], design[, <span class="dv">2</span>] <span class="sc">*</span> (<span class="dv">4</span> <span class="sc">+</span> <span class="dv">2</span>) <span class="sc">-</span> <span class="dv">2</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(design_transformed, <span class="st">"Linearly Scaled Design"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/scaled_design-1.png" width="384"></p>
+</div>
+</div>
+<p>It should be noted that for the best performance of Gaussian processes in Bayesian optimisation, the scale should be similar across features. Additionally, for the kernels that have length scale parameters, the interpretability of those parameters are complicated by differing scales. Normalising to the unit cube is generally a good idea for the actual calculations, but for presentation purposes we might want to scale to a range that matches the physical setting.</p>
+<h4 id="applying-prior-knowledge-to-a-design" class="anchored">Applying prior knowledge to a design</h4>
+<p>Samples that are uniformly distributed in the unit cube can easily be scaled to any other distribution that fits with our prior intuition.</p>
+<p><span class="math display">\mathbf{\hat{x}_{i,:}} = Q(\mathbf{x}_{i,:},\theta)</span></p>
+<p>Where <span class="math inline">\mathbf{x}_{i,:}</span> is the <span class="math inline">i^{\text{th}}</span> dimension of all samples and <span class="math inline">Q</span> is the quantile function of a distribution with parameters <span class="math inline">\theta</span>.</p>
+<p>For instance, let’s make a design with two feature dimensions. For demonstration purposes, we will do a design with many points:</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">latin_hypercube_sampling</span>(<span class="dv">40</span>, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we want the first feature to be normally distributed with mean at 1 and a standard deviation of 2. We want our second dimension to be positive but with a preference towards small values, so we will transform it to an exponential distribution with rate 1.</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>design[,<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(design[,<span class="dv">1</span>], <span class="at">mean =</span> <span class="dv">1</span>, <span class="at">sd =</span> <span class="dv">2</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>design[,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">qexp</span>(design[,<span class="dv">2</span>], <span class="at">rate =</span> <span class="dv">1</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(design, <span class="st">"Prior Informed Design"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/qscale-1.png" width="576"></p>
+</div>
+</div>
+<p>The main thing to notice in this design is that the dimensions are scaled to match a prior distribution but the samples still retain the stratification of the LHS design.</p>
+<p>We could have chosen any distribution that fits with our prior intuition or knowledge about where we might obtain good samples.</p>
+<h2 id="designing-with-discrete-or-categorical-features" class="anchored">Designing with Discrete or Categorical Features</h2>
+<p>So far, we have tacitly assumed that all our features are continuous. This is not always the case and it is easy to imagine a situation where we want to include a discrete or categorical feature in the initial design. Let’s look at how we can extend the continuous unit cube designs to include discrete or categorical features.</p>
+<p>We can turn a continuous range into a discrete range by cutting it into intervals. For instance, imagine that we had a discrete feature with five possible values. To include it in the initial design, we generate a dimension for this feature, just as we would for a continuous feature. We then define five intervals along the unit range and let each interval correspond to a step in the discrete feature.</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">latin_hypercube_sampling</span>(n, d)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>design[,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">cut</span>(design[,<span class="dv">2</span>], <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span> <span class="sc">/</span> <span class="dv">5</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(design, <span class="st">"Design with Discrete Feature"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+</div>
+</div>
+<p>The intervals do not have to be even. We can define the breaks that match with the nature of our discrete feature.</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">latin_hypercube_sampling</span>(n, d)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>design[,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">cut</span>(design[,<span class="dv">2</span>], <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="fl">0.8</span>, <span class="dv">1</span>))</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(design, <span class="st">"Design with Discrete Feature and Uneaven Intervals"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+</div>
+</div>
+<p>When given as input to a surrogate model for Bayesian optimisation, it might be easier to keep pretending that the discrete feature is continuous. For presentation purposes, we can transform the feature into something more in line with the physical process. Alternatively, we could treat the discrete feature as categorical.</p>
+<p>To include a categorical feature in the initial design, we can use the same trick of cutting the unit range into even intervals and then assign each a category label.</p>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">latin_hypercube_sampling</span>(n, d))</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>design[,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">cut</span>(design[,<span class="dv">2</span>], <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span> <span class="sc">/</span> <span class="dv">5</span>), <span class="at">labels =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(design, <span class="st">"Design with Categorical Feature"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
+</div>
+</div>
+<p>This approach works particularly well with LHS, as this design offers guaranteed even stratification when <span class="math inline">n</span> is an integer multiple of <span class="math inline">d</span>. The same is not true for random sampling or quasi random sequences.</p>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>design <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(randtoolbox<span class="sc">::</span><span class="fu">sobol</span>(<span class="dv">10</span>, d))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>design[,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">cut</span>(design[,<span class="dv">2</span>], <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span> <span class="sc">/</span> <span class="dv">5</span>), <span class="at">labels =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>])</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_design</span>(design, <span class="st">"Design with Categorical Feature, Uneaven Distribution"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+</div>
+</div>
+<p>Once we have defined the sampling scheme, we can turn the categorical feature into one-hot features that can be given as inputs to a surrogate model for Bayesian optimisation.</p>
+<div class="cell" data-tbl-colwidths="20">
+<div class="sourceCode" id="cb18"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">as_tibble</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  randtoolbox<span class="sc">::</span><span class="fu">sobol</span>(<span class="dv">10</span>, d),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">.name_repair =</span> <span class="sc">~</span> <span class="fu">c</span>(<span class="st">"X1"</span>, <span class="st">"X2"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">X2 =</span> <span class="fu">cut</span>(X2, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span> <span class="sc">/</span> <span class="dv">5</span>), <span class="at">labels =</span> letters[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]),</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> <span class="dv">1</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> X2, <span class="at">values_from =</span> value, <span class="at">values_fill =</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">align =</span> <span class="st">"l"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">X1</th>
+<th style="text-align: left;">c</th>
+<th style="text-align: left;">b</th>
+<th style="text-align: left;">d</th>
+<th style="text-align: left;">e</th>
+<th style="text-align: left;">a</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">0.500</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0.750</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0.250</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0.375</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0.875</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0.625</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0.125</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0.188</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">0.688</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+<td style="text-align: left;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">0.938</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">0</td>
+<td style="text-align: left;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h1 class="unnumbered" id="references">References</h1>
+<div id="refs" class="references csl-bib-body" role="doc-bibliography">
+<div id="ref-Feurer2015" class="csl-entry" role="doc-biblioentry">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline"><span class="smallcaps">Feurer</span>, M., <span class="smallcaps">Springenberg</span>, J. and <span class="smallcaps">Hutter</span>, F. (2015). Initializing bayesian hyperparameter optimization via meta-learning. <em>Proceedings of the AAAI Conference on Artificial Intelligence</em> <strong>29</strong> Available at <a href="https://ojs.aaai.org/index.php/AAAI/article/view/9354">https://ojs.aaai.org/index.php/AAAI/article/view/9354</a>.</div>
+</div>
+<div id="ref-McKay1979" class="csl-entry" role="doc-biblioentry">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline"><span class="smallcaps">McKay</span>, M. D., <span class="smallcaps">Beckman</span>, R. J. and <span class="smallcaps">Conover</span>, W. J. (1979). A comparison of three methods for selecting values of input variables in the analysis of output from a computer code. <em>Technometrics</em> <strong>21</strong> 239–45 Available at <a href="http://www.jstor.org/stable/1268522">http://www.jstor.org/stable/1268522</a>.</div>
+</div>
+</div>
+<h1 id="license">License</h1>
+<p>The content of this project itself is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International license</a>, and the underlying code is licensed under the <a href="https://github.com/AnHosu/bayes-opt/blob/6e25a7a4ec88edac9b55dea2b51382d21030a998/LICENSE">GNU General Public License v3.0 license</a>.</p>
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+  tabsets.forEach(function(tabset) {
+    const tabby = new Tabby('#' + tabset.id);
+  });
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'light-border',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+
+
+</body></html>
+    </div>
+
+    
+
+
+
+
+
+
+<div class="article-tags">
+  
+  <a class="badge badge-light" href="../../tag/modelling/">Modelling</a>
+  
+  <a class="badge badge-light" href="../../tag/bayesian-statistics/">Bayesian statistics</a>
+  
+  <a class="badge badge-light" href="../../tag/bayesian-optimisation/">Bayesian optimisation</a>
+  
+  <a class="badge badge-light" href="../../tag/r/">R</a>
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  
+  
+    
+  
+  
+  
+  <div class="media author-card content-widget-hr">
+    
+      
+      <a href="../../"><img class="avatar mr-3 avatar-circle" src="../../author/anders-e.-nielsen/avatar_huaf22d72e35256be9d48177f1f21d9377_326351_270x270_fill_q75_lanczos_center.jpg" alt="Anders E. Nielsen"></a>
+    
+
+    <div class="media-body">
+      <h5 class="card-title"><a href="../../">Anders E. Nielsen</a></h5>
+      <h6 class="card-subtitle">Data Professional &amp; Research Scientist</h6>
+      <p class="card-text">I apply modern data technology to solve real-world problems. My interests include statistics, machine learning, computational biology, and IoT.</p>
+      <ul class="network-icon" aria-hidden="true">
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+    <li>
+      <a href="mailto:andellegaard@gmail.com" >
+        <i class="fas fa-envelope"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://www.linkedin.com/in/anders-ellegaard-nielsen-6a0857125/" target="_blank" rel="noopener">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </li>
+  
+    
+    
+    
+      
+    
+    
+    
+    
+    
+      
+    
+    <li>
+      <a href="https://github.com/AnHosu" target="_blank" rel="noopener">
+        <i class="fab fa-github"></i>
+      </a>
+    </li>
+  
+</ul>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <div class="article-widget content-widget-hr">
+    <h3>Related</h3>
+    <ul>
+      
+      <li><a href="../../post/surrogate-alternatives-r/">Alternative Surrogate Models for Bayesian Optimisation</a></li>
+      
+      <li><a href="../../post/acquisition-functions-r/">Acquisition Functions for Bayesian Optimisation</a></li>
+      
+      <li><a href="../../post/kernels-r/">Kernels for Gaussian Processes</a></li>
+      
+      <li><a href="../../post/bayesian-opt-r/">Bayesian Optimisation from Scratch in R</a></li>
+      
+      <li><a href="../../post/bespoke-biochem-three/">Bespoke Bayesian Model for Batch Effects in High Throughput Biochemical Assays</a></li>
+      
+    </ul>
+  </div>
+  
+
+
+
+
+
+  </div>
+</article>
+  </div>
+
+  <div class="page-footer">
+    
+    
+    <div class="container">
+      <footer class="site-footer">
+
+  
+
+  
+
+  
+  <p class="powered-by">
+    © 2023 Anders E. Nielsen
+  </p>
+  
+
+  
+  
+
+
+
+
+
+
+  <p class="powered-by">
+    
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      Published with <a href="https://wowchemy.com/?utm_campaign=poweredby" target="_blank" rel="noopener">Wowchemy</a>, <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>, and <a href="https://github.com/rstudio/blogdown" target="_blank" rel="noopener">R Blogdown</a>.
+    
+  </p>
+</footer>
+
+    </div>
+    
+  </div>
+
+  
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cite</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <pre><code class="tex hljs"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-primary my-1 js-copy-cite" href="#" target="_blank">
+          <i class="fas fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-outline-primary my-1 js-download-cite" href="#" target="_blank">
+          <i class="fas fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+      
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/instant.page/5.1.0/instantpage.min.js" integrity="sha512-1+qUtKoh9XZW7j+6LhRMAyOrgSQKenQ4mluTR+cvxXjP1Z54RxZuzstR/H9kgPXQsVB8IW7DMDFUJpzLjvhGSQ==" crossorigin="anonymous"></script>
+
+      
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha256-lqvxZrPLtfffUl2G/e7szqSvPBILGbwmsGE1MKlOi0Q=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha256-CBrpuqrMhXwcLLUd5tvQ4euBHCdh7wGlDfNz8vbu/iI=" crossorigin="anonymous"></script>
+      
+
+      
+      
+
+      
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js" integrity="sha512-TDKKr+IvoqZnPzc3l35hdjpHD0m+b2EC2SrLEgKDRWpxf2rFCxemkgvJ5kfU48ip+Y+m2XVKyOCD85ybtlZDmw==" crossorigin="anonymous"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/r.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/python.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/languages/latex.min.js"></script>
+        
+      
+
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.min.js" integrity="sha512-SeiQaaDh73yrb56sTW/RgVdi/mMqNeM2oBwubFHagc5BkixSpP1fvqF47mKzPGWYSSy4RwbBunrJBQ4Co8fRWA==" crossorigin="anonymous"></script>
+    
+
+    
+    
+
+    
+    
+    
+      
+      <script id="search-hit-fuse-template" type="text/x-template">
+        <div class="search-hit" id="summary-{{key}}">
+          <div class="search-hit-content">
+            <div class="search-hit-name">
+              <a href="{{relpermalink}}">{{title}}</a>
+              <div class="article-metadata search-hit-type">{{type}}</div>
+              <p class="search-hit-description">{{snippet}}</p>
+            </div>
+          </div>
+        </div>
+      </script>
+      
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+      
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    <script src="../../js/bootstrap.bundle.min.6aed84840afc03ab4d5750157f69c120.js"></script>
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+      
+      
+    
+    
+    <script src="../../en/js/wowchemy.min.cf8ca859a9b74f8b1cd804621b13e5f1.js"></script>
+
+    
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+
+
+
+</body>
+</html>
