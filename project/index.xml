@@ -36,26 +36,28 @@
       <link>/project/bayesian-optimisation/</link>
       <pubDate>Wed, 15 Mar 2023 00:00:00 +0000</pubDate>
       <guid>/project/bayesian-optimisation/</guid>
-      <description>&lt;p&gt;When trying to optimise valuable industrial processes, like manufacturing, drug development, or supply chains, I often encounter the same challenge. There is little relevant historical data available and it is extremely expensive to conduct experiments on the process.&lt;/p&gt;
+      <description>&lt;h1 id=&#34;bayesian-optimisation-tools-and-tutorials&#34;&gt;Bayesian Optimisation Tools and Tutorials&lt;/h1&gt;
+&lt;p&gt;This is the repo for my Bayesian optimisation project. For rendered versions of this page and individual sections, visit &lt;a href=&#34;https://anhosu.com/project/bayesian-optimisation/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;my website&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;When trying to optimise valuable industrial processes, like manufacturing, drug development, or supply chains, I often encounter the same challenge. There is little relevant historical data available and it is extremely expensive to conduct experiments on the process.&lt;/p&gt;
 &lt;p&gt;My go-to tool in these cases is Bayesian optimisation.&lt;/p&gt;
 &lt;p&gt;Bayesian optimisation is a powerful tool to perform optimisation of opaque, complex processes. Bayesian optimisation uses a probabilistic model as a surrogate for the opaque process. This model is updated with sequential experiments that the model itself helps design. With relatively few experiments, Bayesian optimisation can find good maxima or minima.&lt;/p&gt;
 &lt;p&gt;The probabilistic model allows us to incorporate our prior knowledge about the process at hand and gives us a head start in the optimisation. However, for the same reason, Bayesian optimisation is sensitive to initial assumptions, and there are a lot of moving parts.&lt;/p&gt;
 &lt;p&gt;With this project, I aim to introduce and discuss the components of Bayesian optimisation. However, I will focus less on the mathematical intricacies and put more emphasis on the assumptions and implementation of each component.&lt;/p&gt;
 &lt;h2 id=&#34;posts-on-bayesian-optimisation&#34;&gt;Posts on Bayesian Optimisation&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../post/bayesian-opt-r/&#34;&gt;Bayesian Optimisation from Scratch in R&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://anhosu.com/post/bayesian-opt-r&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Bayesian Optimisation from Scratch in R&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;This post introduces and demonstrates all the core components of Bayesian optimisation and implements them from scratch in R. This is a great place to start.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../post/kernels-r&#34;&gt;Kernel Functions&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://anhosu.com/post/kernels-r/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Kernel Functions&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;This post contains a comprehensive list and discussion of kernels to use in the Gaussian processes surrogate model, when doing Bayesian optimisation. Accompanying the discussion, are implementations in R. The kernel is the main way to incorporate prior information into a surrogate model, making it an important choice, when setting up Bayesian optimisation.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;../post/acquisition-functions-r/&#34;&gt;Acquisition Functions&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://anhosu.com/post/acquisition-functions-r/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Acquisition Functions&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;This post discusses acquisition functions, which are used to recommend the next point to sample in the experiment sequence. Acquisition functions are the main means of balancing exploration and exploitation during optimisation. The post lists a number of acquisition functions and implements them in R.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Neural Networks as Surrogate Models&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;This post is coming soon.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Latin Hypercube Sampling and other Initial Designs for Bayesian Optimisation&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;This post is coming soon.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Benchmarking Bayesian Optimisation&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://anhosu.com/post/surrogate-alternatives-r/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Alternative Surrogate Models&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Gaussian processes are almost the default choice for surrogate models in Bayesian optimisation and they do perform well for many diverse tasks. However, a Gaussian process might not always be the right choice. This post discusses and implements four alternatives to Gaussian processes as surrogate models for Bayesian optimisation.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://anhosu.com/post/initial-designs-r/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Initial Designs&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The first step in Bayesian optimisation is the initial experiment design, which provides the base data for a surrogate model. This post discusses the significance of initial experiment designs for Bayesian optimisation, and explores a few examples, including Latin Hypercube Sampling (LHS), while highlighting their advantages and limitations.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Testing Bayesian Optimisation&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;This post is coming soon.&lt;/p&gt;
 &lt;h2 id=&#34;license&#34;&gt;License&lt;/h2&gt;
-&lt;p&gt;The content of this project itself is licensed under the &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Creative Commons Attribution-ShareAlike 4.0 International license&lt;/a&gt;, and the underlying code is licensed under the &lt;a href=&#34;LICENSE&#34;&gt;GNU General Public License v3.0 license&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The content of this project itself is licensed under the &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Creative Commons Attribution-ShareAlike 4.0 International license&lt;/a&gt;, and the underlying code is licensed under the &lt;a href=&#34;https://github.com/AnHosu/bayes-opt/blob/2b81cc2c765cf5aa76e62a2da387c3b4ca1695a9/LICENSE&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;GNU General Public License v3.0 license&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
