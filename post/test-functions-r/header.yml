@@ -1,0 +1,17 @@
+---
+title: Test Functions for Bayesian Optimisation
+author: 'Anders Ellegaard'
+date: '2023-06-16'
+slug: test-functions-r
+tags:
+- Modelling
+- Bayesian statistics
+- Bayesian optimisation
+- R
+summary: Overview of some functions for testing and benchmarking Bayesian optimisation. Implementations in R.
+lastmod: '2023-07-22T12:25:00Z'
+image:
+  focal_point: smart
+  preview_only: yes
+projects: [bayesian-optimisation]
+---
