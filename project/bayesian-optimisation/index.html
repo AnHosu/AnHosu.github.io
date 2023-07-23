@@ -743,7 +743,6 @@
 
     <div class="article-style">
       <h1 id="bayesian-optimisation-tools-and-tutorials">Bayesian Optimisation Tools and Tutorials</h1>
-<p>This is the repo for my Bayesian optimisation project. For rendered versions of this page and individual sections, visit <a href="https://anhosu.com/project/bayesian-optimisation/" target="_blank" rel="noopener">my website</a>.</p>
 <p>When trying to optimise valuable industrial processes, like manufacturing, drug development, or supply chains, I often encounter the same challenge. There is little relevant historical data available and it is extremely expensive to conduct experiments on the process.</p>
 <p>My go-to tool in these cases is Bayesian optimisation.</p>
 <p>Bayesian optimisation is a powerful tool to perform optimisation of opaque, complex processes. Bayesian optimisation uses a probabilistic model as a surrogate for the opaque process. This model is updated with sequential experiments that the model itself helps design. With relatively few experiments, Bayesian optimisation can find good maxima or minima.</p>
@@ -760,8 +759,8 @@
 <p>Gaussian processes are almost the default choice for surrogate models in Bayesian optimisation and they do perform well for many diverse tasks. However, a Gaussian process might not always be the right choice. This post discusses and implements four alternatives to Gaussian processes as surrogate models for Bayesian optimisation.</p>
 <p><strong><a href="https://anhosu.com/post/initial-designs-r/" target="_blank" rel="noopener">Initial Designs</a></strong></p>
 <p>The first step in Bayesian optimisation is the initial experiment design, which provides the base data for a surrogate model. This post discusses the significance of initial experiment designs for Bayesian optimisation, and explores a few examples, including Latin Hypercube Sampling (LHS), while highlighting their advantages and limitations.</p>
-<p><strong>Testing Bayesian Optimisation</strong></p>
-<p>This post is coming soon.</p>
+<p><strong><a href="https://anhosu.com/post/test-functions-r/" target="_blank" rel="noopener">Testing Bayesian Optimisation</a></strong></p>
+<p>The objective function is usually expensive to evaluate, so before starting Bayesian optimisation on an actual problem, the code and models should be tested. This post discusses a set of functions that can help test and gauge the efficacy of potential surrogate models and optimisation policies.</p>
 <h2 id="license">License</h2>
 <p>The content of this project itself is licensed under the <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">Creative Commons Attribution-ShareAlike 4.0 International license</a>, and the underlying code is licensed under the <a href="https://github.com/AnHosu/bayes-opt/blob/2b81cc2c765cf5aa76e62a2da387c3b4ca1695a9/LICENSE" target="_blank" rel="noopener">GNU General Public License v3.0 license</a>.</p>
 
