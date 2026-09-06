@@ -1,0 +1,29 @@
+<style>
+  pre {
+    overflow-x: auto;
+    padding: 10px;
+    background-color: rgba(128, 128, 128, 0.1);
+    border-radius: 3px;
+  }
+</style>
+{{ if .Param "math" }}
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    },
+    startup: {
+      pageReady: function () {
+        document.querySelectorAll('span.math.inline, span.math.display').forEach(function (el) {
+          var text = el.textContent;
+          if (/^\s*(\\\(|\\\[|\$)/.test(text)) return;
+          el.textContent = el.classList.contains('display') ? '\\[' + text + '\\]' : '\\(' + text + '\\)';
+        });
+        return MathJax.startup.defaultPageReady();
+      }
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+{{ end }}
