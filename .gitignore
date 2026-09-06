@@ -1,7 +1,13 @@
 .Rproj.user
+*.Rproj
+.Rprofile
 .Rhistory
 .RData
 .Ruserdata
-*.Rproj
-project/*/deploy.sh
-project/*/header.yml
+/public/
+resources/
+renv/
+.DS_Store
+Thumbs.db
+*.rds
+.hugo_build.lock

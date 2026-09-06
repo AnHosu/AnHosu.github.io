@@ -1,0 +1,59 @@
+theme: "hugo-bearblog"
+
+title: Local Optima
+baseurl: ''
+copyright: '© {year} Anders E. Nielsen'
+
+############################
+## LANGUAGE
+############################
+
+defaultContentLanguage: en
+hasCJKLanguage: false
+defaultContentLanguageInSubdir: false
+removePathAccents: true
+
+############################
+## ADVANCED
+############################
+
+relativeURLs: true
+enableGitInfo: false
+summaryLength: 30
+paginate: 10
+enableEmoji: true
+enableRobotsTXT: true
+ignoreFiles: [\.ipynb$, .ipynb_checkpoints$, \.Rmd$, \.Rmarkdown$, _cache$, "\\.knit\\.md$", "\\.utf8\\.md$"]
+disableAliases: true
+outputs:
+  home: [HTML, RSS]
+  section: [HTML, RSS]
+markup:
+  defaultMarkdownHandler: goldmark
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    style: friendly
+    lineNos: true
+    lineNumbersInTable: false
+    codeFences: true
+  tableOfContents:
+    startLevel: 2
+    endLevel: 3
+taxonomies:
+  tag: tags
+security:
+  allowContent:
+    - '.*'
+  funcs:
+    getenv:
+      - '^HUGO_'
+      - '^CI$'
+      - '^BLOGDOWN_POST_RELREF$'
+
+params:
+  description: ''
+  favicon: favicon.png
+  dateFormat: '02 Jan, 2006'
+  hideMadeWithLine: true
