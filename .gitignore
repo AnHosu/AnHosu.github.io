@@ -1,7 +1,0 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-*.Rproj
-project/*/deploy.sh
-project/*/header.yml
