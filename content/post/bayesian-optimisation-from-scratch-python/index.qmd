@@ -1,0 +1,927 @@
+---
+title: "Bayesian Optimisation from Scratch in Python"
+date: 2026-10-21
+draft: false
+tags:
+  - "Modelling"
+  - "Bayesian statistics"
+  - "Bayesian optimisation"
+  - "Python"
+description: "All the basic components of Bayesian optimisation introduced and implemented in Python and NumPy"
+math: true
+jupyter: python3
+---
+
+Bayesian optimisation is a powerful technique for optimising expensive functions or processes. In many applications, such as drug discovery, manufacturing, machine learning, or scientific experimentation, the function or process to be optimised may be time-consuming or costly to evaluate. Bayesian optimisation provides a framework for sequential experimentation and for finding optima with as few evaluations as possible.
+
+This post seeks to introduce the core ideas and components of Bayesian optimisation. Along with the introduction are implementations of all the core components of Bayesian optimisation in Python. The implementations mainly use NumPy; they are designed to be simple and not necessarily efficient. The same implementations are also available in [Bayesian Optimisation from Scratch in R](../bayesian-optimisation-from-scratch-in-r).
+
+```{python}
+from collections.abc import Callable
+from typing import NamedTuple
+
+import matplotlib.pyplot as plt
+import numpy as np
+import numpy.typing as npt
+import scipy.linalg
+import scipy.optimize
+import scipy.stats
+from IPython.display import display
+
+rng = np.random.default_rng(4444)
+```
+
+The core idea behind Bayesian optimisation is to use a surrogate model to approximate a true objective function or process, and then use this approximation to determine the next experiment to perform. Typically, Gaussian processes or other similar probabilistic models are used as surrogate models.
+
+The surrogate model is initialised with a few points and an acquisition function is then used to determine the next point to evaluate. The acquisition function balances exploration, i.e. searching the regions of covariate space where the uncertainty is high, and exploitation, i.e. searching the regions where the surrogate model predicts a low value.
+
+After the next point is evaluated, it is added to the existing data and the surrogate model is updated. The process of selecting the next point to evaluate and updating the surrogate model is repeated until a stopping criterion is met. This could be when subsequent experiments stop yielding significantly different or better results. In real-world applications, a budget might only allow for a limited number of experiments.
+
+Bayesian optimisation has several advantages over other optimisation methods, including its ability to handle expensive functions and processes with a small number of evaluations. It also performs well in cases with noisy or uncertain data. However, while it can be considered a machine learning model, the surrogate model obtained through Bayesian optimisation is not a universally good approximation of the objective function and is not necessarily suitable for cases where extensive inference or interpretation is needed.
+
+## Core Components of Bayesian Optimisation
+
+There are five main components to Bayesian optimisation:
+
+##### Objective Function
+
+The objective function is the function or process that needs to be optimised, but which is expensive or time-consuming to evaluate. The objective function is typically a black box, meaning that its mathematical form is unknown, and only its inputs and outputs can be observed.
+
+##### Surrogate Model
+
+The surrogate is a regression model that is used to approximate the objective function. The most commonly used surrogate model in Bayesian optimisation is a Gaussian process, which is a flexible, non-parametric model that can capture complex, non-linear relationships between the inputs and outputs of the objective function.
+
+##### Acquisition Function
+
+The acquisition function is used to determine the next point to evaluate in the search space. The acquisition function balances exploration and exploitation.
+
+##### Initial Training Data
+
+Bayesian optimisation requires some initial data to construct the surrogate model. This data can be obtained by evaluating the objective function at a few points in the search space. Given that the total experiment budget is often limited, much consideration often goes into deciding these initial training points.
+
+##### Stopping Criterion
+
+Bayesian optimisation might require a stopping criterion to determine when to stop the search. This could be some measure of convergence, but often the number of experiments or deadlines set the constraints.
+
+In the following sections, each component is discussed in greater detail, accompanied by implementations in Python.
+
+## Objective Function
+
+Bayesian optimisation can be applied to optimise any function or process that can be thought of as a black box function, $f$, that takes as input a set of covariates, $\mathbf{x}$, and returns a scalar, $y$. Sometimes the actual readings from such a function are noisy, i.e.
+
+$$y = f(\mathbf{x}) + \epsilon$$
+
+where $\epsilon$ is the noise, often assumed to be Gaussian $\epsilon \sim \mathcal{N}(0, \sigma_{\epsilon}^2)$.
+
+Some common examples of real-world objective functions include:
+
+**ML Hyperparameters**. Machine learning model hyperparameters such as learning rate or regularisation strength are expensive to optimise, since they require retraining the model for each iteration. In the context of Bayesian optimisation, the model hyperparameters would be the input $\mathbf{x}$ and the model output would be the scalar objective $y$.
+
+**Design of experiments**. Optimising the parameters of chemical or biological experiments can save both time and money, or even accelerate the discovery of new drugs or products.
+
+**Manufacturing**. A manufacturing process can often be thought of as having a set of defined inputs (material, flow, settings, etc.) and measurable outputs that should be maximised (e.g. product output or yield) or minimised (e.g. waste).
+
+### Benchmarking Functions
+
+This implementation of Bayesian optimisation mainly explores each component at a high level so there will not be an actual black box process to optimise. Instead, a benchmark function is used to demonstrate the implementation.
+
+There are many good benchmark functions. One such is the Ackley function. It is defined as:
+
+$$f(\mathbf{x}) = -a\exp\left(-b\sqrt{\frac{1}{d}\sum_{i=1}^dx_i^2}\right) - \exp\left(\frac{1}{d}\sum_{i=1}^d \cos(c x_i)\right) \\ + a + \exp(1)$$
+
+where $d$ is the number of dimensions and $a$, $b$, and $c$ are constants. The global minimum of the Ackley function is $f(\mathbf{x})=0$ at $\mathbf{x}=(0,0,...,0)$.
+
+For this implementation the constants are set at $a = 20$, $b = 0.2$ and $c = 2\pi$, and the function can be applied to a matrix of observations, $\mathbf{X}$, rather than just a single vector of covariates.
+
+```{python}
+def ackley(x: npt.ArrayLike) -> np.ndarray:
+    x = np.atleast_2d(x)
+    d = x.shape[1]
+    part1 = -20 * np.exp(-0.2 * np.sqrt(1 / d * np.sum(x**2, axis=1)))
+    part2 = -np.exp(1 / d * np.sum(np.cos(2 * np.pi * x), axis=1))
+    return part1 + part2 + 20 + np.exp(1)
+```
+
+## Surrogate Model: Gaussian Process Regression
+
+This section explores the virtues of Gaussian processes and how they can be applied as surrogate models for Bayesian optimisation. This is the largest and most complex part of Bayesian optimisation, and the discussions and implementations will only take a brief glance at some of the considerations.
+
+A Gaussian process (GP) is a probabilistic model that defines a distribution over functions. A GP model assumes that a function can be represented as a collection of random variables with a multivariate Gaussian distribution. Intuitively, the GP assumes that data points with high correlation among the covariates have similar values of the output variable(s).
+
+Formally, a GP is defined by a mean function and a covariance function, also called a kernel function.
+
+$$p(f | \mathbf{X}) = \mathcal{N}(f | \mathbf{\mu}, \mathbf{\Sigma})$$
+
+$f$ is the objective function and $\mathbf{X}$ is a set of observations for the covariates of $f$. The mean function, $\mathbf{\mu}$, specifies the expected value of the function at each point in the covariate space, while the covariance matrix, $\mathbf{\Sigma}$, specifies how the function values at any two points in the covariate space are correlated. The covariance matrix is calculated using a kernel function and, in practice, the choice of kernel function is important for obtaining good and interpretable results with Bayesian optimisation. The mean function is of far lesser consequence and is often set to $\mathbf{\mu} = \mathbf{0}$.
+
+### Kernels
+
+The choice of kernel function reflects prior beliefs about smoothness, periodicity, and other properties of the objective function. Intuitively, the kernel is a function that specifies the similarity between pairs of vectors of covariates. In other words, the kernel should quantify how similar two data points are, given just the input.
+
+Formally, a kernel function $k(\mathbf{x}, \mathbf{x'})$ takes two input vectors $\mathbf{x}$ and $\mathbf{x'}$ and produces a scalar value that quantifies the similarity or covariance between the two vectors.
+
+The kernel function can be applied to the covariates, $\mathbf{X}$, of a set of observed data points to create a covariance matrix, $\mathbf{\Sigma}$
+
+$$\Sigma_{ij} = k(\mathbf{x}_i, \mathbf{x}_j)$$
+
+for all combinations of observations $i$ and $j$.
+
+Kernels themselves are an entire subject. See the [kernel post](../kernels-r) for a thorough discussion of kernels for Gaussian processes and Bayesian optimisation.
+
+#### Implementing the RBF kernel
+
+An example of a commonly used kernel is the Radial Basis Function (RBF) kernel. The RBF kernel is defined as
+
+$$k(\mathbf{x}_i, \mathbf{x}_j) = \sigma_f^2 \exp\left(-\frac{1}{2}\frac{\lVert \mathbf{x}_i - \mathbf{x}_j\rVert^2}{l^2}\right)$$
+
+where $\sigma_f$ and $l$ are parameters and $\lVert \rVert$ is the euclidean distance between the two vectors.
+
+This implementation can take two vectors or two matrices. For a vector input, it returns the kernel function value. For matrix inputs, the covariance matrix, $\mathbf{\Sigma}$, is returned.
+
+```{python}
+def rbf_kernel(
+    x1: npt.ArrayLike,
+    x2: npt.ArrayLike,
+    length_scale: float = 1.0,
+    sigma_f: float = 1.0,
+) -> np.ndarray:
+    """RBF Kernel
+
+    Parameters
+    ----------
+    x1 : array of shape (n, d). Vectors are coerced to (1, d).
+    x2 : array of shape (m, d). Vectors are coerced to (1, d).
+    length_scale : length scale
+    sigma_f : scale parameter
+
+    Returns
+    -------
+    array of shape (n, m)
+    """
+    x1 = np.atleast_2d(x1)
+    x2 = np.atleast_2d(x2)
+    sqdist = (
+        np.sum(x1**2, axis=1)[:, np.newaxis]
+        + np.sum(x2**2, axis=1)
+        - 2 * x1 @ x2.T
+    )
+    return sigma_f**2 * np.exp(-0.5 / length_scale**2 * sqdist)
+```
+
+$\sigma_f^2$ is a variance parameter that simply scales the functions to the magnitude of $f$. More interestingly, the length scale parameter, $l$, of the RBF kernel affects the smoothness and flexibility of the functions modelled with a GP that uses this kernel. For a small value of the length scale, the kernel results in very flexible functions, whereas a larger length scale yields very smooth functions.
+
+```{python}
+distance = np.linspace(0, 10, 100)[:, np.newaxis]
+
+fig, ax = plt.subplots()
+for length_scale in [0.25, 0.5, 1, 2, 5]:
+    k = rbf_kernel(distance, np.zeros((1, 1)), length_scale=length_scale)[:, 0]
+    ax.plot(distance, k, label=length_scale)
+ax.set(
+    xlabel="Euclidean distance of points",
+    ylabel="Covariance",
+    title="RBF kernel",
+)
+ax.legend(title="Length scale")
+plt.show()
+```
+
+The intuition here is that for small length scales two points have to be very close to have any correlation. This results in very flexible functions that do not expect much correlation between data points. For a large length scale, however, points that are far apart are still expected to behave in a similar way. This results in very smooth functions that expect similar output values across the entire covariate space.
+
+The RBF kernel is a popular choice for Gaussian processes in part because of this interpretability. There are other advantages to the RBF kernel, but it is not necessarily a good default choice for *every* problem.
+
+### Gaussian Processes as a Distribution Over Functions
+
+If the Gaussian process is a distribution over functions, it should be possible to sample random functions from it. And indeed it is! The only thing needed in order to sample from a Gaussian is a function for pulling random numbers from, well, a Gaussian.
+
+In practice, this amounts to plugging the mean and the covariance (kernel) into a multivariate Gaussian and sampling from it. Of course, a set of points, $\mathbf{x}$, is required to compute $\mathbf{\Sigma}$. Note, however, that no outputs, $\mathbf{y}$, are needed yet, so a grid for $\mathbf{x}$ will suffice.
+
+```{python}
+def rmvnorm(
+    n: int,
+    mu: npt.ArrayLike,
+    sigma: npt.ArrayLike,
+    rng: np.random.Generator,
+    epsilon: float = 1e-6,
+) -> np.ndarray:
+    """Random Samples from a Multivariate Gaussian
+
+    This implementation is similar to `Generator.multivariate_normal` with
+    `method="cholesky"`, but checks that the covariance matrix is positive
+    definite and adds a small tolerance to its diagonal first.
+
+    Parameters
+    ----------
+    n : number of samples
+    mu : the mean of each input dimension
+    sigma : the covariance matrix
+    rng : random number generator
+    epsilon : numerical tolerance added to the diagonal of the covariance
+        matrix. This is necessary for the Cholesky decomposition, in some cases.
+
+    Returns
+    -------
+    array of shape (n, p) of samples
+    """
+    mu = np.ravel(mu)
+    sigma = np.asarray(sigma)
+    p = len(mu)
+    if sigma.shape != (p, p):
+        raise ValueError("incompatible dimensions of arguments")
+    ev = np.linalg.eigvalsh(sigma)
+    if not np.all(ev >= -epsilon * abs(ev[-1])):
+        raise ValueError("The covariance matrix (sigma) is not positive definite")
+    cholesky = np.linalg.cholesky(sigma + np.eye(p) * epsilon)
+    sample = rng.standard_normal((n, p))
+    return sample @ cholesky.T + mu
+```
+
+To assist the visualisation, here is a plot for the mean, uncertainty, and some samples of a Gaussian process for the case where there is only one covariate, i.e. $\mathbf{X}$ is of shape $(n,1)$ where $n$ is the number of observations.
+
+```{python}
+def gpr_plot(
+    samples: np.ndarray,
+    mu: npt.ArrayLike,
+    sigma: np.ndarray,
+    x_pred: np.ndarray,
+    x_train: np.ndarray | None = None,
+    y_train: npt.ArrayLike | None = None,
+    true_function: Callable[[np.ndarray], np.ndarray] | None = None,
+) -> plt.Axes:
+    x = np.ravel(x_pred)
+    mu = np.ravel(mu)
+    uncertainty = 1.6 * np.sqrt(np.diag(sigma))
+    colours = plt.colormaps["YlGnBu"](np.linspace(0.35, 0.85, len(samples)))
+
+    fig, ax = plt.subplots()
+    ax.fill_between(
+        x,
+        mu - uncertainty,
+        mu + uncertainty,
+        color="#219ebc",
+        alpha=0.2,
+        label="89% interval",
+    )
+    ax.plot(x, mu, color="#023047", label="Mean")
+    for i, (sample, colour) in enumerate(zip(samples, colours), start=1):
+        ax.plot(x, sample, linestyle="--", color=colour, label=f"sample {i}")
+    if x_train is not None and y_train is not None:
+        ax.scatter(
+            np.ravel(x_train),
+            np.ravel(y_train),
+            marker="+",
+            s=150,
+            color="#fb8500",
+            label="Training point",
+            zorder=3,
+        )
+    if true_function is not None:
+        ax.plot(x, true_function(x_pred), color="black", label="True function")
+    ax.set(xlabel="x", ylabel="y")
+    ax.legend(loc="center left", bbox_to_anchor=(1, 0.5), frameon=False)
+    return ax
+```
+
+This bit is at the core of Gaussian processes. Given a set of points, the corresponding $\mathbf{\Sigma}$ is calculated. Then this is plugged into a multivariate Gaussian to obtain predicted function values. In this case, $\mathbf{\mu}$ has just been set to $\mathbf{0}$.
+
+```{python}
+n_samples = 5
+x_predict = np.linspace(-5, 5, 100)[:, np.newaxis]
+mu = np.zeros(len(x_predict))
+sigma = rbf_kernel(x_predict, x_predict, length_scale=1.0, sigma_f=1.0)
+samples = rmvnorm(n_samples, mu, sigma, rng=rng)
+gpr_plot(samples, mu, sigma, x_predict)
+plt.show()
+```
+
+### Conditioning the Gaussian process
+
+Until now, the GP has just represented a prior belief for the surrogate functions that might model the objective function. It is not a surrogate model yet.
+
+In order for the GP to be a useful surrogate model, it should provide posterior predictions for proposed points, given the available training data. That is, for a set of training data, $\mathbf{X}_t$ and $\mathbf{y}_t$, as well as a set of proposed points, $\mathbf{X}_p$, the GP should yield a posterior predictive distribution for the proposed/predicted outputs $\mathbf{y}_p$. For a GP, the joint distribution of training points and new proposed points is itself a GP. Consequently, it is possible to compute the joint distribution of training data and posterior prediction points directly.
+
+The mean and covariance of this joint distribution have well defined expressions. Given a set of training data, $\mathbf{X}_t, \mathbf{y}_t$, and a set of points on which to make predictions, $\mathbf{X}_p$, the mean of the posterior predictive distribution is
+
+$$\mathbf{\mu}_{p|t} = \mathbf{\mu}_p + \mathbf{\Sigma}_{tp}^T \mathbf{\Sigma}_{tt}^{-1} (\mathbf{y}_t - \mathbf{\mu}_t)$$
+
+where $\mathbf{\Sigma}_{tp}$ is the covariance matrix between training and prediction points and $\mathbf{\Sigma}_{tt}$ is the covariance matrix between training points.
+
+Recall though that often $\mathbf{\mu} = \mathbf{0}$, so the equation will often show up as
+
+$$\mathbf{\mu}_{p|t} = \mathbf{\Sigma}_{tp}^T \mathbf{\Sigma}_{tt}^{-1} \mathbf{y}_t$$
+
+This is also what is implemented below.
+
+The covariance matrix of the posterior predictive distribution is
+
+$$\mathbf{\Sigma}_{p|t} = \mathbf{\Sigma}_{pp} - \mathbf{\Sigma}_{tp}^T \mathbf{\Sigma}_{tt}^{-1} \mathbf{\Sigma}_{tp}$$
+
+where $\mathbf{\Sigma}_{pp}$ is the covariance matrix between prediction points.
+
+These formulas are straightforward linear algebra and could be implemented directly as such. However, they are somewhat numerically unstable. For greater stability, the implementation below calculates the posterior using the algorithm described in chapter 2 of \[1\].
+
+```{python}
+class Posterior(NamedTuple):
+    mu: np.ndarray
+    sigma: np.ndarray
+
+
+def posterior(
+    kernel: Callable[..., np.ndarray],
+    x_pred: npt.ArrayLike,
+    x_train: npt.ArrayLike,
+    y_train: npt.ArrayLike,
+    noise: float = 1e-8,
+    **kernel_params: float,
+) -> Posterior:
+    """Get Parameters of the Posterior Gaussian Process
+
+    Parameters
+    ----------
+    kernel : kernel function used for the Gaussian process
+    x_pred : array of shape (m, d) of prediction points. Vectors are coerced
+        to (m, 1).
+    x_train : array of shape (n, d) of training points. Vectors are coerced
+        to (n, 1).
+    y_train : array of shape (n,) of training observations
+    noise : scalar of observation noise
+    **kernel_params : named parameters for the kernel function
+
+    Returns
+    -------
+    mean (mu) of shape (m,) and covariance (sigma) of shape (m, m) for the
+    Gaussian
+    """
+    x_pred = np.asarray(x_pred, dtype=float).reshape(len(x_pred), -1)
+    x_train = np.asarray(x_train, dtype=float).reshape(len(x_train), -1)
+    y_train = np.ravel(y_train)
+    k = kernel(x_train, x_train, **kernel_params) + noise**2 * np.eye(len(x_train))
+    k_s = kernel(x_train, x_pred, **kernel_params)
+    k_ss = kernel(x_pred, x_pred, **kernel_params) + 1e-8 * np.eye(len(x_pred))
+    # Algorithm 2.1 in [1]
+    chol = scipy.linalg.cholesky(k, lower=True)
+    alpha = scipy.linalg.solve_triangular(
+        chol.T, scipy.linalg.solve_triangular(chol, y_train, lower=True)
+    )
+    mu = k_s.T @ alpha
+    v = scipy.linalg.solve_triangular(chol, k_s, lower=True)
+    sigma = k_ss - v.T @ v
+    return Posterior(mu=mu, sigma=sigma)
+```
+
+With a way to calculate the posterior, it is possible to condition a Gaussian process on some training data.
+
+Here is a bit of training data for a one dimensional example.
+
+```{python}
+x_train = np.array([[-4.33], [-2.1], [2.1]])
+y_train = ackley(x_train)
+```
+
+The Gaussian process is then conditioned on training data and applied to new proposed points in a single step.
+
+```{python}
+x_predict = np.linspace(-5, 5, 100)[:, np.newaxis]
+post = posterior(rbf_kernel, x_predict, x_train, y_train)
+```
+
+Just like the prior distribution, it is possible to sample random functions from the posterior distribution.
+
+```{python}
+mu = post.mu
+sigma = post.sigma
+n_samples = 3
+samples = rmvnorm(n_samples, mu, sigma, rng=rng)
+gpr_plot(samples, mu, sigma, x_predict, x_train, y_train, ackley)
+plt.show()
+```
+
+At this point, the fit is not too great and the sampled functions look nothing like the true function. However, this is only based on three data points and an arbitrary choice of kernel parameters.
+
+Both things will be handled in due time, but it gets worse before it gets better.
+
+#### A Quick Note on Noise
+
+Recall that training data might be noisy, i.e. $y = f(\mathbf{x}) + \epsilon$.
+
+Noise, too, is a subject all on its own. The key thing to remember is that noise can be accounted for by adding it to the diagonal of $\mathbf{\Sigma}_{tt}$. This is already implemented in the function for the posterior above.
+
+The effect of noisy training data on the posterior is, unsurprisingly, more uncertainty.
+
+Here a bit of known noise is added to the observations.
+
+```{python}
+noise = 1.0
+y_train = ackley(x_train) + noise * rng.standard_normal(len(x_train))
+```
+
+When recreating the plot from above, now using the noisy observations, the most noticeable difference is that the distribution mean no longer passes through each observation.
+
+```{python}
+post = posterior(rbf_kernel, x_predict, x_train, y_train, noise=noise)
+mu = post.mu
+sigma = post.sigma
+n_samples = 3
+samples = rmvnorm(n_samples, mu, sigma, rng=rng)
+gpr_plot(samples, mu, sigma, x_predict, x_train, y_train, ackley)
+plt.show()
+```
+
+### Gaussian Process Regression
+
+Until now, the kernel parameters have been set at fixed, arbitrary values. This is a waste of good parameters, and it is possible to do something better. The core idea of Gaussian process regression (GPR) is that the kernel parameters can be adapted to fit the training data.
+
+A common approach to estimating the parameters of a kernel function in GPR is Maximum Likelihood Estimation (MLE).
+
+The likelihood function for a Gaussian process is given by
+
+$$p(\mathbf{y}_t \mid \mathbf{X}_t, \theta) = \mathcal{N}(\mathbf{y}_t \mid \mathbf{\mu}, \mathbf{\Sigma}_{tt} + \sigma_{\epsilon}^2 \mathbf{I})$$
+
+where $\mathbf{\Sigma}_{tt}$ is the covariance matrix computed on training data using some kernel with parameters $\theta$. In the case of the RBF kernel, the parameters to estimate are $\theta = (\sigma_f, l)$. Notice that the noise has been added to the diagonal of the covariance matrix to account for noisy training data.
+
+The corresponding log likelihood function is
+
+$$\log p(\mathbf{y}_t \mid \mathbf{X}_t, \theta) = -\frac{1}{2} \left( \log \det (\mathbf{\Sigma}_{tt} + \sigma_{\epsilon}^2 \mathbf{I}) + \mathbf{y}_t^T (\mathbf{\Sigma}_{tt} + \sigma_{\epsilon}^2 \mathbf{I})^{-1} \mathbf{y}_t + n \log(2\pi) \right)$$
+
+where $n$ is the number of data points.
+
+The optimal values of the kernel parameters are the values that maximise the log likelihood or, equivalently, minimise the negative log likelihood.
+
+To implement Gaussian process regression, two components are needed: the negative log likelihood and an optimiser. Here is an implementation of a negative log likelihood function, for any kernel. The implementation follows Algorithm 2.1 from chapter 2 of \[1\].
+
+```{python}
+def nll(
+    kernel: Callable[..., np.ndarray],
+    x_train: np.ndarray,
+    y_train: npt.ArrayLike,
+    noise: float,
+) -> Callable[[np.ndarray], float]:
+    """Negative log-Likelihood of a Kernel
+
+    Parameters
+    ----------
+    kernel : kernel function
+    x_train : array of shape (n, d) of training points
+    y_train : array of shape (n,) of training observations
+    noise : scalar of observation noise
+
+    Returns
+    -------
+    function with kernel parameters as input and negative log likelihood as
+    output
+    """
+    y_train = np.ravel(y_train)
+    n = len(x_train)
+
+    def kernel_nll(params: np.ndarray) -> float:
+        k = kernel(x_train, x_train, *params) + noise**2 * np.eye(n)
+        # Algorithm 2.1 in [1]
+        chol = scipy.linalg.cholesky(k, lower=True)
+        alpha = scipy.linalg.solve_triangular(
+            chol.T, scipy.linalg.solve_triangular(chol, y_train, lower=True)
+        )
+        return float(
+            0.5 * y_train @ alpha
+            + np.sum(np.log(np.diag(chol)))
+            + 0.5 * n * np.log(2 * np.pi)
+        )
+
+    return kernel_nll
+```
+
+There are many ways to minimise the function. Since there are only two parameters for the RBF kernel, an off-the-shelf optimiser will do just fine.
+
+```{python}
+rbf_nll = nll(rbf_kernel, x_train, y_train, noise)
+opt = scipy.optimize.minimize(rbf_nll, x0=[1.0, 1.0], method="Nelder-Mead")
+```
+
+The optimised kernel parameters should improve the GP.
+
+```{python}
+post = posterior(
+    rbf_kernel,
+    x_predict,
+    x_train,
+    y_train,
+    noise=noise,
+    length_scale=opt.x[0],
+    sigma_f=opt.x[1],
+)
+mu = post.mu
+sigma = post.sigma
+n_samples = 3
+samples = rmvnorm(n_samples, mu, sigma, rng=rng)
+gpr_plot(samples, mu, sigma, x_predict, x_train, y_train, ackley)
+plt.show()
+```
+
+With that, all the components for creating a GP surrogate model are in place. For future use, they are collected in a single function that performs GPR.
+
+```{python}
+class GPRPrediction(NamedTuple):
+    mu: np.ndarray
+    sigma: np.ndarray
+    parameters: dict[str, float]
+
+
+def gpr(
+    kernel: Callable[..., np.ndarray],
+    x_train: np.ndarray,
+    y_train: npt.ArrayLike,
+    noise: float = 1e-8,
+    **kernel_params: float,
+) -> Callable[[npt.ArrayLike], GPRPrediction]:
+    """Gaussian Process Regression
+
+    Parameters
+    ----------
+    kernel : kernel function
+    x_train : array of shape (n, d) of training points
+    y_train : array of shape (n,) of training observations
+    noise : scalar of observation noise
+    **kernel_params : parameters of the kernel function with initial guesses
+
+    Returns
+    -------
+    function that takes an array of prediction points as input and returns the
+    posterior predictive distribution for the output, with the variance
+    (sigma) of each point
+    """
+    names = list(kernel_params)
+
+    def named_kernel(x1: np.ndarray, x2: np.ndarray, *params: float) -> np.ndarray:
+        return kernel(x1, x2, **dict(zip(names, params)))
+
+    kernel_nll = nll(named_kernel, x_train, y_train, noise)
+    opt = scipy.optimize.minimize(
+        kernel_nll, x0=list(kernel_params.values()), method="Nelder-Mead"
+    )
+    opt_params = {name: float(value) for name, value in zip(names, opt.x)}
+
+    def predict(x_pred: npt.ArrayLike) -> GPRPrediction:
+        post = posterior(kernel, x_pred, x_train, y_train, noise, **opt_params)
+        return GPRPrediction(
+            mu=post.mu,
+            sigma=np.diag(post.sigma),
+            parameters=opt_params,
+        )
+
+    return predict
+```
+
+#### Applying GP in More Dimensions
+
+A GP surrogate model is great for problems with many dimensions and relatively few observations. Here is an example in 2D with just 10 training points.
+
+```{python}
+noise_2d = 1.0
+x_train_2d = rng.uniform(-5, 5, size=(10, 2))
+y_train_2d = ackley(x_train_2d) + noise_2d * rng.standard_normal(len(x_train_2d))
+gpr_2d = gpr(
+    rbf_kernel, x_train_2d, y_train_2d, noise_2d, length_scale=1.0, sigma_f=1.0
+)
+grid_x1, grid_x2 = np.meshgrid(np.linspace(-5, 5, 50), np.linspace(-5, 5, 50))
+x_predict_2d = np.column_stack([grid_x1.ravel(), grid_x2.ravel()])
+pred_2d = gpr_2d(x_predict_2d)
+
+fig, ax = plt.subplots()
+contours = ax.contourf(grid_x1, grid_x2, pred_2d.mu.reshape(grid_x1.shape), levels=8)
+ax.scatter(x_train_2d[:, 0], x_train_2d[:, 1], color="black")
+ax.set(xlabel="x1", ylabel="x2")
+fig.colorbar(contours)
+plt.show()
+```
+
+Even with just a few training points, some general tendencies of the objective function have been captured and the surrogate model should be useful for Bayesian optimisation.
+
+## Acquisition Function
+
+An acquisition function is used to determine the next point at which to evaluate the objective function. The goal of the acquisition function is to balance exploration, i.e. sampling points in unexplored regions, and exploitation, i.e. sampling points that are likely to be optimal. The acquisition function takes into account the posterior predictive distribution of the surrogate model and provides a quantitative measure of the value of evaluating the objective function at a given point. Some common acquisition functions used in Bayesian optimisation include expected improvement, probability of improvement, and upper confidence bound.
+
+### Implementing Expected Improvement
+
+Expected Improvement (EI) is defined as the expected value of the improvement over the current best solution, where the improvement is defined as the difference between the function value at the candidate point and the current best value. In other words, EI measures how much better the objective function is expected to be at the candidate point compared to the current best value, weighted by the probability of achieving that improvement.
+
+Formally, the expected improvement acquisition function for a minimisation problem is defined as:
+
+$$\mathrm{EI}(\mathbf{x}) = \mathbb{E}\left[\max(0, f_{\min} - f(\mathbf{x}))\right]$$
+
+where $\mathbf{x}$ is the candidate point and $f_{\min}$ is the current best function value observed so far.
+
+When using a GP surrogate model in place of $f$, EI can be calculated using the formula
+
+$$\mathrm{EI}(\mathbf{x}) = (y_{\text{best}} - \mu(\mathbf{x}) - \xi) \Phi(Z) + \sigma(\mathbf{x}) \phi(Z)$$
+
+with
+
+$$Z = \frac{y_{\text{best}} - \mu(\mathbf{x}) - \xi}{\sigma(\mathbf{x})}$$
+
+$\mu(\mathbf{x})$ and $\sigma(\mathbf{x})$ are the mean and standard deviation of the Gaussian process at $\mathbf{x}$. $\Phi$ and $\phi$ are the standard normal cumulative distribution function and probability density function, respectively, and $\xi$ is a trade off parameter that balances exploration and exploitation. Higher values of $\xi$ lead to more exploration and smaller values to exploitation. $EI(\mathbf{x}) = 0$ when $\sigma(\mathbf{x}) = 0$.
+
+The formulas can be implemented directly.
+
+```{python}
+def expected_improvement(
+    gp: Callable[[npt.ArrayLike], GPRPrediction],
+    x: np.ndarray,
+    x_train: np.ndarray,
+    xi: float = 0.01,
+) -> np.ndarray:
+    """Expected Improvement
+
+    Parameters
+    ----------
+    gp : a conditioned Gaussian process
+    x : array of shape (m, d) of points where EI should be evaluated
+    x_train : array of shape (n, d) of training points
+    xi : scalar, exploration/exploitation trade off
+
+    Returns
+    -------
+    EI, array of shape (m,)
+    """
+    post_pred = gp(x)
+    post_train = gp(x_train)
+    min_train = np.min(post_train.mu)
+    std = np.sqrt(np.clip(post_pred.sigma, 0.0, None))
+    imp = min_train - post_pred.mu - xi
+    z = np.divide(imp, std, out=np.zeros_like(imp), where=std > 0)
+    ei = imp * scipy.stats.norm.cdf(z) + std * scipy.stats.norm.pdf(z)
+    ei[std == 0.0] = 0.0
+    return ei
+```
+
+When there is only a single input dimension, EI can be plotted next to the GP.
+
+```{python}
+def ei_plot(
+    mu: np.ndarray,
+    sigma: np.ndarray,
+    x_pred: np.ndarray,
+    x_train: np.ndarray,
+    y_train: npt.ArrayLike,
+    ei: np.ndarray,
+    true_function: Callable[[np.ndarray], np.ndarray] | None = None,
+    title: str = "",
+) -> plt.Figure:
+    x = np.ravel(x_pred)
+    uncertainty = 1.96 * np.sqrt(np.clip(sigma, 0.0, None))
+
+    fig, (ax_gp, ax_ei) = plt.subplots(
+        2, 1, sharex=True, figsize=(7, 6), height_ratios=[2, 1]
+    )
+    ax_gp.fill_between(
+        x, mu - uncertainty, mu + uncertainty, color="#219ebc", alpha=0.2
+    )
+    ax_gp.plot(x, mu, color="#023047", label="Mean")
+    ax_gp.scatter(
+        np.ravel(x_train),
+        np.ravel(y_train),
+        marker="+",
+        s=150,
+        color="#fb8500",
+        label="Training point",
+        zorder=3,
+    )
+    if true_function is not None:
+        ax_gp.plot(x, true_function(x_pred), color="black", label="True function")
+    ax_gp.set(ylabel="y", title=title)
+    ax_gp.legend(loc="center left", bbox_to_anchor=(1, 0.5), frameon=False)
+
+    ax_ei.plot(x, ei, color="#219ebc", label="EI")
+    ax_ei.set(ylabel="Expected improvement")
+    ax_ei.legend(loc="center left", bbox_to_anchor=(1, 0.5), frameon=False)
+    fig.tight_layout()
+    return fig
+
+
+mygpr = gpr(rbf_kernel, x_train, y_train, noise, length_scale=1.0, sigma_f=1.0)
+ei = expected_improvement(mygpr, x_predict, x_train, xi=0.1)
+post_ei = mygpr(x_predict)
+ei_plot(post_ei.mu, post_ei.sigma, x_predict, x_train, y_train, ei, ackley)
+plt.show()
+```
+
+In this example, there is some expected improvement near the middle of the input range, but the point expected to bring about the highest improvement is at the right edge of the range.
+
+## Initial Training Data
+
+Before applying GPR and EI, a few initial training data points are needed. Considering that it is expensive to evaluate the objective function, the number of initial training observations should be limited. However, considering that the GP is not great for extrapolation, the number of initial observations should not be too small either.
+
+In general, the initial training data should be chosen to provide a good representation of the objective function. This means that the data should be chosen to cover the range of each input dimension. The data should also include inputs that are expected to be both good and bad performers.
+
+There are a few ways to create a set of initial training inputs. One approach is to use a set of random inputs. This is easy to implement, but it risks testing redundant points and it neglects any prior information about the objective function. In place of a completely random design, Latin Hypercube Sampling (LHS) is often used.
+
+Another approach is to use domain knowledge to select an initial set of inputs. For example, if the function being optimised is a manufacturing process, there might be a fixed range of feasible settings and skilled operators might have good ideas for which settings would perform well.
+
+For the demonstration of Bayesian optimisation with the Ackley function in just a few dimensions, a few random or linearly spaced points will do fine.
+
+## Stopping Criterion
+
+The final component of Bayesian optimisation is a stopping criterion. Depending on the application, a good stopping criterion might be more or less obvious. In settings where a real-world process is optimised, time and money are common constraints. In ML or other theoretical applications, a mathematically defined criterion might be preferred.
+
+Examples of stopping criteria include:
+
+- Maximum number of objective function evaluations.
+- When the improvement in objective function value falls below a threshold.
+- Project time limits or deadlines.
+- Accuracy of the surrogate model.
+
+## Bayesian Optimisation in Action
+
+With all the components of Bayesian optimisation in place, a demonstration is due.
+
+### Example in 1D
+
+The initial training data is just two points.
+
+```{python}
+n_initial = 2
+x_initial = np.array([[-2.5], [2.1]])
+noise = 1.0
+y_initial = ackley(x_initial) + noise * rng.standard_normal(n_initial)
+```
+
+A GP is conditioned on the initial training data and expected improvement is calculated along a grid.
+
+```{python}
+gp = gpr(rbf_kernel, x_initial, y_initial, noise, length_scale=1.0, sigma_f=1.0)
+x_predict = np.linspace(-5, 5, 100)[:, np.newaxis]
+ei = expected_improvement(gp, x_predict, x_initial, xi=0.01)
+```
+
+Here is what it looks like so far.
+
+```{python}
+pred = gp(x_predict)
+ei_plot(pred.mu, pred.sigma, x_predict, x_initial, y_initial, ei, ackley)
+plt.show()
+```
+
+It looks like the point that will yield the most improvement is all the way at the right edge of input space.
+
+This point is added to the training data.
+
+```{python}
+x = x_predict[np.argmax(ei)]
+y = ackley(x) + noise * rng.standard_normal(1)
+x_train = np.vstack([x_initial, x])
+y_train = np.concatenate([y_initial, y])
+```
+
+The stopping criterion will be five additional evaluations.
+
+```{python}
+n_iterations = 5
+```
+
+In each iteration, the GP is conditioned on the training data, the point that maximises EI is found, and that point is evaluated in the objective function.
+
+```{python}
+plots = []
+for i in range(1, n_iterations + 1):
+    gp = gpr(rbf_kernel, x_train, y_train, noise, length_scale=1.0, sigma_f=1.0)
+    ei = expected_improvement(gp, x_predict, x_train, xi=0.01)
+    pred = gp(x_predict)
+    fig = ei_plot(
+        pred.mu,
+        pred.sigma,
+        x_predict,
+        x_train,
+        y_train,
+        ei,
+        ackley,
+        title=f"Iteration {i}",
+    )
+    plt.close(fig)
+    plots.append(fig)
+    x = x_predict[np.argmax(ei)]
+    y = ackley(x) + noise * rng.standard_normal(1)
+    x_train = np.vstack([x_train, x])
+    y_train = np.concatenate([y_train, y])
+```
+
+A closer look at each iteration reveals that there is always some luck involved. For this seed, the global optimum was not reached within the five additional evaluations. Instead, the search settled in the local minimum near $x = 0.45$ and evaluated it three times. With other seeds, the global optimum is reached within a few evaluations.
+
+```{=html}
+<div class="figure-grid">
+```
+
+```{python}
+#| echo: false
+for fig in plots:
+    display(fig)
+```
+
+```{=html}
+</div>
+```
+
+### Example in 2D
+
+With two input dimensions the optimisation is a bit harder.
+
+The initial training data will be four points.
+
+```{python}
+n_initial = 4
+x_initial = np.array([[5.0, 4.7], [-5.0, -4.7], [2.1, -2.5], [-2.1, -2.5]])
+noise = 1.0
+y_initial = ackley(x_initial) + noise * rng.standard_normal(n_initial)
+```
+
+A GP is conditioned on the initial training data and expected improvement is calculated along a grid.
+
+```{python}
+gp = gpr(rbf_kernel, x_initial, y_initial, noise, length_scale=1.0, sigma_f=1.0)
+grid_x1, grid_x2 = np.meshgrid(np.linspace(-5, 5, 50), np.linspace(-5, 5, 50))
+x_predict = np.column_stack([grid_x1.ravel(), grid_x2.ravel()])
+ei = expected_improvement(gp, x_predict, x_initial, xi=0.01)
+```
+
+Here is what it looks like so far.
+
+```{python}
+def contour_plot(
+    mu: np.ndarray,
+    x_train: np.ndarray,
+    x_next: np.ndarray,
+    title: str = "",
+) -> plt.Figure:
+    fig, ax = plt.subplots()
+    contours = ax.contourf(grid_x1, grid_x2, mu.reshape(grid_x1.shape), levels=8)
+    ax.scatter(x_train[:, 0], x_train[:, 1], color="black", clip_on=False)
+    ax.scatter(
+        x_next[0], x_next[1], color="#fb8500", label="max EI", clip_on=False
+    )
+    ax.set(xlabel="x1", ylabel="x2", title=title)
+    ax.legend(loc="lower right", bbox_to_anchor=(1, 1), frameon=False)
+    fig.colorbar(contours)
+    return fig
+
+
+pred = gp(x_predict)
+contour_plot(pred.mu, x_initial, x_predict[np.argmax(ei)])
+plt.show()
+```
+
+It looks like the point that will yield the most improvement is all the way at a corner of input space.
+
+Now this point is added to the training data.
+
+```{python}
+x = x_predict[np.argmax(ei)]
+y = ackley(x) + noise * rng.standard_normal(1)
+x_train = np.vstack([x_initial, x])
+y_train = np.concatenate([y_initial, y])
+```
+
+Now it is time for the optimisation part. The stopping criterion will be six additional evaluations.
+
+```{python}
+n_iterations = 6
+```
+
+In each iteration, the GP is conditioned on the training data, the point that maximises EI is found, and that point is evaluated in the objective function.
+
+```{python}
+plots = []
+for i in range(1, n_iterations + 1):
+    gp = gpr(rbf_kernel, x_train, y_train, noise, length_scale=1.0, sigma_f=1.0)
+    ei = expected_improvement(gp, x_predict, x_train, xi=0.01)
+    pred = gp(x_predict)
+    x = x_predict[np.argmax(ei)]
+    fig = contour_plot(pred.mu, x_train, x, title=f"Iteration {i}")
+    plt.close(fig)
+    plots.append(fig)
+    y = ackley(x) + noise * rng.standard_normal(1)
+    x_train = np.vstack([x_train, x])
+    y_train = np.concatenate([y_train, y])
+```
+
+Looking at iterations 4 through 6 reveals that, after a final visit to the edge of input space, the search concentrates on the centre of the function. The surrogate model now places its minimum close to the global optimum. However, the evaluated points have not quite reached it: the best point found, $(0.51, -0.31)$, sits in a local minimum next to the global optimum. A few more iterations might have revealed the global optimum. On the other hand, the small budget did reveal a relatively good set of input parameters.
+
+```{=html}
+<div class="figure-grid">
+```
+
+```{python}
+#| echo: false
+for fig in plots[3:6]:
+    display(fig)
+```
+
+```{=html}
+</div>
+```
+
+## References
+
+\[1\]
+
+RASMUSSEN, C. E. and WILLIAMS, C. K. I. (2006). *Gaussian processes for machine learning*. MIT Press.
+
+## License
+
+The content of this project itself is licensed under the [Creative Commons Attribution-ShareAlike 4.0 International license](https://creativecommons.org/licenses/by-sa/4.0/), and the underlying code is licensed under the [GNU General Public License v3.0 license](https://github.com/AnHosu/bespoke-bayesian-biochem/blob/main/LICENSE).

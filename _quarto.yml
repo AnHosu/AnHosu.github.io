@@ -1,0 +1,15 @@
+project:
+  type: default
+  # Only render post sources; Hugo handles everything else
+  render:
+    - content/post/**/*.qmd
+
+format:
+  hugo-md:
+    code-fold: false
+    fig-format: png
+    fig-dpi: 150
+
+execute:
+  freeze: auto
+  warning: false

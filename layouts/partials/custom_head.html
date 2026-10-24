@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="{{ "css/syntax-light.css" | relURL }}">
+<link rel="stylesheet" href="{{ "css/syntax-dark.css" | relURL }}" media="(prefers-color-scheme: dark)">
 <style>
   pre {
     overflow-x: auto;
@@ -5,12 +7,32 @@
     background-color: rgba(128, 128, 128, 0.1);
     border-radius: 3px;
   }
+  /* Two-column figure grid for Quarto posts (wrap figure cells in <div class="figure-grid">) */
+  .figure-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    align-items: start;
+  }
+  .figure-grid p {
+    margin: 0;
+  }
+  .figure-grid img {
+    width: 100%;
+    height: auto;
+  }
+  @media (max-width: 600px) {
+    .figure-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 {{ if .Param "math" }}
 <script>
   window.MathJax = {
     tex: {
-      inlineMath: [['\\(', '\\)']],
+      {{- /* `$` delimiters only for Markdown posts so legacy HTML posts are unaffected */}}
+      inlineMath: [['\\(', '\\)']{{ if and .File (eq .File.Ext "md") }}, ['$', '$']{{ end }}],
       displayMath: [['$$', '$$'], ['\\[', '\\]']]
     },
     startup: {
