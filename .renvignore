@@ -1,0 +1,7 @@
+# Only Quarto posts (index.qmd) are rendered locally; legacy blogdown posts
+# (index.Rmd) are published as pre-rendered HTML and their packages aren't tracked
+*.Rmd
+public/
+themes/
+_freeze/
+.venv/

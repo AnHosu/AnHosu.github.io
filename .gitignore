@@ -1,13 +1,24 @@
 .Rproj.user
 *.Rproj
-.Rprofile
 .Rhistory
 .RData
 .Ruserdata
 /public/
 resources/
-renv/
 .DS_Store
 Thumbs.db
 *.rds
 .hugo_build.lock
+
+# Quarto / Python / Rust caches (sources and rendered index.md + figures are committed)
+.quarto/
+_freeze/
+*_cache/
+*.quarto_ipynb
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+target/
+
+/.quarto/
+**/*.quarto_ipynb

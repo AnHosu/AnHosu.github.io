@@ -3,9 +3,20 @@
   "image": "mcr.microsoft.com/devcontainers/base:bookworm",
   "features": {
     "ghcr.io/devcontainers/features/hugo:1": {
-      "extended": true
-    }
+      "extended": true,
+      "version": "0.165.0"
+    },
+    "ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {},
+    "ghcr.io/jsburckhardt/devcontainer-features/uv:1": {},
+    "ghcr.io/rocker-org/devcontainer-features/r-apt:0": {
+      "installRMarkdown": true,
+      "installREnv": true
+    },
+    "ghcr.io/devcontainers/features/rust:1": {}
+  },
+  "containerEnv": {
+    "QUARTO_PYTHON": "${containerWorkspaceFolder}/.venv/bin/python"
   },
   "forwardPorts": [1313],
-  "postCreateCommand": "hugo version"
+  "postCreateCommand": "bash .devcontainer/post-create.sh"
 }

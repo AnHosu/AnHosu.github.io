@@ -1,0 +1,26 @@
+[project]
+name = "local-optima"
+version = "0.1.0"
+description = "Python environment for executing posts with Quarto"
+requires-python = ">=3.13"
+dependencies = [
+    "ipykernel",
+    "matplotlib",
+    "nbclient",
+    "nbformat",
+    "numpy",
+    "pyyaml",
+    "scipy>=1.18.1",
+]
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+dev = [
+    "ruff>=0.17.1",
+]
+
+[tool.ruff.lint]
+# pycodestyle, Pyflakes, pep8-naming (lowercase names) and type annotations
+select = ["E", "F", "N", "ANN"]
